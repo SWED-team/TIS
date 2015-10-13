@@ -1,0 +1,27 @@
+Stretnutie číslo 1
+
+Dátum: 
+
+30.9.2015
+
+
+Zoznam prítomných: 
+
+Martin Danek,Martin Krasňan,Jozef Čelko,Dominik Turák
+
+
+Agenda: 
+
+1.	základné rozdelenie úloh
+2.	hrubý návrh a premyslenie realizácie
+
+
+Zhodnotenie predchádzajúceho obdobia:
+
+Keďže to bolo naše prvé stretnutie, nemali sme čo hodnotiť.
+
+
+Naplánovanie úloh na nasledujúce obdobie:
+
+1.	Hlavnou úlohou tohoto týždňa bude vytvorenie Ganttovho diagramu. Musíme sa dohodnúť, ako si rozdelíme úlohy podľa toho, čo komu ide najlepšie a kto má aké skúsenosti. 
+2.	Stránka má byť hlavne user-friendly, teda ľahko by sa v nej mal orientovať aj človek, ktorý nie je technicky zdatný. Dôležitou súčasťou našej stránky bude aj administrátorské rozhranie, ktoré bude administrátorovi umožňovať pridávať príspevky, editovať už existujúce príspevky, pridávať fotografie alebo mazať veci, ktoré uzná za vhodné. Našou snahou bude taktiež dobrý návrh webu, aby sa na stránke ľahko mohli pridávať ďalšie funkcie.

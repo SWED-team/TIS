@@ -1,0 +1,25 @@
+Dátum: 
+
+5.10.2015
+
+
+Zoznam prítomných: 
+
+Martin Danek,Martin Krasňan,Jozef Čelko,Dominik Turák
+
+
+Agenda: 
+
+1.	práca na špecifikácii
+2.	premýšlanie nad realizáciou projektu po druhom stretnutí so zadávateľom
+
+
+Zhodnotenie predchádzajúceho obdobia:
+
+Splnili sme všetko, čo sme si určili. Rozdelili sme si úlohy a náš Ganttov diagram sme uložili na GitHub. Taktiež sme návrh našej web aplikácie predložili zadávateľovi.
+
+
+Naplánovanie úloh na nasledujúce obdobie:
+
+1. Našim hlavným cieľom je vytvorenie provizornej špecifikácie, nakoľko sme sa na stretnutí s našim zadavateľom dohodli, že na nasledujúcom stretnutí spolu zhodnotíme, čo je dobré, prospešné, s čím je spokojný a čo sa mu až tak nepáči. Po tomto stretnutí vytvoríme finálnu špecifikáciu, ktorá bude zahŕňať aj zadavateľove požiadavky.
+2. Opätovné dohadovanie a hľadanie riešenia, ktoré bude blízke minimálne nadpolovičnej väčšine týmu.
