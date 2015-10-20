@@ -1,16 +1,17 @@
 4.
 
-Dátum: 16.10.2015
+DÃ¡tum: 16.10.2015
 
-Zoznam prítomnıch: Martin Danek,Martin Krasnan,Jozef Celko,Dominik Turák
+Zoznam prÃ­tomnÃ½ch: Martin Danek,Martin Krasnan,Jozef Celko,Dominik TurÃ¡k
 
-Agenda:     - 	práca na špecifikácii
-premıšlanie nad logikou stránky
+Agenda: 
+  - prÃ¡ca na Å¡pecifikÃ¡cii
+  - premÃ½Å¡lanie nad logikou strÃ¡nky
 
-Na predošlom stretnutí s zadávatelom sme prediskutovali realizáciu projektu
-a na základe toho ,bolo potrebné vo velkej miere prerobit našu špecifikáciu
-aby sa viac pribliovala poiadavkám zadávatela.ïalej sme museli premyslet logiku stránky ako bude pracova
-s modulárnymi stránkami ,ako bude fungova vytváranie, editovanie a pridávanie modulov na stránku ,takisto bolo treba 
-premysliet logiku ohladom kategorizovania ,vyhladávania a správy uivate¾skıch úètov
+Na predoÅ¡lom stretnutÃ­ s zadÃ¡vatelom sme prediskutovali realizÃ¡ciu projektu
+a na zÃ¡klade toho ,bolo potrebnÃ© vo velkej miere prerobit naÅ¡u Å¡pecifikÃ¡ciu
+aby sa viac pribliÅ¾ovala poÅ¾iadavkÃ¡m zadÃ¡vatela.Äalej sme museli premyslet logiku strÃ¡nky ako bude pracovaÅ¥
+s modulÃ¡rnymi strÃ¡nkami ,ako bude fungovaÅ¥ vytvÃ¡ranie, editovanie a pridÃ¡vanie modulov na strÃ¡nku ,takisto bolo treba 
+premysliet logiku ohladom kategorizovania ,vyhladÃ¡vania a sprÃ¡vy uÅ¾ivateÄ¾skÃ½ch ÃºÄtov
 
-Úlohy do budúcna je dokonèenie špecifikácie na komplet ,a po potvrdení od zadávate¾a, zaèa pracovat na implementácii 
+Ãšlohy do budÃºcna je dokonÄenie Å¡pecifikÃ¡cie na komplet ,a po potvrdenÃ­ od zadÃ¡vateÄ¾a, zaÄaÅ¥ pracovat na implementÃ¡cii 
