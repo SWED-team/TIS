@@ -1,0 +1,25 @@
+Dátum: 
+
+10.10.2015
+
+
+Zoznam prítomných: 
+
+Martin Danek,Martin Krasňan,Jozef Čelko,Dominik Turák
+
+
+Agenda: 
+
+1.	úprava špecifikácie podľa zadavateľových pripomienok
+2.	premýšlanie nad realizáciou projektu po stretnutí so zadávateľom, hľadanie čo najvhodnejšieho vzoru pre 
+
+
+Zhodnotenie predchádzajúceho obdobia:
+
+Splnili sme všetko, čo sme si určili, aj keď na špecifikácii ešte budeme musieť popracovať. Po priblížení zadávateľovej predstavy sme taktiež museli podrobnejšie rozanalyzovať našu predstavu o webe.
+
+
+Naplánovanie úloh na nasledujúce obdobie:
+
+1. Keďže špecifikácia z minulého týždňa sa zadávateľovi až tak nepáčila a tento týždeň je termín, kedy má byť hotová, pridali sme do našej špecifikácie podrobnejšie rozdelenie proejktu a finálnu verziu sme nahrali na GitHub. 
+2. Po stretnutí so zadávateľom sme sa pokúsili nájsť webové stránky, ktoré by sa svojou štruktúrou čo najviac podobali na našu predstavu. Ako vzor sme si vybrali stránku NASA, ktorej layout sa nám zdá byť vhodným riešením. Taktiež bude potrebné si vopred pripraviť otázky, ktoré nás, dúfame, nasmerujú k žiadanej forme riešenia.

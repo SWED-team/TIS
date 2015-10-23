@@ -1,0 +1,17 @@
+4.
+
+Dátum: 16.10.2015
+
+Zoznam prítomných: Martin Danek,Martin Krasnan,Jozef Celko,Dominik Turák
+
+Agenda: 
+  - práca na špecifikácií
+  - premýšlanie nad logikou webu
+
+Na predošlom stretnutí so zadávatelom sme si prediskutovali realizáciu projektu
+a na základe toho bolo potrebné vo veľkej miere prerobiť našu špecifikáciu tak,
+aby sa viac približovala požiadavkám zadávatela. Taktiež sme si museli premyslieť logiku webu, ako bude web pracovať
+s modulárnymi stránkami ,ako bude fungovať vytváranie, editovanie a pridávanie modulov na stránku atď. Takisto bolo treba 
+premyslieť logiku ohľadom kategorizovania ,vyhľadávania a správy uživateľských účtov.
+
+Úlohou do budúcna je kompletné dokončenie špecifikácie a po potvrdení od zadávateľa by sme chceli začať pracovat na konceptuálnej analýze a implementácii projektu.
