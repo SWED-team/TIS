@@ -1,0 +1,27 @@
+Stretnutie číslo 5
+
+Dátum: 
+
+24.10.2015
+
+
+Zoznam prítomných: 
+
+Martin Danek,Martin Krasňan,Jozef Čelko,Dominik Turák
+
+
+Agenda: 
+
+1. vytvorenie diagramov
+2. grafický návrh webovej aplikácie
+3. prvotný návrh databázy
+
+
+Zhodnotenie predchádzajúceho obdobia:
+
+Po schváelní špecifikácie naším zadávateľom sme sa pustili do tvroby diagramov. Vytvorili sme entitno-relačný diagram, stavový diagram, a use-case diagram. Taktiež sme navrhli grafickú štruktúru webu a mierne sme začali pracovať aj na implementácií stránky. Taktiež sme spravili návrh databázy a graficky sme znázornili vzťahy medzi jednotlivými prvkami tabuliek.
+
+
+Naplánovanie úloh na nasledujúce obdobie:
+
+1. Po stretnutí so zadávateľom a prípadných pripomienkach by sme radi začali pracovať na implementácií grafického návrhu, databázy a tabuliek v nej a dynamickej funkcionality webovej aplikácie.
