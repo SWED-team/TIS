@@ -1,11 +1,13 @@
 # TIS
 ## WEBOVÁ PREZENTAČNÁ STRÁNKA ROBOTICKEJ SKUPINY
 ### Na projekte pracujú
-  - Jozef Čelko
+  - Jozef Čelko 
   - Martin Danek
   - Martin Krasňan
   - Dominik Turák
   
+### Zadávateľ
+  - Mgr. Pavel Petrovič, PhD.
 
 ## O projekte
 
