@@ -1,0 +1,26 @@
+Stretnutie číslo 5
+
+Dátum: 
+
+3.11.2015
+
+
+Zoznam prítomných: 
+
+Martin Danek,Martin Krasňan,Jozef Čelko,Dominik Turák
+
+
+Agenda: 
+
+1. finálny návrh databázy
+2. finálny návrh diagramov
+
+
+Zhodnotenie predchádzajúceho obdobia:
+
+Po stretnutí so zadávateľom sme dokončili návrh databázy, ktorý sme na ďalšom stretnutí prekonzultovali a pripomienky a rady zadávateľa sme zakomponovali do tohto návrhu. Taktiež sme zadávateľovi prezentovali finálne verzia rôznych diagramov.
+
+
+Naplánovanie úloh na nasledujúce obdobie:
+
+Najbližšie nás čaká dokončenie konceptuálnej analýzy a veríme že už len pre nás príjemnejšia časť tohto predmetu, programovanie nášho informačného systému.

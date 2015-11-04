@@ -1,0 +1,27 @@
+Stretnutie číslo 5
+
+Dátum: 
+
+29.10.2015
+
+
+Zoznam prítomných: 
+
+Martin Danek,Martin Krasňan,Jozef Čelko,Dominik Turák
+
+
+Agenda: 
+
+1. prerobenie a dorobenie diagramov
+2. grafický návrh webovej aplikácie
+
+
+
+Zhodnotenie predchádzajúceho obdobia:
+
+Po stretnutí so zadávateľom sme prerobili niektoré diagramy a taktiež sme našu dokumentáciu obohatili o ďalšie UML diagramy. Pustili sme sa aj do grafického návrhu, avšak okrem návrhu sme taktiež naprogramovali prvú verziu našej webovej aplikácie, ktorú sme prezentovali zadávateľovi.
+
+
+Naplánovanie úloh na nasledujúce obdobie:
+
+Ďalšou úlohou bude navrhnutie databázy tak, aby bol náš informačný systém stabilný a pri prípadných zmenách nevyžadoval prerábanie databázy.
