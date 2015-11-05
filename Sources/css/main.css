@@ -180,11 +180,11 @@ header{
     font-size: 300%;
     vertical-align: middle;
     background-color: rgba(255,255,255,0.3);
-    -webkit-transition: .1s ease-in-out;
+   /* -webkit-transition: .1s ease-in-out;
        -moz-transition: .1s ease-in-out;
         -ms-transition: .1s ease-in-out;
          -o-transition: .1s ease-in-out;
-            transition: .1s ease-in-out;
+            transition: .1s ease-in-out;*/
   }
   .module-add:hover,
   .module-add:focus{
