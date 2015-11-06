@@ -1,3 +1,19 @@
+<?php
+  mb_internal_encoding("UTF-8");
+  require('_models/Db.php');
+  require('_controllers/Module.php');
+  require('_controllers/Page.php');
+  require('_controllers/User.php');
+  require('_controllers/File.php');
+
+  Db::connect("127.0.0.1", "root", "", "tis");
+
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -59,10 +75,26 @@
 <div class="wrapper">
 
 
-
-
 <section class="container-fluid">
   <div class="row">
+
+<?php 
+
+$module = new ModuleImage(1);
+$module->printModule();
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
     <!-- modul s nahladom a textom -->
     <div class="module-container col-sm-6 ">
@@ -476,7 +508,7 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
+      */?>
     </div>
 </section>
 <!-------------------------- End of module add -------------------------->
