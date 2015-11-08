@@ -1,14 +1,20 @@
 <?php
 class File{
   private $data = array();
+  private $upload_by = null;
 
   public function __construct($file_id){
     if($file_id =! 0){
+
       $this->data = File_m::getFileById($file_id);
     }
   }
   public function get(){
     return $this->data;
+  }
+  public function getUploadBy(){
+    //if($upload_by != null){$this->upload_by = new User($this->data['upload_by']);}
+    return $this->upload_by;
   }
 
 

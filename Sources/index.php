@@ -4,87 +4,11 @@
   require('_controllers/Module.php');
   require('_controllers/Page.php');
   require('_controllers/User.php');
-  require('_controllers/File.php');
 
   Db::connect("127.0.0.1", "root", "", "tis");
 
-
-?>
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-    <title>ROBOT</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/fileinput.css" media="all" type="text/css" />
-  </head>
-  <body data-spy="scroll" data-target=".navbar" data-offset="50">
-
-<header>
-  <div id="header-image">
-
-
-    
-  </div>
-</header>
-<nav class="navbar navbar-default" data-spy="affix" data-offset-top="197">
-  <div class="container-fluid">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
-      </button>
-    </div>
-    <div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav">
-          <li><a href="">home</a></li>
-          <li><a href="">button</a></li>
-          <li><a href="">button</a></li>
-          <li><a href="">about us</a></li>
-          <li><a href="">contact</a></li>
-
-        </ul>          
-        <div class="col-md-3 pull-right">
-          <form class="navbar-form" role="search">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                <div class="input-group-btn">
-                  <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</nav>
-<div class="wrapper">
-
-
-<section class="container-fluid">
-  <div class="row">
-
-<?php 
-
-$module = new ModuleImage(1);
-$module->printModule();
-
-
-
+  $page = new Page(4);
+  $page->printPage();
 
 
 
@@ -96,9 +20,11 @@ $module->printModule();
 
 /*
 
+?>
+
     <!-- modul s nahladom a textom -->
     <div class="module-container col-sm-6 ">
-      <div class="module module-image-text row-2" style="background-image: url('img/i2.jpg')">
+      <div class="module module-image-text row-1" style="background-image: url('img/i2.jpg')">
         <div class="module-title">Short text</div>
         <div class="module-text">
 One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. "What's happened to me?" he thought. It wasn't a dream. His room, a proper human room although a little too small, lay peacefully between its four familiar walls. A collection of textile samples lay spread out on the table - Samsa was a travelling salesman - and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame. It showed a lady fitted out with a fur hat and fur boa who sat upright, raising a heavy fur muff that covered the whole of her lower arm towards the viewer. Gregor then turned to look out the window at the dull weather. Drops
@@ -194,7 +120,7 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
 
 
 
-
+*/?>
 
     <div class="module-container col-sm-3 ">
       <div class="module module-add text-center" data-toggle="modal" data-target="#module-editor" onclick="hideModuleForms($('#module-forms'))">
@@ -508,7 +434,7 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
       </div>
-      */?>
+      
     </div>
 </section>
 <!-------------------------- End of module add -------------------------->
