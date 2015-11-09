@@ -47,6 +47,7 @@ class Page_v{
               <li><a href="">button</a></li>
               <li><a href="">about us</a></li>
               <li><a href="">contact</a></li>
+              <li><a href="" data-toggle="modal" data-target="#LoginPop" >log/reg</a></li>
 
             </ul>          
             <div class="col-md-3 pull-right">

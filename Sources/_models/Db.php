@@ -19,6 +19,7 @@ class Db {
     }
   }
   public static function query($query, $parameters = array()) {
+   
     $result = self::$connect->prepare($query);
     $result->execute($parameters);
     return $result;

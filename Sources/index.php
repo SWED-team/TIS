@@ -3,17 +3,26 @@
   require('_models/Db.php');
   require('_controllers/Module.php');
   require('_controllers/Page.php');
-  require('_controllers/User.php');
+  include('_controllers/User.php');
 
-  Db::connect("127.0.0.1", "root", "", "tis");
+   
+session_start();
+  Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
 
   $page = new Page(4);
   $page->printPage();
+  $_SESSION["d"]="XXXX";
+  $obj = new User();
+ // echo $obj->login("martin.krasna@gmail.com","123456");
+  echo $_SESSION["data"]["email"];
+
+  echo $obj->userData["email"];
+  $_SESSION["user"] = serialize($obj);
+
+echo $_SESSION["user"]->userData["email"];
 
 
-
-
-
+    //include('_controllers/ajax_handler.php');
 
 
 
@@ -132,6 +141,31 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
 
 
 </section>
+
+
+<!-------------------------- pop up pre login -------------------------->
+<div id="LoginPop" class="modal fade col-md-9 col-centered" role="dialog">
+  <div class="modal-dialog">
+
+   
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Login/Registration</h4>
+      </div>
+      <div class="modal-body">
+         <input id="loginEmail " type="text" class="form-control col-md-5" name="title">
+          <input id="loginPass" type="text" class="form-control" name="title">
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal" id="loginBtn">log</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">reg</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-------------------------- Pridavanie modulov -------------------------->
 <section class="modal fade" id="module-editor" role="dialog">
@@ -462,6 +496,42 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
 <script src="./js/bootstrap.min.js" type="text/javascript"></script>
 <script src="./js/fileinput.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+$("#loginBtn").on("click",function()
+  {
+   // alert("Fsdfsdf");
+   var email= $("#loginEmail").val();
+   var pass=$("#loginPass").val()
+  var sendInfo = {'function':"logUser",
+
+  "arg":{
+           "login": "martin.krasna@gmail.com",
+           "pass":"123456"}
+
+       };
+
+    jQuery.ajax({
+        type: "POST",
+        url: '_controllers/ajax_handler.php',
+        
+        data: {'json':sendInfo},
+       
+       
+
+       success: function(data){
+  //  alert('success');
+    alert(data);
+  },
+  error: function(data){
+    alert(data);
+    alert('failure');
+  }
+    });
+ 
+  
+  
+       
+  });
 
 function checkInsertFileMethod(methodParent){
   var methodVal = methodParent.find('input[type="radio"]:checked').val();
