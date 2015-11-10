@@ -1,7 +1,7 @@
 <?php
 class File{
   private $data = array();
-  private $upload_by = null;
+  private $user = null;
 
   public function __construct($file_id){
     if($file_id =! 0){
@@ -15,6 +15,9 @@ class File{
   public function getUploadBy(){
     //if($upload_by != null){$this->upload_by = new User($this->data['upload_by']);}
     return $this->upload_by;
+  }
+  public function insert(){
+
   }
 
 

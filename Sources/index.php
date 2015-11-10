@@ -4,30 +4,21 @@
   require('_controllers/Module.php');
   require('_controllers/Page.php');
   include('_controllers/User.php');
-
-   
-session_start();
-  Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
-
+  session_start();
+  Db::connect("127.0.0.1", "root", "", "tis");
   $page = new Page(4);
-  $page->printPage();
-  $_SESSION["d"]="XXXX";
-  $obj = new User();
- // echo $obj->login("martin.krasna@gmail.com","123456");
-  echo $_SESSION["data"]["email"];
+  echo $page->header();
+  echo $page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
 
-  echo $obj->userData["email"];
-  $_SESSION["user"] = serialize($obj);
-
-echo $_SESSION["user"]->userData["email"];
-
-
-    //include('_controllers/ajax_handler.php');
+  echo $page->footer();
 
 
 
 
-/*
+
+
+
+ /*  
 
 ?>
 
@@ -129,18 +120,8 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
 
 
 
-*/?>
-
-    <div class="module-container col-sm-3 ">
-      <div class="module module-add text-center" data-toggle="modal" data-target="#module-editor" onclick="hideModuleForms($('#module-forms'))">
-        +
-      </div>
-      
-    </div>
-  </div>
 
 
-</section>
 
 
 <!-------------------------- pop up pre login -------------------------->
@@ -167,54 +148,8 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
   </div>
 </div>
 
-<!-------------------------- Pridavanie modulov -------------------------->
-<section class="modal fade" id="module-editor" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button " class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Insert new module</h4>
-        </div>
-        <div class="modal-body row">
 
-<!-------------------------- ponuka modulov -------------------------->
-        <div class="col-md-3">
-          <div class="row">
-            <button type="button" class="btn btn-info" onclick="showModuleForm($('#module-video-form'))">
-              <i class="fa fa-play-circle"></i>video
-            </button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-info" onclick="showModuleForm($('#module-embeded-form'))">
-              <i class="fa fa-youtube-play"></i>embeded video
-            </button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-info" onclick="showModuleForm($('#module-image-form'))">
-              <i class="fa fa-image"></i>image
-            </button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-info">
-              <i class="fa fa-image"></i>image gallery
-            </button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-info">
-              <i class="fa fa-font"></i>text
-            </button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-info">
-              <i class="fa fa-file-text-o"></i>formated text
-            </button>
-          </div>
-          <div class="row">
-            <button type="button" class="btn btn-info">
-              <i class="fa fa-link"></i>link
-            </button>
-          </div>
-        </div>
+
 <!-------------------------- Module properties -------------------------->
 
         <div id="module-forms" class="col-md-9">
@@ -318,170 +253,6 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
           <button type="submit" class="btn btn-success col-sm-12">Submit</button>
           </form>
 
-<!-------------------------- Properties of embeded video module -------------------------->
-          <form id="module-embeded-form" class="form-horizontal" role="form" enctype="multipart/form-data">
-            <h2>Insert Embeded Video</h2>
-
-            <!---- Video Title ---->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="title">Title:</label>
-              <div class="col-sm-10"> 
-                <input type="text" class="form-control" name="title" >
-              </div>
-            </div>
-
-            <!---- Video size ---->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="width">Width:</label>
-              <div class="col-sm-2">          
-                <select class="form-control col-sm-2" id="edit-module-width" name="width">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                </select>
-              </div>
-              <label class="control-label col-sm-2" for="height">Height:</label>
-              <div class="col-sm-2">          
-                <select class="form-control col-sm-2" id="edit-module-height" name="height">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                </select>
-              </div>
-            </div> 
-
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="comment">Embeded link:</label>
-              <div class="col-sm-10">  
-                <textarea class="form-control" rows="5" id="module-embeded-link" name="module-embeded-link"></textarea>
-              </div>
-            </div>
-
-            <!---- Video module submit ---->
-          <button type="submit" class="btn btn-success col-sm-12" name="submit">Submit</button>
-          </form>
-
-
-<!-------------------------- Properties of image module -------------------------->
-         <form id="module-image-form" class="form-horizontal" role="form" enctype="multipart/form-data">
-            <h2>Insert Image</h2>
-
-            <!---- Image Title ---->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="title">Title:</label>
-              <div class="col-sm-10"> 
-                <input type="text" class="form-control" name="title" >
-              </div>
-            </div>
-
-            <!---- Image size ---->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="width">Width:</label>
-              <div class="col-sm-2">          
-                <select class="form-control col-sm-2" id="edit-module-width" name="width">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                </select>
-              </div>
-              <label class="control-label col-sm-2" for="height">Height:</label>
-              <div class="col-sm-2">          
-                <select class="form-control col-sm-2" id="edit-module-height" name="height">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                </select>
-              </div>
-            </div> 
-
-
-            <!---- Image insert method ---->
-            <div class="file-insert-method form-group">
-              <label class="control-label col-sm-2">Method:</label>
-              <label class="radio-inline col-sm-3"><input type="radio" name="upload-select" value='0'>Upload new image</label>
-              <label class="radio-inline"><input type="radio" name="upload-select" value="1">Select from uploaded</label>
-            </div>
-
-
-            <!---- Image upload method ---->
-            <div id="file-uploader" class="form-group">
-              <label class="control-label col-sm-2" for="upload-file">Upload:</label>
-              <div class="form-group col-sm-10">
-                <input id="upload-image-file" class="file" type="file" data-upload-url="#">
-              </div>
-            </div>
-
-            <!---- Image select method ---->
-            <div id="file-selector">
-              <!---- Image select filter ---->
-              <div class="form-group">
-                <label class="control-label col-sm-2">Filter:</label>
-                
-                <div class="col-sm-4"> 
-                  <label class="control-label" for="filter-name">Name:</label>
-                  <input id="filter-name" name="filter-name" type="text" class="form-control col-sm-2" >
-                </div>
-                
-                <div class="col-sm-3"> 
-                  <label class="control-label" for="filter-date-from">Upload by date:</label>
-                  <input id="filter-date-from" name="filter-date-from" type="date" class="form-control " >
-                </div>
-                             
-                <div class="col-sm-3"> 
-                  <label class="control-label" for="filter-date-to">Upload to date:</label>
-                  <input id="filter-date-to" name="filter-date-to" type="date" class="form-control " >
-                </div>
-              </div>
-
-              <!---- Image result ---->
-              <div class="form-group">
-                <label class="control-label col-sm-2">Result:</label>
-
-                <div class="col-sm-4"> 
-                  <label class="control-label" for="search-file-result">Filter result:</label>
-                  <select class="form-control" name="search-file-result">
-                    <option value="id?????">results row 1</option>
-                  </select>
-                </div>
-                <!---- Image result sort ---->
-                <div class="col-sm-3"> 
-                  <label class="control-label" for="filter-sort">Sort result by:</label>
-                  <select class="form-control col-sm-2" id="filter-sort" name="filter-sort">
-                    <option value="1">Upload date</option>
-                    <option value="2">Title</option>
-                    <option value="3">Size</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!---- Image module submit ---->
-          <button type="submit" class="btn btn-success col-sm-12">Submit</button>
-          </form>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-</section>
-<!-------------------------- End of module add -------------------------->
-
-</div>
-<div class="push"></div>
-<footer class="container-fluid">
-  <div class="row">
-    <div class="col-md-12 text-center">
-      <p>Copyright (c) 2015 SWED Team</p>
-    </div>
-  </div>
-</footer>
 
 
 
@@ -489,12 +260,6 @@ One morning, when Gregor Samsa woke from troubled dreams, he found himself trans
 
 
 
-
-
-
-<script src="./js/jquery-2.1.3.min.js" type="text/javascript"></script>
-<script src="./js/bootstrap.min.js" type="text/javascript"></script>
-<script src="./js/fileinput.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 $("#loginBtn").on("click",function()
@@ -550,13 +315,13 @@ function checkInsertFileMethod(methodParent){
 }
 
 
-$(document).on('ready', function(){
-  $(".file-insert-method").each(function(){
-    $(this).on('change', function(){
-      checkInsertFileMethod($(this));
+  $(document).on('ready', function(){
+    $(".file-insert-method").each(function(){
+      $(this).on('change', function(){
+        checkInsertFileMethod($(this));
+      });
     });
   });
-});
   function hideModuleForms(moduleFormsParent){
     moduleFormsParent.find("form").each(function(){
       $(this).addClass("hiddenSection");
@@ -590,4 +355,4 @@ $(document).on('ready', function(){
 -->
 
 </body>
-</html>
+</html>*/?>

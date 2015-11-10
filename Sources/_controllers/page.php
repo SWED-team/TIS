@@ -5,54 +5,94 @@ Class Page{
   private $modules;         // pole modulov pre stranku
   private $created_by;      // pouzivatel ktory vytvoril stranku
   private $edited_by;       // pouzivatel ktory posledny editoval stranku
-
+  private $newModules;
   public function __construct($page_id){
     require_once('_models/Page_m.php');
     require_once('_views/Page_v.php');
     $this->pageData = Page_m::getPageData($page_id);
     $this->modules = array();
+    // inicializacia modulov >> "nazov_typu_modulu_v_db" => new ModuleTyp()
+    $this->newModules = array(
+      "module_image" => new ModuleImage(),
+      "module_video" => new ModuleVideo(),
+      "module_embeded" => new ModuleEmbeded(),
+      "module_gallery" => new ModuleGallery(),
+      "module_formated" => new ModuleFormated(),
+      "module_attachement" => new ModuleAttachement(),
+      "module_link" => new ModuleLink()
+      );
     
     foreach (Page_m::getModules($page_id) as $key => $module) {
-      //echo "$key -> " . $module['id'] ." : ". $module['type'] ;
-      if( $module['type'] == "module_image"){
-        array_push($this->modules, new ModuleImage( $module['id'] ));
-      }
-      else if( $module['type'] == "module_video"){
-        array_push($this->modules, new ModuleVideo( $module['id'] ));
-      }
-      else if( $module['type'] == "module_embeded"){
-        array_push($this->modules, new ModuleEmbeded( $module['id'] ));
-      }
-      else if( $module['type'] == "module_gallery"){
-        array_push($this->modules, new ModuleGallery( $module['id'] ));
-      }
-      else if( $module['type'] == "module_formated"){
-        array_push($this->modules, new ModuleFormated( $module['id'] ));
-      }
-      else if( $module['type'] == "module_attachement"){
-        array_push($this->modules, new ModuleAttachement( $module['id'] ));
-      }
-      else if( $module['type'] == "module_link"){
-        array_push($this->modules, new ModuleLink( $module['id'] ));
-      }
+      $new = clone  $this->newModules[$module['type']];
+      $new->setById( $module['id']);
+      array_push($this->modules, $new);
     }
-
-
-
-
-    //$this->created_by = new User($this->pageData['created_by']) 
-    //$this->edited_by = new User($this->pageData['edited_by'])   
   }
 
-  public function printPage(){
-    Page_v::printPageHead($this->pageData['title']);
-    Page_v::printPageHeader();
-
+  /*
+    Funkcia vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke s možnosťou editovať/zmazať každý zobrazený modul 
+  */
+  private function modulesEditable(){
     foreach ($this->modules as $key => $module) {
-      $module->printModule();
+      $module->module(); // todo: zmenit na zobrazenie viewu na editovatelny modul 
     }
-
   }
+  /*
+    Funkcia vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke
+  */
+  private function modules(){
+    $m = '';
+    foreach ($this->modules as $key => $module) {
+      $m = $m . $module->module();
+    }
+    return $m;
+  }
+  /*
+  * Funkcia zobrazí tlačidlo na pridávanie modulov
+  */
+  private function addModuleButton(){
+    return Page_v::addModuleButton();
+  }  
+  /*
+    Funkcia vypíše formuláre na úpravu modulov
+  */
+  public function modulesEditor(){
+    return Page_v::moduleEditor($this->newModules);
+  } 
+  /*
+  Funkcia zobrazí view pre header stránky
+  */
+  public function header(){
+    return 
+    Page_v::pageHead($this->pageData['title']).
+    Page_v::pageHeader();
+  }
+  /*
+  funkcia zobrazí view pre footer stránky
+  */
+  public function footer(){
+    return Page_v::footer();
+  }
+  /*
+    Funkcia zobrazí obsah s modulmy
+  */
+  public function pageContent($admin){
+    $content =  '<section class="container-fluid"><div class="row">';
+
+    if($admin){
+      $content = $content . $this->modules();
+      $content = $content . $this->addModuleButton();
+    }
+    
+    $content = $content . '</div></section>';
+    
+
+    if($admin){
+      $content = $content . $this->modulesEditor();
+    }    
+    return $content;
+  }
+
 }
 
 
