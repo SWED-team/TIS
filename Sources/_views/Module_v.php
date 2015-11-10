@@ -10,9 +10,50 @@ class Module_v{
       </div>
     </div>';
   }
+  private static function moduleEditorHead($type){
+    return'       
+          <form id="'.$type.'_form"  class="form-horizontal hiddenSection" role="form" enctype="multipart/form-data">
+            <input type="text" class="hiddenSection" name="type" value="'.$type.'">
+            <!---- Image Title ---->
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="title">Title:</label>
+              <div class="col-sm-10"> 
+                <input type="text" class="form-control" name="title" >
+              </div>
+            </div>
 
-  public static function moduleImageEditor(){
+            <!---- Image size ---->
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="cols">Width:</label>
+              <div class="col-sm-3">          
+                <select class="form-control" id="edit-module-width" name="cols">
+                  <option value="1">1 column</option>
+                  <option value="2">2 columns</option>
+                  <option value="3">3 columns</option>
+                  <option value="4">4 columns</option>
+                </select>
+              </div>
+              <label class="control-label col-sm-2" for="rows">Height:</label>
+              <div class="col-sm-3">          
+                <select class="form-control col-sm-2" id="edit-module-height" name="rows">
+                  <option value="1">1 row</option>
+                  <option value="2">2 rows</option>
+                  <option value="3">3 rows</option>
+                  <option value="4">4 rows</option>
+                  <option value="0">auto</option>
+                </select>
+              </div>
+            </div> 
+            ';
+  }
+  private static function moduleEditorFoot(){
     return '
+            <button type="submit" class="btn btn-success col-sm-12">Submit</button>
+          </form>
+        ';
+  }
+  public static function moduleImageEditor($type){
+    return Module_v::moduleEditorHead($type).'
             <!---- Image insert method ---->
             <div class="file-insert-method form-group">
               <label class="control-label col-sm-2">Method:</label>
@@ -71,7 +112,7 @@ class Module_v{
                   </select>
                 </div>
               </div>
-            </div>';
+            </div>' . Module_v::moduleEditorFoot();
   }
 
 

@@ -23,10 +23,7 @@ abstract class Module{
 /*******************************  Image  *******************************/
 
 
-
 class ModuleImage extends Module{
-
-
   public function __construct($id=0){
     //$this->created_by = new User($this->containerData['created_by']) 
     //$this->edited_by = new User($this->containerData['edited_by'])  
@@ -50,7 +47,7 @@ class ModuleImage extends Module{
     return Module_v::moduleImage($this->containerData, $this->contentData, $this->file->get());
   }
   public function editor(){
-    return Module_v::moduleImageEditor();
+    return Module_v::moduleImageEditor('module_image');
   }
   public function insert(){
     Module_v::insertInto('module',$this->contentContainer);
