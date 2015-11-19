@@ -19,10 +19,15 @@ class Db {
     }
   }
   public static function query($query, $parameters = array()) {
-   
     $result = self::$connect->prepare($query);
     $result->execute($parameters);
     return $result;
+  }
+  public static function insertInto($table, $data){
+    $fields = array_keys($data);
+    $values = array_values($data);
+    $query = 
+    $result = self::$connect->prepare()
   }
 }
 ?>
