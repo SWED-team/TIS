@@ -23,5 +23,3 @@ V nasledujúcom období budeme riešiť programovanie tried a funkcionality web 
 - Krasňan - návrh a programovanie abstraktnej metódy Modul a od nej dedených metód pre ModuleImage, ModuleFormated, ModuleEmbeded, ModuleGallery
 - Čelko - získanie informácii na generovanie dokumentácie, programovanie dedených metód ModuleAttachement, ModuleLink
 - Turák - programovanie triedy Page na zobrazovanie obsahu webstránky, triedy Uploader na nahrávanie súborov do systému
-
-Turák
