@@ -1,22 +1,22 @@
-##Stretnutie číslo 6
+#Stretnutie číslo 6
 
-#Dátum: 
+##Dátum: 
 22.11.2015
 
-#Zoznam prítomných: 
+##Zoznam prítomných: 
 
 - Martin Danek,
 - Martin Krasňan,
 - Jozef Čelko,
 - Dominik Turák
 
-#Agenda: 
+##Agenda: 
 - konzultovanie problémov pri programovaní jednotlivých funkcionalít
 
-#Zhodnotenie predchádzajúceho obdobia:
+##Zhodnotenie predchádzajúceho obdobia:
 Od posledného stretnutia sme začali pracovať na programovaní jednotlivých funkcionalít web-aplikácie
 
-#Naplánovanie úloh na nasledujúce obdobie:
+##Naplánovanie úloh na nasledujúce obdobie:
 - čelko - generovanie a získanie dokumentácie, dokončenie jednotlivých modulov
 - krasňan - dokončenie vkladania a editácie modulov
 - danek - editovanie profilu používateľa, pokročilá funkcionalita pre administrátora, grafické doladenie existujúcich častí web-aplikácie
