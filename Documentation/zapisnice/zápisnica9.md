@@ -1,4 +1,4 @@
-#Stretnutie číslo 6
+#Stretnutie číslo 9
 
 ##Dátum: 
 22.11.2015
