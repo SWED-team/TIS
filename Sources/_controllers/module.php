@@ -1,256 +1,124 @@
 <?php
+/**
+ * Abstraktná trieda pre moduly,
+ * ktorá definuje základnú povinnú funkčnosť pre všetky typy modulov.
+ * @abstract
+ */
 abstract class Module{
+  /**
+   * pole informácií o zakládných vlastnostiach modulu
+   *  @var  array
+   */
+  public $containerData = array();
+  /**
+   * pole informácií o obsahu modulu
+   * @var array
+   */
+  public $contentData   = array();
+  /**
+   * pole informácií o priložených súboroch modulu 
+   * @var array
+   */
+  public $file          = array();
+  /**
+   * pole child modulov modulu( gallery > image )
+   * @var array
+   */
+  public $childsData    = array();
+  /**
+   * používateľ ktorý vytvoril modul
+   * @var User
+   */
+  public $created_by;
+  /**
+   * používateľ ktorý editoval modul
+   * @var User
+   */
+  public $edited_by;
+  /**
+   * typ modulu
+   * @var string
+   */
+  public $module_type;
+
+
+
+  /**
+   * Konštruktor abstraktnej triedy Module
+   * @param [type] $id [description]
+   * @abstract
+   */
+  abstract function __construct($id);
+  /**
+   * Nastavenie Modulu podľa zadaného ID
+   * @param integer $id ID modulu
+   */
+  abstract public function setById($id);
+    /**
+   * Funkcia vráti názov typu modulu
+   * @return string 
+   * @abstract
+   */
+  abstract static public function getModuleTypeName();
+  /**
+   * Funkcia vráti view pre modul na stránke
+   * @return string html kód pre modul
+   * @abstract
+   */
+  abstract public function module();
+  /**
+   * Funkcia vráti view pre editor modulu
+   * @return string html kód editora modulu
+   * @abstract
+   */
+  abstract public function editor();
+
+/**
+ * Funkcia nacita data z post premennych ktore sa odoslu po submitnuti fomulara
+ * @return [type] [description]
+ */
+  abstract public function getPostData();
   
-  public $containerData = array();     // pole informacii o zakladnych vlastnostiach modulu
-  public $contentData = array();       // pole informacii o obsahu modulu
-  public $file = array();              // pole informacii o obrazku modulu
-  public $childsData = array();        // pole child modulov modulu( gallery > image )
-  public $created_by;                  // pouzivatel ktory vytvoril modul
-  public $edited_by;                   // pouzivatel ktory posledny editoval modul
-
-  abstract function __construct($id);     // konstruktor
-  abstract public function setById($id);  // funkcia 
-  abstract static public function getModuleTypeName(); // funkcia vrati nazov typu modulu
-  abstract public function module();      // funkcia zobrazi view pre modul na stranke
-  abstract public function editor();      // funkcia zobrazi view pre editor modulu 
-  abstract public function insert();      // funkcia ulozi novy modul do databazy
-  abstract public function update();      // funkcia aktualizuje informacie o module v databaze
-  abstract public function delete();      // funkcia zmaze modul z databazy a stranky
-
-}
-
-
-/*******************************  Image  *******************************/
-
-
-class ModuleImage extends Module{
-  public function __construct($id=0){
-    //$this->created_by = new User($this->containerData['created_by']) 
-    //$this->edited_by = new User($this->containerData['edited_by'])  
-
-    // nacitanie potrebnych tried
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    require_once('_controllers/File.php');
-    $this->setById($id);
-  }
-
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id); 
-      $this->contentData   = Module_m::getModuleContent($id, "module_image"); 
-      $this->file          = new File($this->contentData['file_id']); 
-    }
-  }
-
-  public function module(){
-    return Module_v::moduleImage($this->containerData, $this->contentData, $this->file->get());
-  }
-  public function editor(){
-    return Module_v::moduleImageEditor('module_image');
-  }
-  public function insert(){
-    Module_v::insertInto('module',$this->contentContainer);
-    Module_v::insertInto('module_image',$this->contentData);
-    $this->file->insert();
-
-  }
-  public function update(){
-
-  }
-  public function delete(){
-
-  }
-  public static function getModuleTypeName(){
-    return "<i class='fa fa-image'></i> Image";
+  /**
+   * Funkcia vloží modul do DB
+   * @return boolean true ak vloží úspešne / false ak nastane chyba
+   * @abstract
+   */
+  abstract public function insert();
+  /**
+   * Funkcia zmení informácie o module v DB
+   * @return boolean true ak zmení úspešne / false ak nastane chyba
+   * @abstract
+   */
+  abstract public function update();
+  /**
+   * Funkcia zmaže modul z DB
+   * @return boolean true ak zmaže úspešne / false ak nastane chyba
+   * @abstract
+   */
+  abstract public function delete();
+  /**
+   * Nastavenie poľa informácií o základných vlastnostiach modulu
+   * @param int $page_id    stránka na ktorej je modul zobrazený
+   * @param string $type    typ modulu
+   * @param int $created_by id používateľa ktorý modul vytvoril
+   * @param int $edited_by  id používateľa ktorý modul editoval
+   * @param int $rows       počet riadkov modulu
+   * @param int $cols       počet stĺpcov modulu
+   * @param int $order      poradie modulu na stránke
+   * @param int $status     status modulu(1-publikovaný, 0-skrytý)
+   */
+  public function setContainerData($page_id,$type,$created_by,$edited_by,$rows,$cols,$order,$status){
+    $this->containerData=array(
+      'page_id' => $page_id,
+      'type' => $type,
+      'created_by' => $created_by,
+      'edited_by' =>$edited_by,
+      'rows' => $rows,
+      'cols' => $cols,
+      'order' => $order,
+      'status' => $status
+    );
   }
 }
-
-
-/*******************************  Formated  *******************************/
-
-
-class ModuleFormated extends Module{
-  public function __construct($id=0){
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    $this->setById($id);
-
-  }
-
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id);
-      $this->contentData   = Module_m::getModuleContent($id, "module_formated");
-    }
-  }
-
-  public function module(){
-    return Module_v::moduleFormated($this->containerData, $this->contentData);
-  }
-  public function editor(){
-
-  }
-  public function insert(){}
-  public function update(){}
-  public function delete(){}
-  public static function getModuleTypeName(){
-    return '<i class="fa fa-font"></i> Formated Text';
-  }
-}
-
-/*******************************  Video  *******************************/
-
-
-class ModuleVideo extends Module{
-  public function __construct($id=0){
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    $this->setById($id);
-
-  }
-  public function module(){
-    return Module_v::module($this->containerData, $this->contentData);
-  }
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id);
-      $this->contentData   = Module_m::getModuleContent($id, "module_video");
-    }
-  }
-  public function editor(){}
-  public function insert(){}
-  public function update(){}
-  public function delete(){}
-  public static function getModuleTypeName(){
-    return '<i class="fa fa-play-circle"></i> Video';
-  }
-}
-
-
-/*******************************  Embeded  *******************************/
-
-
-class ModuleEmbeded extends Module{
-  public function __construct($id=0){
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    $this->setById($id);
-
-  }
-
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id);
-      $this->contentData   = Module_m::getModuleContent($id, "module_embeded");
-    }
-  }
-
-
-  public function module(){
-    return Module_v::moduleEmbeded($this->containerData, $this->contentData);
-  }
-  public function editor(){
-        return Module_v::moduleEmbededEditor();
-  }
-  public function insert(){}
-  public function update(){}
-  public function delete(){}
-  public static function getModuleTypeName(){
-    return '<i class="fa fa-youtube-play"></i> Embeded';
-  }
-}
-
-/*******************************  Gallery  *******************************/
-
-class ModuleGallery extends Module{
-  public function __construct($id=0){
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    $this->setById($id);
-
-  }
-
-
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id);
-      $this->contentData   = Module_m::getModuleContent($id, "module_gallery");
-    }
-  }
-
-  public function module(){
-    return Module_v::module($this->containerData, $this->contentData);
-  }
-  public function editor(){}
-  public function insert(){}
-  public function update(){}
-  public function delete(){}
-  public static function getModuleTypeName(){
-    return '<i class="fa fa-th"></i> Gallery';
-  }
-}
-
-/*******************************  Attachements  *******************************/
-
-
-class ModuleAttachement extends Module{
-  public function __construct($id=0){
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    $this->setById($id);
-
-  }
-
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id);
-      $this->contentData   = Module_m::getModuleContent($id, "module_attachement");
-    }
-  }
-
-  public function module(){
-    return Module_v::module($this->containerData, $this->contentData);
-  }
-  public function editor(){}
-  public function insert(){}
-  public function update(){}
-  public function delete(){}
-  public static function getModuleTypeName(){
-    return '<i class="fa  fa-paperclip"></i> Attachements';
-  }
-}
-
-
-/*******************************  Link  *******************************/
-
-
-class ModuleLink extends Module{
-  public function __construct($id=0){
-    require_once('_models/Module_m.php');
-    require_once('_views/Module_v.php');
-    $this->setById($id);
-
-  }
-
-  public function setById($id){
-    if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
-      $this->containerData = Module_m::getModuleContainer($id);
-      $this->contentData   = Module_m::getModuleContent($id, "module_link");
-    }
-  }
-
-  public function module(){
-    return Module_v::module($this->containerData, $this->contentData);
-  }
-  public function editor(){}
-  public function insert(){}
-  public function update(){}
-  public function delete(){}
-  public static function getModuleTypeName(){
-    return '<i class="fa fa-link"></i> Link';
-  }
-}
-
-
 ?>

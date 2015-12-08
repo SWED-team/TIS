@@ -12,6 +12,14 @@ Class Page{
     $this->pageData = Page_m::getPageData($page_id);
     $this->modules = array();
     // inicializacia modulov >> "nazov_typu_modulu_v_db" => new ModuleTyp()
+    require_once('_controllers/ModuleImage.php'); 
+    require_once('_controllers/ModuleVideo.php'); 
+    require_once('_controllers/ModuleGallery.php'); 
+    require_once('_controllers/ModuleEmbeded.php'); 
+    require_once('_controllers/ModuleLink.php'); 
+    require_once('_controllers/ModuleAttachement.php'); 
+    require_once('_controllers/ModuleEmbeded.php'); 
+    require_once('_controllers/ModuleFormated.php'); 
     $this->newModules = array(
       "module_image" => new ModuleImage(),
       "module_video" => new ModuleVideo(),

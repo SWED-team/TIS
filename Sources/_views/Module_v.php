@@ -1,18 +1,8 @@
 <?php
 class Module_v{
-  public static function moduleImage($container, $content, $file){
-    return '
-    <div class="module-container col-sm-'.$container['cols'] * 3 .'">
-      <div class="module module-image row-'.$container['rows'] .'" onclick="" style="background-image: url(\''. $file['thumb_medium'] .'\')">
-        <div class="module-title">
-          '. $content['title'].'
-        </div>
-      </div>
-    </div>';
-  }
   private static function moduleEditorHead($type){
     return'       
-          <form id="'.$type.'_form"  class="form-horizontal hiddenSection" role="form" enctype="multipart/form-data">
+          <form id="'.$type.'_form"  class="form-horizontal hiddenSection" role="form" enctype="multipart/form-data" method="post" action="">
             <input type="text" class="hiddenSection" name="type" value="'.$type.'">
             <!---- Image Title ---->
             <div class="form-group">
@@ -52,6 +42,17 @@ class Module_v{
           </form>
         ';
   }
+  public static function moduleImage($container, $content, $file){
+    return '
+    <div class="module-container col-sm-'.$container['cols'] * 3 .'">
+      <div class="module module-image row-'.$container['rows'] .'" onclick="" style="background-image: url(\''. $file['thumb_medium'] .'\')">
+        <div class="module-title">
+          '. $content['title'].'
+        </div>
+      </div>
+    </div>';
+  }
+
   public static function moduleImageEditor($type){
     return Module_v::moduleEditorHead($type).'
             <!---- Image insert method ---->
@@ -144,15 +145,14 @@ class Module_v{
     </div>
     ';
   }
-  public static function moduleEmbededEditor(){
-    return '
+  public static function moduleEmbededEditor($type){
+    return Module_v::moduleEditorHead($type).'
             <div class="form-group">
               <label class="control-label col-sm-2" for="comment">Embeded link:</label>
               <div class="col-sm-10">  
                 <textarea class="form-control" rows="5" id="module-embeded-link" name="module-embeded-link"></textarea>
               </div>
-            </div>
-    ';
+            </div>' . Module_v::moduleEditorFoot();
   }
 
 
