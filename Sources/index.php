@@ -7,12 +7,35 @@
   session_start();
   Db::connect("127.0.0.1", "root", "", "tis");
   $page = new Page(4);
+    $_user=new User();
+     $_user->checkIfLogin();
+  $_user->checkIfLogoff();
   echo $page->header();
+ 
+ if(isset($_POST["submitProf"]))
+  {
+   
+    $_user->fillUserDataBySession();
+
+    echo $_user->printUserSection();
+  }
+  else if(isset($_POST["submitReg"])){
+    echo $_user->printUserSectionReg();
+  }
+  else if(isset($_POST["submitRegUser"])){
+    // $_user->Reg();
+  }
+  else {
+
+    error_reporting(1);
+
   echo $page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
-
+  }
   echo $page->footer();
-
-
+  $_user->printLogPop();
+  ?>
+        <script src="./js/scripts.js" type="text/javascript"></script>
+       
 
 
 
