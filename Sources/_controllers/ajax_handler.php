@@ -1,23 +1,20 @@
 <?php
 
-  	session_start();
+    session_start();
 
-require('User.php');
+include ("User.php");
+include('../_models/User_m.php');
+//$user= new User();
   include('../_models/Db.php');
-  require('Module.php');
-  require('Page.php');
-require('../_models/User_m.php');
-require('../_views/User_v.php');
-
 Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
-	
-	/*echo "kravaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-	echo $_POST['json']['function'];
-	echo sizeof($_POST['json']['arg']);*/
+  
+  /*echo "kravaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+  echo $_POST['json']['function'];
+  echo sizeof($_POST['json']['arg']);*/
 
-	$ob=  unserialize($_SESSION["user"]);
-	
-	
+  //$ob=  unserialize($_SESSION["user"]);
+  
+  
     $aResult = array();
 
     if( !isset($_POST['json']['function']) ) { $aResult['error'] = 'No function name!';echo "aj toto"; }
@@ -28,11 +25,22 @@ Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
 
         switch($_POST['json']['function']) {
             case 'logUser':
-            	
+              
            $res= $ob->login($_POST['json']['arg']['login'],$_POST['json']['arg']['pass']);
            $_SESSION["data"]=$res;
            $_SESSION["user"]=serialize($ob);
             //echo $ob->userData["first_name"]; 
+
+           case 'RegUser':
+
+           echo "picaa";
+         //  $user->ajaxReg($_POST['json']['arg']);
+           User_m::addUserToDb($_POST['json']['arg']);
+
+           case 'EditUser':
+
+         echo  User_m::EditUserToDb($_POST['json']['arg']);
+
                break;
 
             default:
