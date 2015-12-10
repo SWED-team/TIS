@@ -57,6 +57,46 @@ class Page_v{
               <li><a href="">button</a></li>
               <li><a href="">about us</a></li>
               <li><a href="">contact</a></li>
+                <li class="widthLi first">  <div class="input-group" id="searchBar">
+                
+                      <div id="searchBarHide">
+                  <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+      
+                </div>
+                <div id="userBarHide"><form method="POST">
+                    <?php if(isset($_SESSION["userId"])){
+
+                      echo '<input type="submit" value="Logoff" name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >';
+                      echo '<input type="submit" value="Profile" name="submitProf" class="btn btn-info" data-dismiss="modal">';
+                      echo '</form>';
+                    } 
+                      else {
+                        echo '<button type="button" class="btn btn-success" data-dismiss="modal"><div data-toggle="modal" data-target="#LoginPop"  >login</div></button>';
+                        echo '<input type="submit" name="submitReg" value="Registration"class="btn btn-info" data-dismiss="modal"data-toggle="modal" ></button>';
+                      }
+                    ?>
+                  </div>
+               
+
+              </div></li>
+
+                  
+               <li  class="widthLi">
+                
+                   <div id="userBarIcon">
+                     <span class="glyphicon glyphicon-user" data-dismiss="modal"></span>
+                    </div>
+
+                     <div id="searchBarIcon">
+                     <span class="glyphicon glyphicon-search" data-dismiss="modal"></span>
+                    </div>
+              
+              </li>
+
+           
+             
+         
 
             </ul>          
             <div class="col-md-3 pull-right">
