@@ -33,13 +33,27 @@ Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
 
            case 'RegUser':
 
-           echo "picaa";
-         //  $user->ajaxReg($_POST['json']['arg']);
-           User_m::addUserToDb($_POST['json']['arg']);
+            if(sizeof(User::checkValidReg($_POST['json']['arg']))<1)
+           {
+            User_m::AddUserToDb($_POST['json']['arg']);
+         //   echo "ok";
+            }
+
+            else {
+              echo json_encode(User::checkValidReg($_POST['json']['arg']));
+            }
 
            case 'EditUser':
 
-         echo  User_m::EditUserToDb($_POST['json']['arg']);
+           if(sizeof(User::checkValidEdit($_POST['json']['arg']))<1)
+           {
+            User_m::EditUserToDb($_POST['json']['arg']);
+          //  echo "ok";
+            }
+
+            else {
+              echo json_encode(User::checkValidEdit($_POST['json']['arg']));
+            }
 
                break;
 

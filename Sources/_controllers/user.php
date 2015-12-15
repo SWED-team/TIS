@@ -177,6 +177,76 @@
 
 
 
+		public static function checkValidReg($param)
+		{
+			
+			$errors = array();
+			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
+			{$errors["email"]="Email address is not valid";}
+
+			if(sizeof(User_m::isInDb("email",$param["login"]))>1)
+			{$errors["email2"]="Entered email is already in use";}
+			
+
+			if(strlen($param["firstName"])<2)
+			{$errors["fname"]="First Name have to contains atleast 2 characters";}
+
+			if(strlen($param["lastName"])<2)
+			{$errors["lname"]="Last dsName have to contains atleast 2 characters";}
+
+
+			if(strlen($param["pass"])<5)
+			{$errors["lname"]="Password have to contains atleast 5 characters";}
+
+			
+			
+			return $errors;
+			
+
+
+		}
+		public static function checkValidEdit($param)
+		{
+			
+			$errors = array();
+			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
+			{$errors["email"]="Email address is not valid";}
+
+			
+			
+
+			if(strlen($param["firstName"])<2)
+			{$errors["fname"]="First Name have to contains atleast 2 characters";
+	$errors["fname"]="First Name have to contains atleast 2 characters";
+$errors["fname"]="First Name have to contains atleast 2 characters";}
+
+			if(strlen($param["lastName"])<2)
+			{$errors["lname"]="Last Name have to contains atleast 2 characters";}
+
+
+			if(strlen($param["pass"])<5)
+			{$errors["lname"]="Password have to contains atleast 5 characters";}
+
+			
+			
+			return $errors;
+			
+
+
+		}
+
+
+		public function listPages()
+		{
+
+			$list = User_m::gePagesFromDb($tihs->userData["id"]);
+			foreach ($list as $key => $value) {
+				
+					echo "toto je valuie".$value;
+					}
+					
+		}
+
 
 
 

@@ -89,10 +89,10 @@
 		public static function showEditForm($userData)
 		{
 			$res='<div id="infoSectionUser2" >
-			<div id="editForm" class="hiddeng">
+			<div id="editForm" ">
 			<form method="post">
 
-			 <input id="Idcko " type="text" class="form-control col-ms-1" name="login" value='.$userData["id"].'>
+			 <input id="idcko" type="text" class="form-control col-ms-1 hidden" name="login" value='.$userData["id"].'>
       
 
       	 <div class="form-group col-md-6">
@@ -131,7 +131,7 @@
          <div id="editButton" name="submitRegUser" class="btn btn-success" >Edit</div>
          
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-      </form></div></div><div id="check_div">blabla</div></div>';
+      </form></div></div></div><div id="check_div">blabla</div>';
       	return $res;
 		}
 
@@ -144,7 +144,7 @@
 		public static function showRegForm()
 		{
 
-			$res='<div id="infoSectionUser2" >
+			$res='<div id="infoSectionUser1" >
 
 			<div id="editForm" >
 			<form method="post">
@@ -197,24 +197,76 @@
 		public static function showListModules()
 		{
 
-			$res='
-			<div id="listM" class="hidden">
+			$res=
+			'<div id="infoSectionUser2" ><div id="listP">'.'
+			 <div class="module-container col-sm-6 xxxf">
+      <div class="module module-image-title" style="background-image: url('.'img/i3.jpg'.')">
+        <div class="module-category">category</div>
+        <div class="module-title">Page link with image</div>
+      </div>
 
-			  <div class="modal-body">
+      <div class="sideStatus">
+      	<i class="fa fa-check">
+      	<span>20.15.2014</span>
+      	<span>Modules:350</span>
 
-			<button type="button" class="btn btn-info crow col-md-12 "  >
-              <i class="glyphicon glyphicon-edit"></i>&nbsp &nbsp Edit profile
-            </button>
-            <button type="button" class="btn btn-info crow col-md-11" >
-              <i class="glyphicon glyphicon-list"></i>&nbsp List modules
-            </button>
-            <button type="button" class="btn btn-info crow col-md-11" >
-              <i class="glyphicon glyphicon-align-justify"></i>&nbsp &nbsp List pages
-            </button>
-            <button type="button" class="btn btn-danger crow col-md-11" >
-              <i class="glyphicon glyphicon-remove"></i>&nbspremove user
-            </button></div></div>';
-            return $res;
+
+      	</i>
+
+
+      </div>
+
+    </div>
+    <div class="module-container col-sm-6 xxxf">
+      <div class="module module-image-title" style="background-image: url('.'img/i3.jpg'.')">
+        <div class="module-category">category</div>
+        <div class="module-title">Page link with image</div>
+      </div>
+            <div class="sideStatus"></div>
+    </div>
+    </div>
+    </div>
+
+    <style>
+
+    	.fa-check
+    	{
+    		
+    		color:green;
+    		width:80%;
+    		float:right;
+    	}
+    	.xxxf{
+    		
+    		
+    		
+    		margin-top:10%;
+    		margin-left:20%;
+
+    		border:0px solid gray;    		
+    	}
+    	.module-image-title
+    	{
+    		float:left;
+    		width:100%;
+    		margin:0;
+
+    	}
+
+    	.sideStatus{
+
+    		background-color:rgba(0,0,0,.7);
+
+    		height:30px;
+    		float:left;
+    		width:100%;
+    	}
+    </style>
+
+    ';
+
+
+    return $res;
 		}
 
 
@@ -263,12 +315,12 @@
 				  $("#btnEdit").on("click",function(){
 		
 				    $("#editForm").removeClass("hidden");
-				     $("#listM").addClass("hidden");
+				     $("#listP").addClass("hidden");
 				  });
 				  
 				  $("#btnListM").on("click",function(){
 				  
-				    $("#listM").removeClass("hidden");
+				    $("#listP").removeClass("hidden");
 				     $("#editForm").addClass("hidden");
 				  });
 

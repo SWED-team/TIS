@@ -107,6 +107,20 @@ public function __construct(){
 
 			}
 
+			public static function isInDb($what,$value)
+			{
+
+				 $result = Db::query("
+				      SELECT *
+				      FROM user u
+				      WHERE u.email=?", 
+				      array($value))->fetch();
+				    return $result;
+
+
+
+
+			}
 
 
 	}

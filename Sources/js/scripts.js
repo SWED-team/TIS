@@ -24,12 +24,9 @@
 /////script pre overenie registracnych udajov usera a naslednej registracie
 	$("#regButton").on("click",function  () {
 
-alert("fsdfsdf");
-		if(checkValidReg())
-		{
-			ajaxRegEdit(0);	
-	 		$("#check_div").append("<div id='sub_error' class='btn btn-success'><i ></i><span>Registration successfull</span> </div>");
-		}
+		alert("idem reg");
+			ajaxRegEdit(0);
+
 	
 	
 	});
@@ -38,17 +35,18 @@ alert("fsdfsdf");
 
 ////script pre overenie a editaciu usera
 	$("#editButton").on("click",function  () {
-		alert("editujem");
+		
 
-		if(checkValidReg())
-		{
-			ajaxRegEdit($("#idcko").val());	
-	 		$("#check_div").append("<div id='sub_error' class='btn btn-success'><i ></i><span>Edit successfull</span> </div>");
-		}
+			id=$("#idcko").val();
+			alert("fsdfsdfsdfsd"+id);
+			ajaxRegEdit(id);
+
+			
 		// body...
 	});
 
-////funckia na validaciu registracie/editacie usera
+////funckia na validaciu registracie/editacie usera 
+/*
 	function checkValidReg()
 	{
 		valid =true;
@@ -58,13 +56,13 @@ alert("fsdfsdf");
 		//alert($("#loginLastName").val());
 		if($("#loginEmail").val().length<3){
 		valid=false;errors["email"]="invalid email ";
-		$("#loginEmail").css("border-bottom","2px solid red");}
+		$("#loginEmail2").css("border-bottom","2px solid red");}
 
 		if($("#loginFirstName").val().length<3){
 		valid=false;errors["first name"]=true;
-		$("#loginFirstName").css("border-bottom","2px solid red");}
+		$("#loginFirstName2").css("border-bottom","2px solid red");}
 
-		if($("#loginLastName").val().length<3){
+		if($("#loginLastName2").val().length<3){
 		valid=false;errors["last name"]=true;
 		$("#loginLastName").css("border-bottom","2px solid red");}
 		if($("#loginPass1").val()){}
@@ -73,16 +71,20 @@ alert("fsdfsdf");
 			printRegErrors(errors);
 		return valid;
 
-	}
+	}*/
+
+
 ///funckia vypise vsetky errory pri reg/editacii usera
 	function printRegErrors(errors)
 	{
+	//	alert("som tu"+errors);
 		$("#check_div").html("");
 			 $.each(errors ,function(key,value)
 			 {
 
+			 //	alert("idem pole");
 			 	if(value){$("#check_div").
-			 		append("<div id='sub_error' class='btn btn-danger'><i class='fa fa-minus-circle'></i> <span>chyba: "+value+"</span> </div>");}
+			 		append('<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> '+value+'</div>');}
 			 });
 		}
 		
@@ -91,7 +93,7 @@ alert("fsdfsdf");
 	function ajaxRegEdit(id)
 	{
 		
-alert("volam ajax"+id);
+//alert("Vddolam ajax toto je id : " +id);
 		var fnc;
 		if(id==0)fnc="RegUser";
 		else fnc="EditUser"
@@ -121,12 +123,21 @@ alert("volam ajax"+id);
 
 	       success: function(data){
 		    alert(data);
-		    alert(data);
+		   if(data=="ok" || data ==""){
+		   	alert("je to ok");
+
+		   $("#check_div").append("<div id='sub_error' class='btn btn-success'><i ></i><span>Edit successfull</span> </div>");
+				}
+			else {
+				alert("neniOK");
+				
+				printRegErrors(JSON.parse(data));}
+		   // return data;
 		  },
 	  		error: function(data){
-		    alert(data);
-		    alert('failure');
+		    return data;
 		  }
 	    });
+
 
 	}

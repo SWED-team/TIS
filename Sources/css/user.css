@@ -1,0 +1,101 @@
+
+
+#navigationBarUser
+{
+	
+	float: left;
+	background-color: rgba(255,255,255,.9);
+	height: 100vh;
+
+
+}
+
+#navigationBarUser button
+{
+	margin-top: 10px;
+	
+	}
+
+#infoSectionUser{
+	background-color: rgba(255,255,255,.9);
+	border: 1px solid red;
+	height: 100pv;
+
+	float: left;
+	
+}
+#infoSectionUser2
+{
+	background-color: rgba(255,255,255,.9);
+	
+	height: 100pv;
+	width: 70%;
+	margin-top: 1%;
+	margin-left: 15%;
+	float: left;
+}
+
+#check_div
+{
+	background-color: rgba(255,255,255,.9);
+	min-height: 50px;
+	
+	border-top:1px solid #958D8D;
+	float: left;
+	width: 70%;
+	margin-left: 15%;
+}
+
+#sub_error
+{
+	
+	margin:10px;
+	clear: both;
+  width: 90%;
+  float: left;
+  color:red;
+}
+/***csssko pre preklikavia user/ search v headeri*/
+ #userBarIcon:hover
+              {
+                cursor: pointer;
+              }
+              #userBarIcon{margin-top: 15px;margin-left: 5px;}
+              #searchBarIcon {margin-top: 15px;margin-left: 5px;}
+             #searchBarHide input {float: left;width: 200px;}
+             #searchBarHide button {float: left;width: 50px;}
+             #userBarHide button {
+              margin-left: 20px;
+             }
+
+              #searchBarIcon{float: right;}
+              #userBarIcon{ float: right;}
+              #userBar{position: relative;}
+              #userBarHide{overflow:hidden;width:00px;height:00px;
+                position: absolute;background-color: white;
+               z-index:100;top:0px;right: 10px;
+               border-radius: 5px;padding-top: 5px;
+               background-color: rgba(255,255,255,.9);
+             }
+            
+              
+              
+               #searchBar{position: relative;}
+              #searchBarHide{overflow:hidden;width:0px;height:0px;
+                position: absolute;top:0px;right: 10px;z-index: 100;
+                background-color: white; border-radius: 5px;padding-top: 5px;
+           		background-color: rgba(255,255,255,.9);}
+
+                #sub_error
+                {
+                  float: left;
+                  width: 20%;
+
+                }
+                #sub_error i
+                {float: left;}
+                #sub_error span
+                {float: left;
+
+                  margin-right: 20px;}
+
