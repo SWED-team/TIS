@@ -17,7 +17,7 @@ class Page_v{
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/fileinput.css" media="all" type="text/css" />
-
+        <link rel="stylesheet" href="css/user.css">
         <script src="./js/jquery-2.1.3.min.js" type="text/javascript"></script>
         <script src="./js/bootstrap.min.js" type="text/javascript"></script>
         <script src="./js/fileinput.js" type="text/javascript"></script>
@@ -99,16 +99,7 @@ class Page_v{
          
 
             </ul>          
-            <div class="col-md-3 pull-right">
-              <form class="navbar-form" role="search">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                    <div class="input-group-btn">
-                      <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                  </div>
-                </div>
-              </form>
-            </div>
+            
           </div>
 
         </div>

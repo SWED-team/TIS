@@ -1,4 +1,9 @@
 <?php
+if(file_exists('../_models/Db.php'))
+  require_once('../_models/Db.php');
+if(file_exists('_models/Db.php'))
+  require_once('_models/Db.php');
+
 class Module_m{
 /**
  * Získanie základných informácií o module z DB

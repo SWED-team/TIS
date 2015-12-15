@@ -1,6 +1,7 @@
 <?php  
   session_start();
   mb_internal_encoding("UTF-8");
+  
   require('_models/Db.php');
   require('_controllers/Module.php');
   require('_controllers/Page.php');

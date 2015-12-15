@@ -3,12 +3,8 @@ class ModuleEmbeded_v{
 	public static function editor($container, $content, $operation){
 // value="'.(isset($content["title"]))?$content["title"]:"".'"
 		$url = '_controllers/ModuleEmbeded.php?';
-		$url = $url.'type=module_embeded&';
-		if(isset($operation) && $operation=="insert")
-			$url = $url.'insert=true&';
-		if(isset($operation) && $operation=="edit")
-			$url = $url.'edit=true&';
-
+		if(isset($operation))
+			$url = $url.$operation.'=true&';
 		if(isset($_GET["page_id"]) && $_GET["page_id"]!=0)
 			$url = $url.'page_id='.$_GET["page_id"].'&';
 		if(isset($container["id"]) && $container["id"]!=0)
@@ -45,10 +41,6 @@ class ModuleEmbeded_v{
             </div> 
 
             <div class="form-group">
-              <label class="control-label col-sm-2" for="me-order">Order:</label>
-              <div class="col-sm-4">          
-                <input id="me-order" type="number" class="form-control" name="order" min="0" value="'.((isset($content["order"]))?$content["order"]:"").'">
-              </div>
 	            <label class="control-label col-sm-2" for="status">Status:</label>
 	            <div class="col-sm-4">          
 	              <select id="status" class="form-control" name="status" >
@@ -56,6 +48,10 @@ class ModuleEmbeded_v{
 	                <option value="1" '. ((isset($container["status"]) && $container["status"]==1)?"selected":"").'>Published</option>
 	              </select>
 	            </div>
+              <label class="control-label col-sm-2" for="me-order">Order:</label>
+              <div class="col-sm-4">          
+                <input id="me-order" type="number" class="form-control" name="order" min="0" value="'.((isset($content["order"]))?$content["order"]:"").'">
+              </div>
 	          </div>
 
            	<h4 class="text-muted "> Module Content Data</h4><hr>

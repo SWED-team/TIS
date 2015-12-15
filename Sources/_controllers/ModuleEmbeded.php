@@ -1,15 +1,11 @@
 <?php
-
-// --------- ak posielame poziadavku pomocou ajaxu tak treba naimportovat potrebne kniznice ---------
-if(isset($_GET["insert"]) || isset($_GET["edit"]) || isset($_GET["delete"])|| isset($_GET["show_editor"])){
-  session_start();
-  require_once('../_models/Db.php');
-  require_once('Module.php');
-  require_once('../_controllers/User.php');
+if(!isset($_SESSION)){
+ session_start();
 }
-// --------------------------------------------------------------------------------------------------
-
-
+if(file_exists('Module.php'))
+  require_once('Module.php');
+if(file_exists('_controllers/Module.php'))
+  require_once('_controllers/Module.php');
 
 
 /*******************************  ModuleEmbeded  *******************************/
@@ -23,17 +19,25 @@ class ModuleEmbeded extends Module{
       require_once('_models/Module_m.php');
       require_once('_views/ModuleEmbeded_v.php');
     }
-    else if(file_exists('../_models/Module_m.php')&&file_exists('../_views/ModuleEmbeded_v.php')) {
+    if(file_exists('../_models/Module_m.php')&&file_exists('../_views/ModuleEmbeded_v.php')) {
       require_once('../_models/Module_m.php');
       require_once('../_views/ModuleEmbeded_v.php');
     }
-    else {
-      echo 'Cannot open model or view for controller.';
-      return;
-    }
+    if(file_exists('_controllers/user.php'))
+      require_once('_controllers/user.php');
+    if(file_exists('user.php'))
+      require_once('user.php');
+    
+    $this->created_by = new User();
+    $this->edited_by = new User();
+
+    $this->loggedUser = new User();
+    $this->loggedUser->fillUserDatabySession();
+
     $this->module_type = "module_embeded";
     $this->setById($id);
     
+
   }
  /**
   * Funkcia načíta informácie z DB pre model so zadaným ID
@@ -43,6 +47,8 @@ class ModuleEmbeded extends Module{
     if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
       $this->containerData = Module_m::getModuleContainer($id);
       $this->contentData   = Module_m::getModuleContent($id,  $this->module_type);
+      $this->created_by->fillUserDataById($this->containerData['created_by']);
+      $this->edited_by->fillUserDataById($this->containerData['edited_by']);
     }
   }
   /**
@@ -66,7 +72,7 @@ class ModuleEmbeded extends Module{
  * @return string html kód pohľadu na modul 
  */
   public function module(){
-    return ModuleEmbeded_v::module($this->containerData, $this->contentData, true);
+    return ModuleEmbeded_v::module($this->containerData, $this->contentData, $this->loggedUser->isAdmin());
   }
 /**
  * Funkcia vráti pohľad na editoru modulu
@@ -82,29 +88,33 @@ class ModuleEmbeded extends Module{
    */
   public function getFormData(){
     $success = true;
+    $this->containerData["type"] = $this->module_type;
 
 
 
     // --------- nacitanie udajov o containeri daneho modulu ----------------
-
-     ///////////////////// dorobit treba ///////////////////
     //overenie prav na pridanie / editaciu modulu 
-    if(false){
+    if(!$this->loggedUser->isAdmin()){
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You don\'t have prermission to insert this module.</div>';
       $success = false;
       return $success;
     }   
+
+    // ak vkladam novy modul ///////////////////////////////////////
     if(isset($_GET['insert'])){
-      ///////////////////// dorobit treba //////////////////
-      //overenie prihlaseneho pouzivatela 
-      if(true){
-        $this->containerData["edited_by"] = 1;
+
+      //overenie prihlaseneho pouzivatela a nastavenie id usera ktory editoval modul posledny
+      if($this->loggedUser->getUserID()!=0){
+        $this->containerData["created_by"] = $this->loggedUser->getUserID();
+        $this->containerData["edited_by"] = $this->loggedUser->getUserID();
+
       }
       else{
         echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You must be loged in.</div>';
         $success = false;
       }
-      //////////////////////////////////////////////////////
+
+      //overenie ci je zadane page_id
       if(isset($_GET['page_id']) && $_GET['page_id'] > 0){
         $this->containerData["page_id"] = $_GET['page_id'];
       }
@@ -113,21 +123,20 @@ class ModuleEmbeded extends Module{
         $success = false;
       }
     }
+    ///////////////////////////////////////////////////////////////
+    // ak editujem modul //////////////////////////////////////////
     if(isset($_GET['edit'])){
       $this->containerData["edited"] = date("Y-m-d H:i:s", time());
 
-      ///////////////////// dorobit treba ///////////////////
-      //overenie prihlaseneho pouzivatela 
-      if(true){
-        $this->containerData["created_by"] = 1;
-        $this->containerData["edited_by"] = 1;
+      // overenie prihlaseneho pouzivatela 
+      if($this->loggedUser->getUserID()!=0){
+        $this->containerData["created_by"] = $this->loggedUser->getUserID();
       }
       else{
         echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You must be loged in.</div>';
         $success = false;
       }
-      //////////////////////////////////////////////////////
-
+      // overenie ci je zadane id modulu ktory sa ma editovat 
       if( isset($_GET['id']) && $_GET['id'] > 0 ){
         $this->containerData["id"] = $_GET['id'];
       }
@@ -135,17 +144,11 @@ class ModuleEmbeded extends Module{
         echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You cannot update this module (wrong module_id inserted).</div>';
         $success = false;
       }
-    }
+    }//////////////////////////////////////////////////////////////
     
-    if(isset($_GET['type']) && $_GET['type'] == $this->module_type){
-      $this->containerData["type"] = $_GET['type'];
-    }
-    else{
-      echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module Type is wrong.</div>';
-      $success = false;
-    }
 
-    if(isset($_POST['rows']) && $_POST['rows']>=0){
+    // overenie spravneho zadania poctu riadkov
+    if(isset($_POST['rows']) && $_POST['rows']>=0 && $_POST['rows']<=4){
       $this->containerData["rows"] = $_POST['rows'];
     }
     else{
@@ -153,15 +156,18 @@ class ModuleEmbeded extends Module{
       $success = false;
     }
 
-    if(isset($_POST['cols']) && $_POST['cols']>=0){
+    // overenie spravneho zadania poctu stlpcov
+    if(isset($_POST['cols']) && $_POST['cols']>=1 && $_POST['cols']<=4){
       $this->containerData["cols"] = $_POST['cols'];
     }
     else{
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Number of module columns must be greater than 0.</div>';
       $success = false;      
     }
-
+    
+    // overenie spravneho zadania statusu
     if(isset($_POST['status']) && $_POST['status']>=0 && $_POST['status']<=1) {
+      // ak je status modulu nastaveny na skryty tak vypis warning
       if($_POST['status']==0){
         echo '<div class="alert alert-warning" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Warning:</strong> Module is hidden.</div>';
       }
@@ -176,6 +182,8 @@ class ModuleEmbeded extends Module{
 
 
     // --------- nacitanie udajov o contente daneho modulu ----------------
+    
+    // overenie a ulozenie titulky modulu
     if(isset($_POST['title'])){
       $this->contentData["title"] = $_POST['title'];
     }
@@ -183,6 +191,7 @@ class ModuleEmbeded extends Module{
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module title error.</div>';
       $success = false;
     }
+    // overenie a ulozenie popisu modulu
     if(isset($_POST['description'])){
       $this->contentData["description"] = $_POST['description'];
     }
@@ -190,8 +199,15 @@ class ModuleEmbeded extends Module{
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module description error.</div>';
       $success = false;
     }
-    if(isset($_POST['link']) && $_POST['link'] != ""){
-      $this->contentData["link"] = $_POST['link'];
+    // overenie a ulozenie linku embedovaneho odkazu
+    if(isset($_POST['link']) && $_POST['link'] != "" ){
+      if(strpos(strtolower($_POST['link']) ,'<iframe') !== false && strpos(strtolower($_POST['link']) ,'</iframe>') !== false){
+          $this->contentData["link"] = $_POST['link'];
+      }
+      else{
+        echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module link must contains &lt;iframe&gt;&lt;/iframe&gt; tag.</div>';
+        $success = false;
+      }
     }
     else{
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module link must be inserted.</div>';
@@ -221,7 +237,7 @@ class ModuleEmbeded extends Module{
       $this->contentData["module_id"] = $result1;
       $result2 = Module_m::insertInto($this->module_type, $this->contentData);
       if($result2 > 0){
-        echo '<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Module was inserted successfully.</strong></div>';
+        echo '<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Module was saved successfully.</strong></div>';
         return true;
       }
       else{

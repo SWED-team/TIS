@@ -12,17 +12,38 @@
 	 */
 	public function __construct()
 	{
-
-		require_once('/_models/User_m.php');
-    	require_once('/_views/User_v.php');
-
-    	 
-
-    	 
+    if(file_exists('_models/User_m.php')&&file_exists('_views/User_v.php')) {
+      require_once('_models/User_m.php');
+      require_once('_views/User_v.php');
+    }
+    if(file_exists('../_models/User_m.php')&&file_exists('../_views/User_v.php')) {
+      require_once('../_models/User_m.php');
+      require_once('../_views/User_v.php');
+    } 
 	}
 	/**
 	 * Funkcia zabezpečuje zobrazenie POP-UP okna pre prihlásenie
 	 */
+
+	public function isLoggedIn()
+	{
+		if(isset($this->userData["id"]) && $this->userData["id"]>0)
+			return true;
+		return false;
+	}
+
+	public function getUserID(){
+		if(isset($this->userData["id"]) && $this->userData["id"]>0) 
+			return  $this->userData["id"];
+		return 0;
+	}
+
+	public function isAdmin()
+	{
+		if(isset($this->userData["admin"]) && $this->userData["admin"]==1)
+			return true;
+		return false;
+	}
 
 	public function printLogPop()
 	{

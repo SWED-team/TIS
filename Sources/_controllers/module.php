@@ -36,6 +36,11 @@ abstract class Module{
    */
   public $edited_by;
   /**
+   * aktuálne prihlásený používateľ
+   * @var User
+   */
+  public $loggedUser;
+  /**
    * typ modulu
    * @var string
    */
