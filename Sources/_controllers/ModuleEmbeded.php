@@ -176,8 +176,8 @@ class ModuleEmbeded extends Module{
 
 
     // --------- nacitanie udajov o contente daneho modulu ----------------
-    if(isset($_POST['me-title'])){
-      $this->contentData["title"] = $_POST['me-title'];
+    if(isset($_POST['title'])){
+      $this->contentData["title"] = $_POST['title'];
     }
     else{
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module title error.</div>';
