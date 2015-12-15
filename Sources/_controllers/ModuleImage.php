@@ -26,10 +26,10 @@ class ModuleImage extends Module{
   public function module(){
     return Module_v::moduleImage($this->containerData, $this->contentData, $this->file->get());
   }
-  public function editor(){
+  public function editor($operation){
     return Module_v::moduleImageEditor($this->module_type);
   }
-  public function getPostData(){}
+  public function getFormData(){}
   public function insert(){
     Module_m::insertInto('module',$this->contentContainer);
     Module_m::insertInto($this->module_type, $this->contentData);

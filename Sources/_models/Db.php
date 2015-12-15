@@ -30,12 +30,22 @@ class Db {
    * @return [type]             [description]
    */
   public static function query($query, $parameters = array()) {
-    $result = self::$connect->prepare($query);
-    $result->execute($parameters);
-    return $result;
+    $stmt = self::$connect->prepare($query);
+    $stmt->execute($parameters);
+    return $stmt;
   }
   public static function lastInsertId(){
-    self::$connect->lastInsertId();
+    return self::$connect->lastInsertId();
+  }
+  public static function insert($query, $parameters = array()) {
+    $stmt = self::$connect->prepare($query);
+    $res = $stmt->execute($parameters);
+    if($res){
+        return self::lastInsertId();
+      }
+    return 0;
   }
 }
+
+Db::connect("127.0.0.1", "root", "", "tis");
 ?>

@@ -1,11 +1,11 @@
-<?php
+<?php  
+  session_start();
   mb_internal_encoding("UTF-8");
   require('_models/Db.php');
   require('_controllers/Module.php');
   require('_controllers/Page.php');
   include('_controllers/User.php');
-  session_start();
-  Db::connect("127.0.0.1", "root", "", "tis");
+
   $page = new Page(4);
     $_user=new User();
      $_user->checkIfLogin();

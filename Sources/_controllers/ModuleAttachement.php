@@ -19,8 +19,8 @@ class ModuleAttachement extends Module{
   public function module(){
     return Module_v::module($this->containerData, $this->contentData);
   }
-  public function editor(){}
-  public function getPostData(){}
+  public function editor($operation){}
+  public function getFormData(){}
   public function insert(){}
   public function update(){}
   public function delete(){}

@@ -6,9 +6,10 @@ Class Page{
   private $created_by;      // pouzivatel ktory vytvoril stranku
   private $edited_by;       // pouzivatel ktory posledny editoval stranku
   private $newModules;
-  public function __construct($page_id){
+  public function __construct($page_id = 0){
     require_once('_models/Page_m.php');
     require_once('_views/Page_v.php');
+    
     $this->pageData = Page_m::getPageData($page_id);
     $this->modules = array();
     // inicializacia modulov >> "nazov_typu_modulu_v_db" => new ModuleTyp()

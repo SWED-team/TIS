@@ -68,16 +68,17 @@ abstract class Module{
   abstract public function module();
   /**
    * Funkcia vráti view pre editor modulu
+   * @param  String $operation Operácia ktorá sa má vykonať po odoslaní formulára (Editovanie/Vloženie)
    * @return string html kód editora modulu
    * @abstract
    */
-  abstract public function editor();
+  abstract public function editor($operation);
 
 /**
  * Funkcia nacita data z post premennych ktore sa odoslu po submitnuti fomulara
  * @return [type] [description]
  */
-  abstract public function getPostData();
+  abstract public function getFormData();
   
   /**
    * Funkcia vloží modul do DB

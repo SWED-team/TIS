@@ -2,7 +2,8 @@
 class Module_v{
   private static function moduleEditorHead($type){
     return'       
-          <form id="'.$type.'_form"  class="form-horizontal hiddenSection" role="form" enctype="multipart/form-data" method="post" action="">
+          <form id="'.$type.'_form"  class="form-horizontal hiddenSection" role="form" enctype="multipart/form-data" method="post" 
+          action="insertModule.php?'. (isset($_GET["page_id"])?"page_id=".$_GET["page_id"]:"").'">
             <input type="text" class="hiddenSection" name="type" value="'.$type.'">
             <!---- Image Title ---->
             <div class="form-group">
@@ -133,26 +134,6 @@ class Module_v{
       </div>
     </div>';
     
-  }
-
-
-  public static function moduleEmbeded($container, $content){
-    return '
-    <div class="module-container col-sm-'.$container['cols'] * 3 .'">
-      <div class="module-embeded row-'.$container['rows'] .'">
-        '. $content['link'].'
-      </div>
-    </div>
-    ';
-  }
-  public static function moduleEmbededEditor($type){
-    return Module_v::moduleEditorHead($type).'
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="comment">Embeded link:</label>
-              <div class="col-sm-10">  
-                <textarea class="form-control" rows="5" id="module-embeded-link" name="module-embeded-link"></textarea>
-              </div>
-            </div>' . Module_v::moduleEditorFoot();
   }
 
 

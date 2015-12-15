@@ -126,6 +126,20 @@ class Page_v{
     public static function footer(){
       return '
         </section>
+        <section id="modal-box" class="modal fade" role="dialog">
+          <div  class="modal-dialog modal-lg">
+            <div  class="modal-content">          
+              <div id="modal-box-header" class="modal-header">
+                <button type="button " class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div id="modal-box-content" class="modal-body row">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </section>
         </div>
         <div class="push"></div>
         <footer class="container-fluid">
@@ -192,7 +206,7 @@ class Page_v{
               '.$m->getModuleTypeName().'
             </button>
           </div>';
-        $editors = $editors . $m->editor();
+        $editors = $editors . $m->editor("insert");
       }
 
     return '
@@ -238,6 +252,7 @@ class Page_v{
         }
     }
     $(document).on("ready", function(){
+      hideModuleForms($("#module-forms"));
       $(".file-insert-method").each(function(){
         $(this).on("change", function(){
           checkInsertFileMethod($(this));
@@ -256,13 +271,8 @@ class Page_v{
       checkInsertFileMethod(moduleForm.find(".file-insert-method"));
 
     }
+
     </script>
-
-
-
-
-
-
     ';
   }
 

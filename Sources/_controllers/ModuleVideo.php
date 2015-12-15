@@ -22,8 +22,8 @@ class ModuleVideo extends Module{
       $this->contentData   = Module_m::getModuleContent($id, $this->module_type);
     }
   }
-  public function getPostData(){}
-  public function editor(){}
+  public function getFormData(){}
+  public function editor($operation){}
   public function insert(){}
   public function update(){}
   public function delete(){}

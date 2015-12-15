@@ -119,6 +119,52 @@ header{
     background-position: center center;
     background-size: cover;
     margin-bottom: 30px;
+    border: 1px solid #222;
+    -webkit-transition: .1s ease-in-out;
+       -moz-transition: .1s ease-in-out;
+        -ms-transition: .1s ease-in-out;
+         -o-transition: .1s ease-in-out;
+            transition: .1s ease-in-out;
+  }
+  .module:hover,
+  .module:focus{
+    border: 1px solid rgba(81, 203, 238, 1);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(81, 203, 238, 0.7);    
+  }
+  .module-buttons{
+    
+    opacity: 0.2;
+    position: absolute;
+    right: 0;
+    top: -20px;
+    left: 15px;
+    right: 15px;
+    min-height: 20px;
+    background:  rgba(255,255,255,0.9);
+    border-bottom:solid white 1px;
+    font-size: 80%;
+    -webkit-transition: .1s ease-in-out;
+       -moz-transition: .1s ease-in-out;
+        -ms-transition: .1s ease-in-out;
+         -o-transition: .1s ease-in-out;
+            transition: .1s ease-in-out;
+  }
+
+  .module-buttons:hover, 
+  .module-buttons:focus{
+     z-index: 999;
+   }
+  .module-buttons:hover,
+  .module-buttons:focus,
+  .module:hover > .module-buttons,
+  .module:focus > .module-buttons{
+    opacity: 1;
+  }
+  .module-buttons .row:first-child{
+    font-size: 140%;
+  }
+  .module-buttons a{
+    padding-left: 5px;
   }
   .row-0{
     height: auto;
@@ -206,10 +252,13 @@ header{
   }
   .module-embeded {
     background-color: black;
+
   }
   .module-embeded iframe{
     max-width: 100%;
-    height: 100%;
+    height: 100%;    
+    display: block;
+    margin: 0 auto;
   }
 
 
@@ -237,11 +286,11 @@ header{
   .module-image .module-title{
     opacity: 0;
     bottom:-50px;
-    -webkit-transition: .1s ease-in;
-       -moz-transition: .1s ease-in;
-        -ms-transition: .1s ease-in;
-         -o-transition: .1s ease-in;
-            transition: .1s ease-in;
+    -webkit-transition: .1s ease-in-out;
+       -moz-transition: .1s ease-in-out;
+        -ms-transition: .1s ease-in-out;
+         -o-transition: .1s ease-in-out;
+            transition: .1s ease-in-out;
   }
   .module-image:hover > .module-title, 
   .module-image:focus > .module-title{
@@ -308,11 +357,11 @@ header{
       width: 100%;
       opacity: 0;
       bottom:-50px;
-      -webkit-transition: .1s ease-in;
-       -moz-transition: .1s ease-in;
-        -ms-transition: .1s ease-in;
-         -o-transition: .1s ease-in;
-            transition: .1s ease-in;
+    -webkit-transition: .1s ease-in-out;
+       -moz-transition: .1s ease-in-out;
+        -ms-transition: .1s ease-in-out;
+         -o-transition: .1s ease-in-out;
+            transition: .1s ease-in-out;
   }
 
   .carousel:hover >  .carousel-indicators,

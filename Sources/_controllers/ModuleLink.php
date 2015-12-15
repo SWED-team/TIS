@@ -21,8 +21,8 @@ class ModuleLink extends Module{
   public function module(){
     return Module_v::module($this->containerData, $this->contentData);
   }
-  public function getPostData(){}
-  public function editor(){}
+  public function getFormData(){}
+  public function editor($operation){}
   public function insert(){}
   public function update(){}
   public function delete(){}

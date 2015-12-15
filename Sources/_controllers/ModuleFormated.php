@@ -22,10 +22,10 @@ class ModuleFormated extends Module{
   public function module(){
     return Module_v::moduleFormated($this->containerData, $this->contentData);
   }
-  public function editor(){
+  public function editor($operation){
 
   }
-  public function getPostData(){}
+  public function getFormData(){}
   public function insert(){}
   public function update(){}
   public function delete(){}
