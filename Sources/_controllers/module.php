@@ -114,7 +114,6 @@ abstract class Module{
     public function verify(){
 
         $success = true;
-        $this->containerData["type"] = $this->module_type;
 
         // ----------- Overenie uzivatelskych práv ----------------START
         // Overenie ci je uzivatel prihlaseny
