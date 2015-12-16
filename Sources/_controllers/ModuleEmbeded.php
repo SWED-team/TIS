@@ -1,7 +1,6 @@
 <?php
-if(!isset($_SESSION)){
+if(!isset($_SESSION))
  session_start();
-}
 if(file_exists('Module.php'))
   require_once('Module.php');
 if(file_exists('_controllers/Module.php'))
@@ -253,9 +252,6 @@ class ModuleEmbeded extends Module{
    * @return boolean true ak edituje úspešne inak false
    */
   public function update(){
-    //echo $this->contentData["title"]."<br>";
-    //print_r($this->containerData["id"]);
-    //print_r($this->contentData);
     if(isset($this->containerData['id'])&& isset($this->contentData['module_id']) && $this->containerData['id'] > 0 && $this->contentData['module_id'] > 0){
       Module_m::update("module", $this->containerData, "id",$this->containerData['id']);
       Module_m::update($this->module_type, $this->contentData, "module_id",$this->containerData['id']);
