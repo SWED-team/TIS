@@ -30,7 +30,7 @@
 	
 	height: 100pv;
 	width: 70%;
-	margin-top: 1%;
+	margin-top: 0%;
 	margin-left: 15%;
 	float: left;
 }
@@ -38,9 +38,9 @@
 #check_div
 {
 	background-color: rgba(255,255,255,.9);
-	min-height: 50px;
+	min-height: 0px;
 	
-	border-top:1px solid #958D8D;
+	
 	float: left;
 	width: 70%;
 	margin-left: 15%;

@@ -63,6 +63,7 @@
 	if(isset($_POST["submitLogoff"])){
 				
 				unset($_SESSION["userId"]);
+				header("Refresh:0; url=index.php");
 
 				}
 		
@@ -100,11 +101,13 @@
 
 	 	
 	 	$this->userData=User_m::getUserDataByLogin($login,$password);
+	 //	echo User_m::getUserDataByLogin($login,$password);
 	 	$_SESSION["userId"]=$this->userData["id"];
+	 //	echo $this->userData["id"];
 
-	 	
-	    
-	    return $this->userData;
+	 
+	  //  return "Fsdfsdfsd"+$this->userData["email"];
+	  return $this->userData["id"];
 	 }
 
 	 /**
@@ -121,7 +124,9 @@
 	 	if(isset($_SESSION["userId"])){
 	 	$this->userData=User_m::getUserDataById($_SESSION["userId"]);
 	 	}
-	 	else {echo "neni prihlaseny user";}
+	 	else {
+	 		//echo "neni prihlaseny user";
+	 	}
 	 }
 
 	
@@ -205,7 +210,7 @@
 			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
 			{$errors["email"]="Email address is not valid";}
 
-			if(sizeof(User_m::isInDb("email",$param["login"]))>1)
+		if(sizeof(User_m::isInDb("email",$param["login"]))>1)
 			{$errors["email2"]="Entered email is already in use";}
 			
 
@@ -217,11 +222,13 @@
 
 
 			if(strlen($param["pass"])<5)
-			{$errors["lname"]="Password have to contains atleast 5 characters";}
+			{$errors["pass"]="Password have to contains atleast 5 characters";}
 
 			
+			if($param["pass"]!=$param["pass2"])
+			{$errors["pass2"]="Passwords dont match";}
 			
-			return $errors;
+			return ($errors);
 			
 
 
@@ -237,16 +244,15 @@
 			
 
 			if(strlen($param["firstName"])<2)
-			{$errors["fname"]="First Name have to contains atleast 2 characters";
-	$errors["fname"]="First Name have to contains atleast 2 characters";
-$errors["fname"]="First Name have to contains atleast 2 characters";}
+			{$errors["fname"]="First Name have to contains atleast 2 characters";}
+
 
 			if(strlen($param["lastName"])<2)
 			{$errors["lname"]="Last Name have to contains atleast 2 characters";}
 
 
 			if(strlen($param["pass"])<5)
-			{$errors["lname"]="Password have to contains atleast 5 characters";}
+			{$errors["pass"]="Password have to contains atleast 5 characters";}
 
 			
 			
@@ -264,8 +270,9 @@ $errors["fname"]="First Name have to contains atleast 2 characters";}
 			foreach ($list as $key => $value) {
 				
 					echo "toto je valuie".$value;
-					}
 					
+					
+					}
 		}
 
 
