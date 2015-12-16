@@ -90,7 +90,6 @@ class ModuleEmbeded extends Module{
     $this->containerData["type"] = $this->module_type;
 
 
-
     // --------- nacitanie udajov o containeri daneho modulu ----------------
     //overenie prav na pridanie / editaciu modulu 
     if(!$this->loggedUser->isAdmin()){
@@ -296,7 +295,7 @@ if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
 }
 
 // ak spracuvame formular ktory ma vlozit modul
-if( isset($_GET["insert"]) && $_GET["insert"] && isset($_GET["page_id"])){
+if( isset($_GET["insert"]) && $_GET["insert"]){
   $m = new ModuleEmbeded();
   if($m->getFormData()){
     $m->insert();
@@ -328,7 +327,6 @@ if ( isset($_GET["delete"]) && $_GET["delete"]){
   }
   else{
     echo '<strong>Delete Error:</strong> Unknown module.';
-
   }
 }
 // ------------------------------------------------------------

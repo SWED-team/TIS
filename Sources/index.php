@@ -7,7 +7,7 @@
   require('_controllers/Page.php');
   include('_controllers/User.php');
 
-  $page = new Page(4);
+  $page = new Page($_GET["page_id"]);
     $_user=new User();
      $_user->checkIfLogin();
   $_user->checkIfLogoff();
@@ -36,7 +36,6 @@
   $_user->printLogPop();
   ?>
         <script src="./js/scripts.js" type="text/javascript"></script>
-       
 
 
 <?php
