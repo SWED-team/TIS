@@ -14,6 +14,8 @@ class ModuleEmbeded extends Module{
    * @param integer $id ID modulu(ak je ID = 0 tak sa vytvorí prázdny objekt)
    */
   public function __construct($id=0){
+    $this->module_type = "module_embeded";
+
     if(file_exists('_models/Module_m.php')&&file_exists('_views/ModuleEmbeded_v.php')) {
       require_once('_models/Module_m.php');
       require_once('_views/ModuleEmbeded_v.php');
@@ -26,16 +28,16 @@ class ModuleEmbeded extends Module{
       require_once('_controllers/user.php');
     if(file_exists('user.php'))
       require_once('user.php');
-    
+
     $this->created_by = new User();
     $this->edited_by = new User();
 
     $this->loggedUser = new User();
     $this->loggedUser->fillUserDatabySession();
 
-    $this->module_type = "module_embeded";
+    $this->containerData["type"]=$this->module_type;
     $this->setById($id);
-    
+
 
   }
  /**
@@ -68,7 +70,7 @@ class ModuleEmbeded extends Module{
 
 /**
  * Funkcia vráti pohľad na modul
- * @return string html kód pohľadu na modul 
+ * @return string html kód pohľadu na modul
  */
   public function module(){
     return ModuleEmbeded_v::module($this->containerData, $this->contentData, $this->loggedUser->isAdmin());
@@ -76,7 +78,7 @@ class ModuleEmbeded extends Module{
 /**
  * Funkcia vráti pohľad na editoru modulu
  * @param  string $operation operácia ktorá sa má vykonať po odoslaní formulára (insert/edit)
- * @return string html kód editora modulu 
+ * @return string html kód editora modulu
  */
   public function editor($operation){
     return ModuleEmbeded_v::editor( $this->containerData, $this->contentData, $operation);
@@ -91,12 +93,12 @@ class ModuleEmbeded extends Module{
 
 
     // --------- nacitanie udajov o containeri daneho modulu ----------------
-    //overenie prav na pridanie / editaciu modulu 
+    //overenie prav na pridanie / editaciu modulu
     if(!$this->loggedUser->isAdmin()){
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You don\'t have prermission to insert this module.</div>';
       $success = false;
       return $success;
-    }   
+    }
 
     // ak vkladam novy modul ///////////////////////////////////////
     if(isset($_GET['insert'])){
@@ -126,15 +128,15 @@ class ModuleEmbeded extends Module{
     if(isset($_GET['edit'])){
       $this->containerData["edited"] = date("Y-m-d H:i:s", time());
 
-      // overenie prihlaseneho pouzivatela 
+      // overenie prihlaseneho pouzivatela
       if($this->loggedUser->getUserID()!=0){
-        $this->containerData["created_by"] = $this->loggedUser->getUserID();
+          $this->containerData["edited_by"] = $this->loggedUser->getUserID();
       }
       else{
         echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You must be loged in.</div>';
         $success = false;
       }
-      // overenie ci je zadane id modulu ktory sa ma editovat 
+      // overenie ci je zadane id modulu ktory sa ma editovat
       if( isset($_GET['id']) && $_GET['id'] > 0 ){
         $this->containerData["id"] = $_GET['id'];
       }
@@ -143,7 +145,7 @@ class ModuleEmbeded extends Module{
         $success = false;
       }
     }//////////////////////////////////////////////////////////////
-    
+
 
     // overenie spravneho zadania poctu riadkov
     if(isset($_POST['rows']) && $_POST['rows']>=0 && $_POST['rows']<=4){
@@ -160,9 +162,9 @@ class ModuleEmbeded extends Module{
     }
     else{
       echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Number of module columns must be greater than 0.</div>';
-      $success = false;      
+      $success = false;
     }
-    
+
     // overenie spravneho zadania statusu
     if(isset($_POST['status']) && $_POST['status']>=0 && $_POST['status']<=1) {
       // ak je status modulu nastaveny na skryty tak vypis warning
@@ -180,7 +182,7 @@ class ModuleEmbeded extends Module{
 
 
     // --------- nacitanie udajov o contente daneho modulu ----------------
-    
+
     // overenie a ulozenie titulky modulu
     if(isset($_POST['title'])){
       $this->contentData["title"] = $_POST['title'];
@@ -229,7 +231,7 @@ class ModuleEmbeded extends Module{
    * @return boolean true ak vloží úspešne false ak nastane chyba
    */
   public function insert(){
-    
+
     $result1 = Module_m::insertInto("module", $this->containerData);
     if ($result1 > 0){
       $this->contentData["module_id"] = $result1;

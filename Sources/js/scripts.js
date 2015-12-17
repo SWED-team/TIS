@@ -1,3 +1,5 @@
+
+
 ///script na preklikvania user/search v headeri
    
   $("#userBarIcon" ).on("click",function() {

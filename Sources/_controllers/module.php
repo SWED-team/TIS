@@ -19,10 +19,10 @@ abstract class Module{
    * pole informácií o priložených súboroch modulu 
    * @var array
    */
-  public $file          = array();
+  public $file;
   /**
    * pole child modulov modulu( gallery > image )
-   * @var array
+   * @var File
    */
   public $childsData    = array();
   /**

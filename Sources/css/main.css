@@ -417,3 +417,59 @@ header{
 .hiddenSection{
   display: none;
 }
+.relative {
+  position:relative;
+}
+.align-bottom{
+    position:absolute;
+    bottom:0;
+}
+.align-top{
+    position:absolute;
+    top:0;
+}
+.align-left{
+    position:absolute;
+    left:0;
+}
+.align-right{
+    position:absolute;
+    right:0;
+}
+.result-file-preview{
+    height:70px;
+    background-repeat:no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+.bordered {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+}
+input[name="selected-file"],
+input[name^="actual-file-id"] {    
+    display:none;
+}
+input[name="selected-file"] + div,
+input[name^="actual-file-id"] + div {
+    padding: 4px;
+    border: 3px solid rgba(81, 203, 238, 0);
+}
+input[name="selected-file"]:checked + div,
+input[name^="actual-file-id"]:checked + div {
+    border: 3px solid rgba(81, 203, 238, 1);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(81, 203, 238, 0.7);
+    background:  rgba(81, 203, 238, 1);
+}
+
+.file-select-result-single,
+.file-select-result-multiple {
+    height:150px;
+    overflow-y:scroll;
+}
+.files-actual {
+    min-height:100px;
+    max-height:350px;
+    overflow-y:scroll;
+}

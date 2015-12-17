@@ -3,9 +3,8 @@ class File{
   private $data = array();
   private $user = null;
 
-  public function __construct($file_id){
+  public function __construct($file_id=0){
     if($file_id =! 0){
-
       $this->data = File_m::getFileById($file_id);
     }
   }
