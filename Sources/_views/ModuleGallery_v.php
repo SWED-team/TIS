@@ -1,17 +1,15 @@
 <?php
 
 /**
- * ModuleFormated je view pre FormatedText 
+ * ModuleGallery_v short summary.
  *
- * ModuleFormated obsahuje zakladne funkcie ako editor a module
+ * ModuleGallery_v description.
  *
- * @version 1.0
- * @author Jozef
  */
-class ModuleFormated_v{
+class ModuleGallery_v{
     public static function editor($container, $content, $operation){
         // value="'.(isset($content["title"]))?$content["title"]:"".'"
-		$url = '_controllers/ModuleFormated.php?';
+		$url = '_controllers/ModuleGallery.php?';
 		if(isset($operation))
 			$url = $url.$operation.'=true&';
 		if(isset($_GET["page_id"]) && $_GET["page_id"]!=0)
@@ -22,7 +20,7 @@ class ModuleFormated_v{
 
           <form id="'.$container["type"].'_form" class="form-horizontal" role="form" enctype="multipart/form-data" method="post" 
           action="'.$url.'">
-            <h1>Formated Text</h1>            
+            <h1>Gallery</h1>            
 
 
             <h4 class="text-muted "> Module Container Data</h4><hr>
@@ -159,7 +157,7 @@ class ModuleFormated_v{
 	    	<script>
 			    function updateModule(id){
 			    	$.ajax({
-			    		url: "_controllers/ModuleFormated.php?show_editor=true",
+			    		url: "_controllers/ModuleGallery.php?show_editor=true",
 			        data: {"id": id},
 			        type: "post",
 			        success: function(result){
@@ -171,7 +169,7 @@ class ModuleFormated_v{
 			    function deleteModule(id){
 			    	if (confirm("Do you really want to remove this module?")) {
 			    		$.ajax({
-			    		url: "_controllers/ModuleFormated.php?delete=true",
+			    		url: "_controllers/ModuleGallery.php?delete=true",
 			        data: {"id": id},
 			        type: "post",
 			        success: function(result){
@@ -201,7 +199,10 @@ class ModuleFormated_v{
 
 
         return $view;
-    }
+    }  
+
+
 
 }
+
 ?>

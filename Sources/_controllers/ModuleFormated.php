@@ -39,8 +39,7 @@ class ModuleFormated extends Module{
 
         $this->setById($id);
         $this->containerData["type"] = $this->module_type;  
-        
-        $this->
+
     }
 
     /**
@@ -100,5 +99,51 @@ class ModuleFormated extends Module{
     return '<i class="fa fa-font"></i> Formated Text';
   }
 }
+  // --------- spracovanie poziadavky posielanej ajaxom ---------
+
+// ak posielame poziadavku na vypisanie editora pre dany modul
+if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
+  if(isset($_POST["id"]) && $_POST["id"]>0){
+    $m = new ModuleFormated($_POST["id"]);
+    echo $m->editor("edit");
+  }
+}
+
+// ak spracuvame formular ktory ma vlozit modul
+if( isset($_GET["insert"]) && $_GET["insert"]){
+  $m = new ModuleFormated();
+  if($m->getFormData()){
+    $m->insert();
+  }
+}
+
+
+// ak spracuvame formular ktory ma editovat modul
+if( isset($_GET["edit"]) && $_GET["edit"] ){
+  if(isset($_GET["id"]) && $_GET["id"]>0){
+    $m = new ModuleFormated($_GET["id"]);
+    if ($m->getFormData()){
+      $m->update();
+    }
+  }
+}
+
+// ak posielame poziadavku na vymazanie modulu s danum id
+if ( isset($_GET["delete"]) && $_GET["delete"]){
+  echo "delete";
+  if( isset($_POST["id"]) && $_POST["id"] > 0 ){
+    $m = new ModuleFormated($_POST["id"]);
+    if($m->delete()){
+      echo '<strong>Module was deleted.</strong>';
+    }
+    else{
+      echo '<strong>Delete Error:</strong> Delete was unsuccessfull.';
+    }
+  }
+  else{
+    echo '<strong>Delete Error:</strong> Unknown module.';
+  }
+}
+
 
 ?>
