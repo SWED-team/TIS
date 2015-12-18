@@ -101,12 +101,23 @@ public function __construct(){
 				      array($param['login'],$param['firstName'],
 				      	$param['lastName'],
 				      	0,'2014-01-01',
-				      	$param['pass'],
-				      	$param['bio']));
+				      	
+				      	$param['bio'],
+				      	$param['pass']));
 			
 
 			}
 
+			public static function getAllUsers()
+			{
+
+				$result = Db::query("
+				      SELECT *
+				      FROM user 
+				      "
+				      )->fetchAll();
+				    return $result;
+			}
 			public static function isInDb($what,$value)
 			{
 

@@ -103,28 +103,100 @@ abstract class Module{
    * @abstract
    */
   abstract public function delete();
-  /**
-   * Nastavenie poľa informácií o základných vlastnostiach modulu
-   * @param int $page_id    stránka na ktorej je modul zobrazený
-   * @param string $type    typ modulu
-   * @param int $created_by id používateľa ktorý modul vytvoril
-   * @param int $edited_by  id používateľa ktorý modul editoval
-   * @param int $rows       počet riadkov modulu
-   * @param int $cols       počet stĺpcov modulu
-   * @param int $order      poradie modulu na stránke
-   * @param int $status     status modulu(1-publikovaný, 0-skrytý)
-   */
-  public function setContainerData($page_id,$type,$created_by,$edited_by,$rows,$cols,$order,$status){
-    $this->containerData=array(
-      'page_id' => $page_id,
-      'type' => $type,
-      'created_by' => $created_by,
-      'edited_by' =>$edited_by,
-      'rows' => $rows,
-      'cols' => $cols,
-      'order' => $order,
-      'status' => $status
-    );
-  }
+
+
+    /**
+     * Funkcia uloží validné premenné odoslané z formulára a uloží ich do vnútornej štruktúry objektu
+     * Overuje prihlasenie pouzivatela, administratorske prava pouzivatela, spravnost id pre modul a page,
+     * rozmery sirku a vysku modulu, status
+     * @return boolean true ak sú dáta posielané z formulára validné / inak false
+     */
+    public function verify(){
+
+        $success = true;
+
+        // ----------- Overenie uzivatelskych práv ----------------START
+        // Overenie ci je uzivatel prihlaseny
+        if(!$this->loggedUser->getUserID()!=0){
+            echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You must be loged in.</div>';
+            return false;
+        }
+        // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly
+        if(!$this->loggedUser->isAdmin()){
+            echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Error:</strong> You don\'t have prermission to insert or edit this module.</div>';
+            return false;
+        }
+
+        // ----------- Overenie uzivatelskych práv ----------------END
+        
+        // ----------- Pridanie noveho modulu na stranku -------- START
+
+        if(isset($_GET['insert'])){
+        
+            //  Overenie ci je nastavene v url page_id na 
+            //TODO: Vyrobit funkciu na overenie ci page_id patri do zoznamu nasich existujucich stranok
+            if(!(isset($_GET['page_id']) && $_GET['page_id'] > 0)){
+                echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Page_ID is wrog.</div>';
+                return false;
+            }
+
+       // nastavenie container dat
+        $this->containerData["page_id"] = $_GET['page_id'];                     // Priradi modulu page_id stranky na ktorej sa bude zobrazovat 
+        $this->containerData["created_by"] = $this->loggedUser->getUserID();    // Nastavi modulu created_by id uzivatela ktorý ho vytvoril
+        $this->containerData["edited_by"] = $this->loggedUser->getUserID();     // nastavi modulu edited_by id uzivatela ktory ho upravil
+
+        }
+        // ----------- Pridanie noveho modulu na stranku --------------- END
+
+        // ----------- Editacia existujuceho modulu na stranke -------- START
+        if(isset($_GET['edit'])){
+
+            // overenie ci je zadane id modulu ktory sa ma editovat 
+            //TODO: Vytvorit funkciu na overenie ci dane id modulu evidujeme v nasej databaze
+            if(!(isset($_GET['id']) && $_GET['id'] > 0) ){
+                echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> You cannot update this module (wrong module_id inserted).</div>';
+                return false;
+            }
+            
+            $this->containerData["edited"] = date("Y-m-d H:i:s", time());       // Nastavenie casu kedy bol modul upravovany 
+            $this->containerData["edited_by"] = $this->loggedUser->getUserID(); // Nastavi modulu edited_by id uzivatela ktory upravoval modul
+            $this->containerData["id"] = $_GET['id'];                           // Nastavi modulu jeho id z url
+
+        }
+        // ----------- Editacia existujuceho modulu na stranke -------- END
+        
+        // ----------- Overenie spravneho zadania rozmerov a statusu-------- START
+
+        // Spravne zadanie poctu riadkov
+        if(!(isset($_POST['rows']) && $_POST['rows']>=0 && $_POST['rows']<=4)){
+            echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Number of module rows must be greater than 0.</div>';
+            $success = false;
+        }
+        
+        // Spravne zadanie poctu stlpcov
+        if(!(isset($_POST['cols']) && $_POST['cols']>=1 && $_POST['cols']<=4)){
+            echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Number of module columns must be greater than 0.</div>';
+            $success = false;   
+        }
+      
+        // Spravneho zadanie statusu
+        if(!(isset($_POST['status']) && $_POST['status']>=0 && $_POST['status']<=1)) {
+            //  Ak je chybne uvedena hodnota statusu vyhodi chybu
+            echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Module status is not correct.</div>';
+            $success = false;
+
+        }else if($_POST['status']==0){
+            // Ak je status nastaveny ako skryty tak vyhodi warning
+            echo '<div class="alert alert-warning" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Warning:</strong> Module is hidden.</div>';
+        }
+
+        $this->containerData["rows"] = $_POST['rows'];      // Nastavi modulu velkost - vysku
+        $this->containerData["cols"] = $_POST['cols'];      // Nastavi modulu velkost - sirka
+        $this->containerData["status"] = $_POST['status'];  // Nastavi modulu status - visibility
+
+       // ----------- Overenie spravneho zadania rozmerov a statusu-------- END
+    
+     return $success;
+    }
 }
 ?>
