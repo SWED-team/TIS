@@ -21,7 +21,7 @@ class ModuleImage_v
 			$url = $url.'id='.$container["id"].'&';
 		return '
 
-          <form id="'.$container["type"].'_form"  class="form-horizontal" role="form" enctype="multipart/form-data" method="post"
+          <form  class="'.$container["type"].'_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
           action="'.$url.'">
             <h1> Module Image</h1>
 
@@ -187,16 +187,17 @@ class ModuleImage_v
 
           <script>
 ////////////////// file scripts
-            $("#'.$container["type"].'_form").find("[type=\'submit\']").each(function(){
+            $(".'.$container["type"].'_form").find("[type=\'submit\']").each(function(){
                 $(this).on("click",function(event){
                     event.preventDefault();
-                    alert("1");
+alert(1);
+
                 });
             });
 
 
             // change file-insert method
-            $("#'.$container["type"].'_form").find(".file-insert-method").each(function(){
+            $(".'.$container["type"].'_form").find(".file-insert-method").each(function(){
                 $(this).on("change",function(event){
                     var method = $(this).find("input[type=\"radio\"]:checked").val();
                     if(method=="upload"){
@@ -216,12 +217,12 @@ class ModuleImage_v
 
 
             // show add section on actual-add
-            $("#'.$container["type"].'_form").find(".actual-add").each(function(){
+            $(".'.$container["type"].'_form").find(".actual-add").each(function(){
                 $(this).on("click",function(event){
                     event.preventDefault();
                     var $btn = $(this).button("loading");
 
-                    var form = $(this).closest("#'.$container["type"].'_form");
+                    var form = $(this).closest(".'.$container["type"].'_form");
                     var finsert = form.find(".file-insert-section");
                     var isHidden = finsert.hasClass("hiddenSection");
                     if(isHidden){
@@ -234,12 +235,12 @@ class ModuleImage_v
                 });
             });
             //remove actual
-            $("#'.$container["type"].'_form").find(".actual-remove").each(function(){
+            $(".'.$container["type"].'_form").find(".actual-remove").each(function(){
                 $(this).on("click",function(event){
                     event.preventDefault();
                     var $btn = $(this).button("loading");
 
-                    var form = $(this).closest("#'.$container["type"].'_form");
+                    var form = $(this).closest(".'.$container["type"].'_form");
                     var selected = form.find("input[name^=\'actual-file-id\']:checked");
 
                     selected.each(function(){
@@ -250,7 +251,7 @@ class ModuleImage_v
                 });
             });
             //filter sumbit
-            $("#'.$container["type"].'_form").find(".filter-submit").each(function(){
+            $(".'.$container["type"].'_form").find(".filter-submit").each(function(){
                 $(this).on("click",function(event){
                     event.preventDefault();
                     var $btn = $(this).button("loading");
@@ -292,11 +293,11 @@ class ModuleImage_v
 
 ////////////////// end file scripts
 
-/*
-            $("#'.$container["type"].'_form").find(".form_submit").each(function(){
+
+            $(".'.$container["type"].'_form").find("[type=\'submit\']").each(function(){
                 $(this).on("click",function(event){
                     event.preventDefault();
-                    //alert("2");
+                    alert("kjhkh");
                     var $btn = $(this).button("loading");
                     var form = $(this).closest("#module_embeded_form");
                     var formData = new FormData(form[0]);
@@ -320,10 +321,12 @@ class ModuleImage_v
                 });
             });
 
-*/
 
 
 
 
 
-</script>';}}
+
+            </script>';
+    }
+}

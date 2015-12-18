@@ -193,7 +193,7 @@ class Page_v{
       foreach ($modules as $type => $m) {
         $buttons = $buttons .'
           <div class="row">
-            <button type="button" class="btn btn-info" onclick="showModuleForm($(\'#'.$type.'_form\'))">
+            <button type="button" class="btn btn-info" onclick="showModuleForm($(\'.'.$type.'_form\'))">
               '.$m->getModuleTypeName().'
             </button>
           </div>';
@@ -227,21 +227,6 @@ class Page_v{
     </section>
     <script>
     
-    function checkInsertFileMethod(methodParent){
-      var methodVal = methodParent.find("input[type=\"radio\"]:checked").val();
-        if(methodVal == 0){
-          methodParent.parent().find("#file-uploader").removeClass("hiddenSection");
-          methodParent.parent().find("#file-selector").addClass("hiddenSection");
-        }
-        else if(methodVal == 1){
-          methodParent.parent().find("#file-selector").removeClass("hiddenSection");
-          methodParent.parent().find("#file-uploader").addClass("hiddenSection");
-        }
-        else{
-          methodParent.parent().find("#file-selector").addClass("hiddenSection");
-          methodParent.parent().find("#file-uploader").addClass("hiddenSection");
-        }
-    }
     $(document).on("ready", function(){
       hideModuleForms($("#module-forms"));
       $(".file-insert-method").each(function(){

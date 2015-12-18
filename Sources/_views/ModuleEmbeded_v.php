@@ -11,7 +11,7 @@ class ModuleEmbeded_v{
 			$url = $url.'id='.$container["id"].'&';
 		return '
 
-          <form id="'.$container["type"].'_form"  class="form-horizontal" role="form" enctype="multipart/form-data" method="post"
+          <form class="'.$container["type"].'_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
           action="'.$url.'">
             <h1> Module Embeded</h1>
 
@@ -78,19 +78,19 @@ class ModuleEmbeded_v{
             </div>
 
             <div class="'.$container["type"].'_form_result"></div>
-            <button type="button" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+            <button type="submit" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
             <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
             <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
 
           </form>
 
           <script>
-					$("#'.$container["type"].'_form").find(".form_submit").each(function(){
+					$(".'.$container["type"].'_form").find("[type=\'submit\']").each(function(){
 						$(this).on("click",function(event){
 							event.preventDefault();
 
 							var $btn = $(this).button("loading");
-						 	var form = $(this).closest("#module_embeded_form");
+						 	var form = $(this).closest(".module_embeded_form");
 							var formData = new FormData(form[0]);
 
 							$.ajax({

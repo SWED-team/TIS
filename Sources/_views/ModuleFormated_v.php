@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ModuleFormated je view pre FormatedText 
+ * ModuleFormated je view pre FormatedText
  *
  * ModuleFormated obsahuje zakladne funkcie ako editor a module
  *
@@ -17,19 +17,19 @@ class ModuleFormated_v{
 		if(isset($_GET["page_id"]) && $_GET["page_id"]!=0)
 			$url = $url.'page_id='.$_GET["page_id"].'&';
 		if(isset($container["id"]) && $container["id"]!=0)
-			$url = $url.'id='.$container["id"].'&';		
-		return '    
+			$url = $url.'id='.$container["id"].'&';
+		return '
 
-          <form id="'.$container["type"].'_form" class="form-horizontal" role="form" enctype="multipart/form-data" method="post" 
+          <form class="'.$container["type"].'_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
           action="'.$url.'">
-            <h1>Formated Text</h1>            
+            <h1>Formated Text</h1>
 
 
             <h4 class="text-muted "> Module Container Data</h4><hr>
 
             <div class="form-group">
               <label class="control-label col-sm-2" for="cols">Width:</label>
-              <div class="col-sm-4">          
+              <div class="col-sm-4">
                 <select id="cols" class="form-control" name="cols" >
                   <option value="1" '. ((isset($container["cols"]) && $container["cols"]==1)?"selected":"").'>1 column</option>
                   <option value="2" '. ((isset($container["cols"]) && $container["cols"]==2)?"selected":"").'>2 columns</option>
@@ -38,7 +38,7 @@ class ModuleFormated_v{
                 </select>
               </div>
               <label class="control-label col-sm-2" for="rows">Height:</label>
-              <div class="col-sm-4">          
+              <div class="col-sm-4">
                 <select id="rows" class="form-control col-sm-2" name="rows">
                   <option value="1" '. ((isset($container["rows"]) && $container["rows"]==1)?"selected":"").'>1 row</option>
                   <option value="2" '. ((isset($container["rows"]) && $container["rows"]==2)?"selected":"").'>2 rows</option>
@@ -47,33 +47,33 @@ class ModuleFormated_v{
                   <option value="0" '. ((isset($container["rows"]) && $container["rows"]==0)?"selected":"").'>auto</option>
                 </select>
               </div>
-            </div> 
+            </div>
 
             <div class="form-group">
 	            <label class="control-label col-sm-2" for="status">Status:</label>
-	            <div class="col-sm-4">          
+	            <div class="col-sm-4">
 	              <select id="status" class="form-control" name="status" >
 	                <option value="0" '. ((isset($container["status"]) && $container["status"]==0)?"selected":"").'>Hidden</option>
 	                <option value="1" '. ((isset($container["status"]) && $container["status"]==1)?"selected":"").'>Published</option>
 	              </select>
 	            </div>
               <label class="control-label col-sm-2" for="me-order">Order:</label>
-              <div class="col-sm-4">          
+              <div class="col-sm-4">
                 <input id="me-order" type="number" class="form-control" name="order" min="0" value="'.((isset($content["order"]))?$content["order"]:"").'">
               </div>
 	          </div>
 
            	<h4 class="text-muted "> Module Content Data</h4><hr>
-			
+
 
             <div class="'.$container["type"].'_form_result"></div>
-            <button type="button" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete=""off><i class="fa fa-check"></i> Save</button>
+            <button type="submit" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete=""off><i class="fa fa-check"></i> Save</button>
             <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
             <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
           </form>
 
             <script>
-             $("#'.$container["type"].'_form").find(".form_submit").each(function(){
+             $(".'.$container["type"].'_form").find("[type=\'submit\']").each(function(){
               $(this).on("click",function(event){
                event.preventDefault();
 
@@ -105,14 +105,14 @@ class ModuleFormated_v{
     }
     public static function module($container, $content, $editable){
         $view = '<div class="module-container col-sm-'.$container['cols'] * 3 .'">';
-        
+
         if($editable){
             $view = $view . '
 				<div class="module-buttons">
 	      	<div class="row">
 		      	<div class="col-md-6">'.($container["status"]==1?"<i class=\"fa fa-eye\"></i>":"<i class=\"fa fa-eye-slash\"></i>").' #'.$container["id"].'</div>
 						<div class="col-md-6">
-							<span class="pull-right">      	
+							<span class="pull-right">
 		    				<a onclick="updateModule('.$container["id"].')"><i class="fa fa-pencil-square-o"></i></a>
 		    				<a onclick="deleteModule('.$container["idA1"].')" ><i class="fa fa-trash"></i></a>
 		    			</span>
@@ -180,7 +180,7 @@ class ModuleFormated_v{
 			          setTimeout(function(){
 			          	location.reload();
 			          },1000);
-			          
+
 			        },
 			        error: function(result){
 			          $("#modal-box-content").html(result);
@@ -190,13 +190,13 @@ class ModuleFormated_v{
 						}
 			    }
 			  </script>
-   
-	  		'; 
+
+	  		';
         }
-        $view = $view.'      
+        $view = $view.'
 	  		<div class="module-embeded module row-'.$container['rows'] .'">
 	        '. $content['link'].'
-	      </div>    	
+	      </div>
 	    </div>';
 
 
