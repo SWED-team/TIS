@@ -28,7 +28,7 @@ class ModuleGallery extends Module{
             require_once('_controllers/user.php');
         if(file_exists('user.php'))
             require_once('user.php');
-        
+
         $this->created_by = new User();
         $this->edited_by = new User();
 
@@ -38,7 +38,7 @@ class ModuleGallery extends Module{
         $this->module_type = "module_gallery";
 
         $this->setById($id);
-        $this->containerData["type"] = $this->module_type;  
+        $this->containerData["type"] = $this->module_type;
 
     }
 
@@ -57,7 +57,7 @@ class ModuleGallery extends Module{
 
     /**
      * Funkcia vráti poh¾ad na modul
-     * @return string html kód poh¾adu na modul 
+     * @return string html kód poh¾adu na modul
      */
     public function module(){
         return ModuleGallery_v::module($this->containerData, $this->contentData, $this->loggedUser->isAdmin());
@@ -65,7 +65,7 @@ class ModuleGallery extends Module{
     /**
      * Funkcia vráti poh¾ad na editoru modulu
      * @param  string $operation operácia ktorá sa má vykona po odoslaní formulára (insert/edit)
-     * @return string html kód editora modulu 
+     * @return string html kód editora modulu
      */
     public function editor($operation){
         return ModuleGallery_v::editor( $this->containerData, $this->contentData, $operation);
@@ -77,7 +77,7 @@ class ModuleGallery extends Module{
      */
     public function getFormData(){
 
-        // Overenie zakladnych informaci o Userovi,Page a Module  
+        // Overenie zakladnych informaci o Userovi,Page a Module
         $success = $this->verify();
 
 
@@ -106,6 +106,10 @@ if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
     if(isset($_POST["id"]) && $_POST["id"]>0){
         $m = new ModuleGallery($_POST["id"]);
         echo $m->editor("edit");
+    }
+    else{
+        $m = new ModuleGallery();
+        $m->editor("insert");
     }
 }
 

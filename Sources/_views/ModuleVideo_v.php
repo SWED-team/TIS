@@ -77,7 +77,7 @@ class ModuleVideo_v{
                event.preventDefault();
 
                var $btn = $(this).button("loading");
-                var form = $(this).closest("#'.$container["type"].'_form");
+                var form = $(this).closest(".'.$container["type"].'_form");
                var formData = new FormData(form[0]);
 
                $.ajax({

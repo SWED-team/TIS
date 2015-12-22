@@ -1,8 +1,8 @@
 <?php
 
 class Page_v{
-  public static function pageHead($title){
-    ?>
+    public static function pageHead($title){
+?>
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -15,6 +15,8 @@ class Page_v{
 
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/font-awesome.min.css">
+          <link rel="stylesheet" href="./js/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
+
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/fileinput.css" media="all" type="text/css" />
         <link rel="stylesheet" href="css/user.css">
@@ -23,16 +25,18 @@ class Page_v{
         <script src="./js/fileinput.js" type="text/javascript"></script>
         <script src="./js/fileinput_locale_cz.js" type="text/javascript"></script>
         <script src="./js/fileinput_locale_sk.js" type="text/javascript"></script>
+        <script type="text/javascript" src="./js/fancybox/source/jquery.fancybox.pack.js"></script>
+
       </head>
       <body data-spy="scroll" data-target=".navbar" data-offset="50">
   <?php
-  }
+    }
 
 
 
 
-  public static function pageHeader(){
-    ?>
+    public static function pageHeader(){
+  ?>
     <header>
       <div id="header-image">
 
@@ -67,14 +71,14 @@ class Page_v{
                 <div id="userBarHide"><form method="POST">
                     <?php if(isset($_SESSION["userId"])){
 
-                      echo '<input type="submit" value="Logoff" name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >';
-                      echo '<input type="submit" value="Profile" name="submitProf" class="btn btn-info" data-dismiss="modal">';
-                      echo '</form>';
-                    } 
-                      else {
-                        echo '<button type="button" class="btn btn-success" data-dismiss="modal"><div data-toggle="modal" data-target="#LoginPop"  >login</div></button>';
-                        echo '<input type="submit" name="submitReg" value="Registration"class="btn btn-info" data-dismiss="modal"data-toggle="modal" ></button>';
-                      }
+                              echo '<input type="submit" value="Logoff" name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >';
+                              echo '<input type="submit" value="Profile" name="submitProf" class="btn btn-info" data-dismiss="modal">';
+                              echo '</form>';
+                          } 
+                          else {
+                              echo '<button type="button" class="btn btn-success" data-dismiss="modal"><div data-toggle="modal" data-target="#LoginPop"  >login</div></button>';
+                              echo '<input type="submit" name="submitReg" value="Registration"class="btn btn-info" data-dismiss="modal"data-toggle="modal" ></button>';
+                          }
                     ?>
                   </div>
                
@@ -110,12 +114,12 @@ class Page_v{
 
 
     <?php
-  }
+    }
 
 
 
     public static function footer(){
-      return '
+        return '
         </section>
         <section id="modal-box" class="modal fade" role="dialog">
           <div  class="modal-dialog modal-lg">
@@ -140,93 +144,92 @@ class Page_v{
             </div>
           </div>
         </footer>';
-  }
+    }
 
 
 
-  /* 
-  Funkcia vypíše view pre tlačídlo na pridávanie modulov
-  */
-  public static function addModuleButton(){
-    return '
+    /* 
+    Funkcia vypíše view pre tlačídlo na pridávanie modulov
+     */
+    public static function addModuleButton(){
+        return '
     <div class="module-container col-sm-3 ">
       <div class="module module-add text-center" data-toggle="modal" data-target="#module-editor" >
         +
       </div>
     </div>
   </div>';
-  }
+    }
 
 
 
 
 
 
-  /*
-  Funkcia zobrazí view pre sekciu na pridávanie modulov
-  */
-  /*public static function mdulesEditSection($content){
+    /*
+    Funkcia zobrazí view pre sekciu na pridávanie modulov
+     */
+    /*public static function mdulesEditSection($content){
     return '
     <section class="modal fade" id="module-editor" role="dialog">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button " class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Insert new module</h4>
-          </div>
-          <div class="modal-body row">
-          '.$content.'
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-        
-      </div>
-  </section>';
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+    <button type="button " class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Insert new module</h4>
+    </div>
+    <div class="modal-body row">
+    '.$content.'
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+    </div>
+    
+    </div>
+    </section>';
 
-  }*/
-  public static function moduleEditor($modules)
-  {
-      $buttons = "";
-      $editors = "";
-      foreach ($modules as $type => $m) {
-        $buttons = $buttons .'
+    }*/
+    public static function moduleEditor($modules)
+    {
+        $buttons = "";
+        $editors = "";
+        foreach ($modules as $type => $m) {
+            $editorUrl = "_controllers/".get_class($m).".php?show_editor=true".((isset($_GET["page_id"]) && $_GET["page_id"]>0)?"&page_id=".$_GET["page_id"]:"");
+            $buttons = $buttons .'
           <div class="row">
-            <button type="button" class="btn btn-info" onclick="showModuleForm($(\'.'.$type.'_form\'))">
+            <button type="button" class="btn btn-info" onclick="showModuleInsertForm(\''.$editorUrl.'\')">
               '.$m->getModuleTypeName().'
             </button>
           </div>';
-        $editors = $editors . $m->editor("insert");
-      }
+            //$editors = $editors . $m->editor("insert");
+        }
+    ?>
+    <section class="modal fade" id="module-editor" role="dialog" tabindex="-1" aria-hidden="false" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button " class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Insert new module</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-3">
+                        <?php echo $buttons;?>
+                    </div>
+                    <div id="module-forms" class="col-md-9">
 
-    return '
-    <section class="modal fade" id="module-editor" role="dialog">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button " class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Insert new module</h4>
-          </div>
-          <div class="modal-body row">
-            <div class="col-md-3">
-            '.
-              $buttons
-            .'
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div id="module-forms" class="col-md-9">
-            '.
-              $editors
-            .'
-            </div> 
-          </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
-      </div>
     </section>
+   
     <script>
-    
+
+/*
     $(document).on("ready", function(){
       hideModuleForms($("#module-forms"));
       $(".file-insert-method").each(function(){
@@ -244,25 +247,20 @@ class Page_v{
       hideModuleForms(moduleForm.parent());
       moduleForm.removeClass("hiddenSection");
 
-      checkInsertFileMethod(moduleForm.find(".file-insert-method"));
 
-    }
+    }*/
+        function showModuleInsertForm(url) {
+            $.ajax({
+                url: url,
+                type: "post",
+                success: function (result) {
+                    $("#module-forms").html(result);
+                }
+            });
 
+        }
     </script>
-    ';
-  }
-
-
-
-
-
-
-
-
-
-
-
+    <?php
+    }
 }
 
-
-?>
