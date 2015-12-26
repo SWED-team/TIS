@@ -79,10 +79,8 @@ class ModuleImage_v
         <label class="control-label col-sm-2">Actual files:</label>
         <div class="col-sm-10 ">
             <div class="files-actual bordered">
-                <?php
-                if(isset($file["name"])&&isset($file["path"])&&isset($file["thumb"]))
-                    echo "<script>preview(".basename($file["path"]).", ".$file["path"].", ".$file["thumb"].") </script>";
-                ?>
+                               
+
             </div>
         </div>
     </div>
@@ -129,24 +127,29 @@ class ModuleImage_v
         var filename = url.replace(/^.*[\\\/]/, "");
         var ext = filename.split(".").pop();
         var path = "files/" + url;
-        if (UrlExists("filesthumb/" + url)) {
+        if (UrlExists("filesthumb/" + url) ) {
             var thumb = "filesthumb/" + url;
+            var thumb_medium = "filesthumb_medium/" + url;
         }
         else if (UrlExists("img/ico/" + ext + ".jpg")) {
             var thumb = "img/ico/" + ext + ".jpg";
+            var thumb_medium = thumb;
         }
         else {
             var thumb = "img/ico/default.jpg";
+            var thumb_medium = thumb;
         }
-        $(".files-actual").html(preview(filename, path, thumb));
+        $(".files-actual").html(preview(filename, path, thumb, thumb_medium));
 
     }
-    function previewEdit(filename, description, path, thumb) {
+
+    function previewEdit(filename, description, path, thumb, thumb_medium) {
         return '\
-                        <label class="">\
+                        <label class="col-xs-12">\
                             <input class="hiddenSection" name="file-path[]" type="checkbox" value="' + path + '">\
                             <div class="row">\
                                 <input class="hiddenSection" name="file-thumb[]" type="text" value="' + thumb + '">\
+                                <input class="hiddenSection" name="file-thumb-medium[]" type="text" value="' + thumb_medium + '">\
                                 <div class="col-xs-3 result-file-preview" style="background-image:url(\''+ thumb + '\')"></div>\
                                 <div class="col-xs-9 "><input name="file-title[]" placeholder="title"  class="form-control" type="text" value="'+ filename + '"></div>\
                                 <div class="col-xs-9 "><input name="file-description[]" placeholder="description" class="form-control" type="text" value="' + description + '"></div>\
@@ -156,18 +159,25 @@ class ModuleImage_v
     }
 
 
-    function preview(filename, path, thumb) {
+    function preview(filename, path, thumb, thumb_medium) {
         return '\
-                        <label class="">\
+                        <label class="col-xs-12">\
                             <input class="hiddenSection" name="file-path[]" type="checkbox" value="' + path + '">\
                             <div class="row">\
                                 <input class="hiddenSection" name="file-thumb[]" type="text" value="' + thumb + '">\
-                                <div class="col-xs-3 result-file-preview" style="background-image:url(\''+ thumb + '\')"></div>\
+                                <input class="hiddenSection" name="file-thumb-medium[]" type="text" value="' + thumb_medium + '">\
+                                <div class="col-xs-3 result-file-preview" style="background-image:url(\'' + thumb_medium + '\')"></div>\
                                 <div class="col-xs-9 "><a href="'+ path + '" target="_blank" title="' + filename + '">' + filename + '</a></div>\
                                 <div class="col-xs-9 "></div>\
                             </div>\
                         </label>';
     }
+
+    <?php
+    if(isset($file["path"])&&isset($file["thumb"]))
+            echo "$('.files-actual').html(preview('".basename($file["path"])."', '".$file["path"]."', '".$file["thumb"]."', '".$file["thumb-medium"]."'));";
+    ?>
+
 
     function open_popup(url) {
         var w = window.innerWidth - window.innerWidth / 15;
@@ -239,8 +249,8 @@ class ModuleImage_v
             </div>
             <div class="col-xs-6">
                 <span class="pull-right">
-                    <a onclick="updateModuleEmbeded(<?php echo $container[" id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
-                    <a onclick="deleteModuleEmbeded(<?php echo $container[" id"];?>)"><i class="fa fa-trash"></i></a>
+                    <a onclick="updateModuleImage(<?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
+                    <a onclick="deleteModuleImage(<?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
                 </span>
             </div>
         </div>
@@ -300,7 +310,7 @@ class ModuleImage_v
         </div>
     </div>
     <script>
-        function updateModuleEmbeded(id) {
+        function updateModuleImage(id) {
             $.ajax({
                 url: "_controllers/ModuleImage.php?show_editor=true",
                 data: { "id": id },
@@ -311,40 +321,61 @@ class ModuleImage_v
                 }
             });
         }
-        function deleteModuleEmbeded(id) {
+        function deleteModuleImage(id) {
             if (confirm("Do you really want to remove this module?")) {
                 $.ajax({
                     url: "_controllers/ModuleImage.php?delete=true",
                     data: { "id": id },
                     type: "post",
                     success: function (result) {
-                        $("#modal-box-content").html(result);
-                        $("#modal-box").modal();
+                        $.fancybox({
+                            'modal': true,
+                            'content': result+'<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
+                        });
                         setTimeout(function () {
                             location.reload();
                         }, 1000);
                     },
                     error: function (result) {
-                        $("#modal-box-content").html(result);
-                        $("#modal-box").modal();
+                        $.fancybox({
+                            'modal': true,
+                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
+                        });
                     }
                 });
             }
         }
+
+        $(document).ready(function () {
+            $(".fancybox-image").fancybox({
+                afterLoad: function () {
+                    this.title = '<a href="' + this.href + '">Download</a><br>' + this.title;
+                },
+                padding: 5,
+                prevEffect: 'none',
+                nextEffect: 'none',
+                helpers: {
+                    title: {
+                        type: 'over'
+                    }
+                }
+               
+            });
+        });
         </script>
     <?php
        }
     ?>
 
 
-        <div class="module module-image row-<?php echo $container['rows'] ;?>" onclick="" style="background-image: url(\'<?php echo  $file['thumb']; ?>\')>
+        <a rel="module-image" class="fancybox-image module module-image row-<?php echo $container['rows'] ;?>" href="<?php echo  $file["path"]; ?>"  title="<?php echo  $content["title"] . " [" . $content["description"] . "] "; ?>" style="background-image: url('<?php echo  $file["thumb-medium"]; ?>')">
             <div class="module-title">
                 <?php
                                 echo $content['title'] ;
                 ?>
 
             </div>
-        </div>
+        </a>
     </div>
 <?php
     }

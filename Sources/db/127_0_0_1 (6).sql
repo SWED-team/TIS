@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hostiteľ: 127.0.0.1
--- Čas generovania: St 16.Dec 2015, 01:19
+-- Čas generovania: Pi 25.Dec 2015, 21:35
 -- Verzia serveru: 10.0.17-MariaDB
 -- Verzia PHP: 5.6.14
 
@@ -25,20 +25,6 @@ USE `tis`;
 -- --------------------------------------------------------
 
 --
--- Štruktúra tabuľky pre tabuľku `attachement`
---
-
-CREATE TABLE `attachement` (
-  `id` int(11) NOT NULL COMMENT 'id prilohoveho suboru',
-  `modul_parent_id` int(11) DEFAULT NULL COMMENT 'id modulu pre prilohove subory',
-  `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov prilohoveho suboru',
-  `file_id` int(11) DEFAULT NULL COMMENT 'odkaz na subor',
-  `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis prilohoveho suboru'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='jedna priloha z modulu prilohovych suborov';
-
--- --------------------------------------------------------
-
---
 -- Štruktúra tabuľky pre tabuľku `edit_rights`
 --
 
@@ -55,14 +41,12 @@ CREATE TABLE `edit_rights` (
 
 CREATE TABLE `file` (
   `id` int(11) NOT NULL,
+  `module_id` int(11) NOT NULL,
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov suboru',
-  `extension` varchar(20) COLLATE utf8_slovak_ci NOT NULL COMMENT 'pripona suboru - typ',
+  `description` text COLLATE utf8_slovak_ci NOT NULL,
   `path` text COLLATE utf8_slovak_ci COMMENT 'relativna cesta k suboru',
-  `thumb_small` text COLLATE utf8_slovak_ci COMMENT 'relativna cesta k malemu nahladu ',
-  `thumb_medium` text COLLATE utf8_slovak_ci COMMENT 'relativna cesta k strednemu nahladu',
-  `size` int(11) DEFAULT NULL COMMENT 'velkost suboru v bajtoch',
-  `upload_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'datum nahratia suboru',
-  `upload_by` int(11) DEFAULT NULL COMMENT 'id pouzivatela ktory nahral subor'
+  `thumb` text COLLATE utf8_slovak_ci NOT NULL,
+  `thumb-medium` text COLLATE utf8_slovak_ci COMMENT 'relativna cesta k strednemu nahladu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 -- --------------------------------------------------------
@@ -84,6 +68,14 @@ CREATE TABLE `module` (
   `order` int(11) DEFAULT NULL COMMENT 'poradie modulu na stranke',
   `status` int(11) DEFAULT NULL COMMENT 'status daneho modulu - schvaleny/neschvaleny'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='tabulka obsahujuca zakladne vlastnosti kazdeho modulu';
+
+--
+-- Sťahujem dáta pre tabuľku `module`
+--
+
+INSERT INTO `module` (`id`, `page_id`, `type`, `created`, `edited`, `created_by`, `edited_by`, `rows`, `cols`, `order`, `status`) VALUES
+(1, 1, 'module_embeded', '2015-12-16 11:15:41', '2015-12-20 10:00:08', 1, 1, 1, 1, NULL, 1),
+(4, 1, 'module_embeded', '2015-12-16 13:24:09', '2015-12-22 17:28:38', 1, 1, 1, 2, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -111,6 +103,14 @@ CREATE TABLE `module_embeded` (
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov embedovaneho videa',
   `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis embedovaneho videa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='tabulka pre modul embeded video';
+
+--
+-- Sťahujem dáta pre tabuľku `module_embeded`
+--
+
+INSERT INTO `module_embeded` (`id`, `module_id`, `link`, `title`, `description`) VALUES
+(1, 1, '<iframe width="560" height="315" src="https://www.youtube.com/embed/8XpjVlGn6_o?showinfo=0" frameborder="0" allowfullscreen></iframe>', 'volajake robotisko velke', ''),
+(4, 4, '<iframe width="560" height="315" src="https://www.youtube.com/embed/Fy7FzXLin7o" frameborder="0" allowfullscreen></iframe>asdfasdf', 'Aby tu bolo niečo dobré ', '');
 
 -- --------------------------------------------------------
 
@@ -146,10 +146,8 @@ CREATE TABLE `module_gallery` (
 CREATE TABLE `module_image` (
   `id` int(11) NOT NULL COMMENT 'id obrazka',
   `module_id` int(11) DEFAULT NULL COMMENT 'id modulu pre obrazok',
-  `file_id` int(11) DEFAULT NULL COMMENT 'id suboru',
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov obrazka',
-  `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis obrazka',
-  `module_parent_id` int(11) DEFAULT NULL COMMENT 'id galerie pre obrazok'
+  `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis obrazka'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='tabulka modulov obrazkov';
 
 -- --------------------------------------------------------
@@ -163,8 +161,7 @@ CREATE TABLE `module_link` (
   `module_id` int(11) NOT NULL COMMENT 'modul pre link',
   `link` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'odkaz',
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'titulka odkazu',
-  `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis odkazu',
-  `file_id` int(11) DEFAULT NULL COMMENT 'reprezentativny obrazok odkazu'
+  `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis odkazu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='modul linku';
 
 -- --------------------------------------------------------
@@ -176,7 +173,6 @@ CREATE TABLE `module_link` (
 CREATE TABLE `module_video` (
   `id` int(11) NOT NULL COMMENT 'id videa',
   `module_id` int(11) DEFAULT NULL COMMENT 'id modulu pre video',
-  `file_id` int(11) DEFAULT NULL COMMENT 'id suboru',
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov videa',
   `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis videa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
@@ -252,15 +248,6 @@ INSERT INTO `user` (`id`, `email`, `first_name`, `last_name`, `admin`, `reg_date
 --
 
 --
--- Indexy pre tabuľku `attachement`
---
-ALTER TABLE `attachement`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `modul_attachements_id` (`modul_parent_id`),
-  ADD KEY `file_id` (`file_id`);
-
---
 -- Indexy pre tabuľku `edit_rights`
 --
 ALTER TABLE `edit_rights`
@@ -273,7 +260,7 @@ ALTER TABLE `edit_rights`
 ALTER TABLE `file`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `upload_by` (`upload_by`);
+  ADD KEY `module_id` (`module_id`);
 
 --
 -- Indexy pre tabuľku `module`
@@ -323,9 +310,7 @@ ALTER TABLE `module_gallery`
 ALTER TABLE `module_image`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `module_id` (`module_id`),
-  ADD KEY `file_id` (`file_id`),
-  ADD KEY `module_gallery_id` (`module_parent_id`);
+  ADD KEY `module_id` (`module_id`);
 
 --
 -- Indexy pre tabuľku `module_link`
@@ -333,8 +318,7 @@ ALTER TABLE `module_image`
 ALTER TABLE `module_link`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `module_id` (`module_id`),
-  ADD KEY `file_id` (`file_id`);
+  ADD KEY `module_id` (`module_id`);
 
 --
 -- Indexy pre tabuľku `module_video`
@@ -342,8 +326,7 @@ ALTER TABLE `module_link`
 ALTER TABLE `module_video`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `module_id` (`module_id`),
-  ADD KEY `file_id` (`file_id`);
+  ADD KEY `module_id` (`module_id`);
 
 --
 -- Indexy pre tabuľku `page`
@@ -373,11 +356,6 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT pre tabuľku `attachement`
---
-ALTER TABLE `attachement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id prilohoveho suboru';
---
 -- AUTO_INCREMENT pre tabuľku `file`
 --
 ALTER TABLE `file`
@@ -386,7 +364,7 @@ ALTER TABLE `file`
 -- AUTO_INCREMENT pre tabuľku `module`
 --
 ALTER TABLE `module`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id modulu';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id modulu', AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT pre tabuľku `module_attachements`
 --
@@ -396,7 +374,7 @@ ALTER TABLE `module_attachements`
 -- AUTO_INCREMENT pre tabuľku `module_embeded`
 --
 ALTER TABLE `module_embeded`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id embedovaneho videa';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id embedovaneho videa', AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT pre tabuľku `module_formated`
 --
@@ -442,13 +420,6 @@ ALTER TABLE `user`
 --
 
 --
--- Obmedzenie pre tabuľku `attachement`
---
-ALTER TABLE `attachement`
-  ADD CONSTRAINT `attachement_ibfk_1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`),
-  ADD CONSTRAINT `attachement_ibfk_2` FOREIGN KEY (`modul_parent_id`) REFERENCES `module_attachements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Obmedzenie pre tabuľku `edit_rights`
 --
 ALTER TABLE `edit_rights`
@@ -459,7 +430,7 @@ ALTER TABLE `edit_rights`
 -- Obmedzenie pre tabuľku `file`
 --
 ALTER TABLE `file`
-  ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`upload_by`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Obmedzenie pre tabuľku `module`
@@ -497,22 +468,18 @@ ALTER TABLE `module_gallery`
 -- Obmedzenie pre tabuľku `module_image`
 --
 ALTER TABLE `module_image`
-  ADD CONSTRAINT `module_image_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `module_image_ibfk_3` FOREIGN KEY (`module_parent_id`) REFERENCES `module_gallery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `module_image_ibfk_4` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`);
+  ADD CONSTRAINT `module_image_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Obmedzenie pre tabuľku `module_link`
 --
 ALTER TABLE `module_link`
-  ADD CONSTRAINT `module_link_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `module_link_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`);
+  ADD CONSTRAINT `module_link_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Obmedzenie pre tabuľku `module_video`
 --
 ALTER TABLE `module_video`
-  ADD CONSTRAINT `module_video_ibfk_1` FOREIGN KEY (`file_id`) REFERENCES `file` (`id`),
   ADD CONSTRAINT `module_video_ibfk_2` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

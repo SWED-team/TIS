@@ -50,17 +50,15 @@ Class Page{
     Funkcia vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke
   */
   private function modules(){
-    $m = '';
     foreach ($this->modules as $key => $module) {
-      $m = $m . $module->module();
+      $module->module();
     }
-    return $m;
   }
   /*
   * Funkcia zobrazí tlačidlo na pridávanie modulov
   */
   private function addModuleButton(){
-    return Page_v::addModuleButton();
+    echo Page_v::addModuleButton();
   }  
   /*
     Funkcia vypíše formuláre na úpravu modulov
@@ -86,22 +84,21 @@ Class Page{
     Funkcia zobrazí obsah s modulmy
   */
   public function pageContent($admin){
-    $content =  '<section class="container-fluid"><div class="row">';
-
+    echo '<section class="container-fluid"><div class="row">';
+    $this->modules();
+    
+    
     if($admin){
-      $content = $content . $this->modules();
-      $content = $content . $this->addModuleButton();
+      $this->addModuleButton();
     }
     
-    $content = $content . '</div></section>';
+    echo '</div></section>';
     
 
     if($admin){
-      $content = $content . $this->modulesEditor();
+      $this->modulesEditor();
     }    
-    return $content;
   }
-
 }
 
 

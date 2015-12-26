@@ -26,6 +26,9 @@ class Page_v{
         <script src="./js/fileinput_locale_cz.js" type="text/javascript"></script>
         <script src="./js/fileinput_locale_sk.js" type="text/javascript"></script>
         <script type="text/javascript" src="./js/fancybox/source/jquery.fancybox.pack.js"></script>
+        <script type="text/javascript" src="./js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+        <script type="text/javascript" src="./js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+        <script type="text/javascript" src="./js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
 
       </head>
       <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -193,7 +196,6 @@ class Page_v{
     public static function moduleEditor($modules)
     {
         $buttons = "";
-        $editors = "";
         foreach ($modules as $type => $m) {
             $editorUrl = "_controllers/".get_class($m).".php?show_editor=true".((isset($_GET["page_id"]) && $_GET["page_id"]>0)?"&page_id=".$_GET["page_id"]:"");
             $buttons = $buttons .'

@@ -236,7 +236,6 @@ if( isset($_GET["edit"]) && $_GET["edit"] ){
 
 // ak posielame poziadavku na vymazanie modulu s danum id
 if ( isset($_GET["delete"]) && $_GET["delete"]){
-    echo "delete";
     if( isset($_POST["id"]) && $_POST["id"] > 0 ){
         $m = new ModuleEmbeded($_POST["id"]);
         if($m->delete()){

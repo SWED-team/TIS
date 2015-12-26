@@ -30,7 +30,7 @@
 
     error_reporting(1);
 
-  echo $page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
+  $page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
   }
   echo $page->footer();
   $_user->printLogPop();

@@ -118,6 +118,7 @@ header{
     position: relative;
     background-position: center center;
     background-size: cover;
+    background-repeat:no-repeat;
     margin-bottom: 30px;
     border: 1px solid #222;
     -webkit-transition: .1s ease-in-out;
@@ -246,6 +247,9 @@ header{
 
   .module-image{
     overflow: hidden;
+    background-size:contain;
+        background-color: black;
+
   }
   .module-video{
     background-color: black;
@@ -314,13 +318,20 @@ header{
 
   .modal{
     z-index: 10050;
-  }
+  }/*
   .fancybox-overlay{
-    z-index: 99999;
+    z-index: 99998;
   }
   .fancybox-opened{
     z-index: 99999 ;
   }
+  */
+.fancybox-skin {
+    background:rgba(255,255,255,0.6);
+    webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
 
 
 

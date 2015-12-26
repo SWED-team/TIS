@@ -207,6 +207,7 @@ class ModuleEmbeded_v{
 </script>
 <?php
     }
+    /*
   public static function module($container, $content, $editable){
   	$view = '<div class="module-container col-sm-'.$container['cols'] * 3 .'">';
   	if($editable){
@@ -292,13 +293,126 @@ class ModuleEmbeded_v{
 			    }
 			  </script>
 	  		';
-  	}
-  	$view = $view.'
-	  		<div class="module-embeded module row-'.$container['rows'] .'">
-	        '. $content['link'].'
+  	}*/
+
+    public static function module($container, $content, $editable, $file){
+?>
+<div class="module-container col-sm-<?php echo $container['cols'] * 3 ;?>">
+    <?php
+       if($editable){
+    ?>
+    <div class="module-buttons">
+        <div class="row">
+            <div class="col-xs-6">
+                <?php echo($container["status"]==1?"<i class=\"fa fa-eye\"></i>":"<i class=\"fa fa-eye-slash\"></i>").' #'.$container["id"];?>
+            </div>
+            <div class="col-xs-6">
+                <span class="pull-right">
+                    <a onclick="updateModuleEmbeded(<?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
+                    <a onclick="deleteModuleEmbeded(<?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Child ID:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $content["id"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Page:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["page_id"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Type:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["type"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Created:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["created"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Created By:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["created_by"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Edited:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["edited"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Edited By:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["edited_by"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Order:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["order"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Status:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["status"];?></div>
+        </div>
+    </div>
+    <script>
+        function updateModuleEmbeded(id) {
+            $.ajax({
+                url: "_controllers/ModuleEmbeded.php?show_editor=true",
+                data: { "id": id },
+                type: "post",
+                success: function (result) {
+                    $("#modal-box-content").html(result);
+                    $("#modal-box").modal();
+                }
+            });
+        }
+        function deleteModuleEmbeded(id) {
+            if (confirm("Do you really want to remove this module?")) {
+                $.ajax({
+                    url: "_controllers/ModuleEmbeded.php?delete=true",
+                    data: { "id": id },
+                    type: "post",
+                    success: function (result) {
+                        $.fancybox({
+                            'modal': true,
+                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
+                        });
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    },
+                    error: function (result) {
+                        $.fancybox({
+                            'modal': true,
+                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
+                        });
+                    }
+                });
+            }
+        }
+        </script>
+    <?php
+       }
+    ?>
+	    <div class="module-embeded module row-<?php echo $container['rows'] ?>">
+	        <?php echo  $content['link']?>
 	      </div>
-	    </div>';
-	  return $view;
+	    </div>
+<?php
   }
 }
 ?>

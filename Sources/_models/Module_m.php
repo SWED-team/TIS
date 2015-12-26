@@ -14,7 +14,7 @@ class Module_m{
     $result = Db::query("
       SELECT *
       FROM module m
-      WHERE m.id = ?", 
+      WHERE m.id = ?",
       array($id))->fetch(PDO::FETCH_ASSOC);
     return $result;
   }
@@ -22,13 +22,13 @@ class Module_m{
    * Získa podrobné informácie o module z DB
    * @param  int    $id         ID kontajnera modulu
    * @param  string $table      Tabulka z ktorej získavame modul
-   * @return array              Podrobné informácie o module 
+   * @return array              Podrobné informácie o module
    */
   public static function getModuleContent($id, $table){
     $result = Db::query("
       SELECT *
       FROM $table m
-      WHERE m.module_id = ?", 
+      WHERE m.module_id = ?",
       array($id))->fetch(PDO::FETCH_ASSOC);
     return $result;
   }
@@ -38,14 +38,14 @@ class Module_m{
    * @param  [type] $childTable [description]
    * @return [type]             [description]
    */
-  public static function getModuleFiles($parent_id, $childTable){
-      $result = Db::query(
-        "SELECT m.*, f.title AS filetitle, f.extension, f.path, f.thumb_small, f.thumb_medium, f.size, f.upload_date, f.upload_by
-        FROM  $childTable m
-        INNER JOIN file f ON m.file_id = f.id
-        WHERE m.module_parent_id = ?
-        ",array($parent_id))->fetch(PDO::FETCH_ASSOC);
-    return $result;
+  public static function getModuleFiles($module_id){
+      $result = Db::query("
+      SELECT *
+      FROM `file`
+      WHERE module_id = ?",
+            array($module_id))->fetchAll(PDO::FETCH_ASSOC);
+      return $result;
+      return $result;
   }
   /**
    * Vloží údaje z asociativneho poľa do tabuľky
@@ -56,7 +56,7 @@ class Module_m{
   public static function insertInto($table, $data){
     $fields=array_keys($data);
     $values=array_values($data);
-    $fieldlist=implode("`, `",$fields); 
+    $fieldlist=implode("`, `",$fields);
     $qs=str_repeat("?,",count($fields)-1);
     $sql="INSERT INTO `$table`(`$fieldlist`) VALUES (${qs}?)";
     $result = Db::insert($sql, $values);
@@ -71,8 +71,8 @@ class Module_m{
    */
   public static function deleteFrom($table, $id){
     $result = Db::query(
-      "DELETE 
-      FROM `$table` 
+      "DELETE
+      FROM `$table`
       WHERE `$table`.`id` = ?", array($id));
     return $result;
   }
@@ -87,8 +87,8 @@ class Module_m{
     $fields=array_keys($data);
     $values=array_values($data);
     array_push($values, $whereVal);
-    $fieldlist=implode("`=?, `",$fields); 
-    $query = 
+    $fieldlist=implode("`=?, `",$fields);
+    $query =
     "UPDATE `$table`
         SET `$fieldlist`=?
       WHERE `$whereCol`=?

@@ -52,25 +52,12 @@ class ModuleImage extends Module{
         if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
             $this->containerData = Module_m::getModuleContainer($id);
             $this->contentData   = Module_m::getModuleContent($id,  $this->module_type);
+            $this->file          = Module_m::getModuleFiles($id)[0];
             $this->created_by->fillUserDataById($this->containerData['created_by']);
             $this->edited_by->fillUserDataById($this->containerData['edited_by']);
         }
     }
-    /**
-     * Funkcia nastaví obsah modulu pod¾a vstupných parametrov
-     * @param integer $module_id   id modulu
-     * @param string  $link        Odkaz na embedované video
-     * @param string  $title       Názov modulu
-     * @param string  $description Popis modulu
-     */
-    public function setContentData($module_id=0,$link="",$title="",$description=""){
-        $this->contentData=array(
-          'module_id' => $module_id,
-          'link' => $link,
-          'title' => $title,
-          'description' =>$description
-        );
-    }
+
 
     /**
      * Funkcia vypíše poh¾ad na modul
@@ -115,16 +102,16 @@ class ModuleImage extends Module{
 
         // --------------------------------------------------------------------
         if(isset($_POST['file-path']) && file_exists('../'.$_POST['file-path'][0])){
-            $file["path"] = $_POST['file-path'][0];
+            $this->file["path"] = $_POST['file-path'][0];
             //echo "<pre>".$_POST['file-path'][0]."</pre>";
         }
         else{
             echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>File Insert Error:</strong> Path to file is incorrect.</div>';
             $success = false;
         }
-        if(isset($_POST['file-thumb']) && file_exists('../'.$_POST['file-thumb'][0])){
-            $file["thumb"] = $_POST['file-thumb'][0];
-            //echo "<pre>".$_POST['file-thumb'][0]."</pre>";
+        if(isset($_POST['file-thumb'][0]) && file_exists('../'.$_POST['file-thumb'][0]) && isset($_POST['file-thumb-medium'][0]) && file_exists('../'.$_POST['file-thumb-medium'][0])){
+            $this->file["thumb"] = $_POST['file-thumb'][0];
+            $this->file["thumb-medium"] = $_POST['file-thumb-medium'][0];
         }
         else{
             echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>File Insert Error:</strong> Path to file thumbnail is incorrect.</div>';
@@ -148,16 +135,18 @@ class ModuleImage extends Module{
      */
     public function insert(){
 
-        $result1 = Module_m::insertInto("module", $this->containerData);
-        if ($result1 > 0){
-            $this->contentData["module_id"] = $result1;
-            $result2 = Module_m::insertInto($this->module_type, $this->contentData, $this->file);
-            if($result2 > 0){
+        $resultContainer = Module_m::insertInto("module", $this->containerData);
+        if ($resultContainer > 0){
+            $this->contentData["module_id"] = $resultContainer;
+            $this->file["module_id"] = $resultContainer;
+            $resultContent = Module_m::insertInto($this->module_type, $this->contentData);
+            $resultFile = Module_m::insertInto('file', $this->file);
+            if($resultContent > 0 && $resultFile>0){
                 echo '<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Module was saved successfully.</strong></div>';
                 return true;
             }
             else{
-                Module_m::deleteFrom("module", $result1);
+                Module_m::deleteFrom("module", $resultContainer);
             }
         }
         echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Problem with saving module to database.</div>';
@@ -172,6 +161,8 @@ class ModuleImage extends Module{
         if(isset($this->containerData['id'])&& isset($this->contentData['module_id']) && $this->containerData['id'] > 0 && $this->contentData['module_id'] > 0){
             Module_m::update("module", $this->containerData, "id",$this->containerData['id']);
             Module_m::update($this->module_type, $this->contentData, "module_id",$this->containerData['id']);
+            Module_m::update("file", $this->file, "module_id",$this->containerData['id']);
+
             echo '<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Module was inserted successfully.</strong></div>';
             return true;
         }
@@ -220,7 +211,7 @@ if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
 if( isset($_GET["insert"]) && $_GET["insert"]){
     $m = new ModuleImage();
     if($m->getFormData()){
-        //$m->insert();
+        $m->insert();
     }
 }
 
@@ -237,7 +228,6 @@ if( isset($_GET["edit"]) && $_GET["edit"] ){
 
 // ak posielame poziadavku na vymazanie modulu s danum id
 if ( isset($_GET["delete"]) && $_GET["delete"]){
-    echo "delete";
     if( isset($_POST["id"]) && $_POST["id"] > 0 ){
         $m = new ModuleImage($_POST["id"]);
         if($m->delete()){
