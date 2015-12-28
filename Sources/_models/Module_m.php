@@ -62,7 +62,19 @@ class Module_m{
     $result = Db::insert($sql, $values);
     return $result;
   }
-
+  /**
+   * Funkcia vymaže položku z tabuľky
+   * @param  String  $table  tabuľka z ktorej sa majú údaje vumazať
+   * @param  Integer $id     id vymazávaného riadka
+   * @return Boolean         true ak vymaže úspešne / false ak nastane chyba
+   */
+  public static function deleteFromWhere($table, $column,$value){
+      $result = Db::query(
+        "DELETE
+      FROM `$table`
+      WHERE `$table`.`$column` = ?", array($value));
+      return $result;
+  }
   /**
    * Funkcia vymaže položku z tabuľky
    * @param  String  $table  tabuľka z ktorej sa majú údaje vumazať

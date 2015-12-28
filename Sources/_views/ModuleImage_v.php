@@ -88,7 +88,7 @@ class ModuleImage_v
     <div class="file-actual-buttons form-group">
         <input id="newFilePath" class="hiddenSection" type="text" value="">
         <div class="col-sm-5 col-xs-6  col-sm-offset-2">
-            <a href="javascript:open_popup('./js/filemanager/dialog.php?popup=1&type=1&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-warning col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-pencil-square"> </i> Change Image</a>
+            <a href="javascript:open_popup('./filemanager/dialog.php?popup=1&type=1&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-warning col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-pencil-square"> </i> Change Image</a>
         </div>
         <div class="col-sm-5 col-xs-6 ">
             <button type="button" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove Selected Files</button>
@@ -349,17 +349,20 @@ class ModuleImage_v
         $(document).ready(function () {
             $(".fancybox-image").fancybox({
                 afterLoad: function () {
-                    this.title = '<a href="' + this.href + '">Download</a><br>' + this.title;
+                    this.title = "<i class='fa fa-tag'></i> <strong>" + $(this.element).attr('fancybox-title') + "</strong><br>";
+                    this.title += "<i class='fa fa-info-circle'></i> " + $(this.element).attr('fancybox-description') + "<br>";
+                    this.title += "<a download='' href=" + this.href + "><i class='fa fa-download'></i></a><br>";
                 },
+
                 padding: 5,
-                prevEffect: 'none',
-                nextEffect: 'none',
+                prevEffect: 'elastic',
+                nextEffect: 'elastic',
                 helpers: {
                     title: {
                         type: 'over'
                     }
                 }
-               
+
             });
         });
         </script>
@@ -368,15 +371,13 @@ class ModuleImage_v
     ?>
 
 
-        <a rel="module-image" class="fancybox-image module module-image row-<?php echo $container['rows'] ;?>" href="<?php echo  $file["path"]; ?>"  title="<?php echo  $content["title"] . " [" . $content["description"] . "] "; ?>" style="background-image: url('<?php echo  $file["thumb-medium"]; ?>')">
-            <div class="module-title">
-                <?php
-                                echo $content['title'] ;
-                ?>
-
-            </div>
-        </a>
+     <div class="module module-image row-<?php echo $container['rows'] ;?>" style="background-image: url('<?php echo  $file["thumb-medium"]; ?>')">    
+         <div class="module-title ">
+             <a role="button" class="help" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><i class="fa fa-hashtag"></i><?php echo $content['title'] ; ?></a>
+         </div>
+         <a rel="module-image" class="fancybox-image" href="<?php echo  $file["path"]; ?>" title="Open Fullscreen" fancybox-title="<?php echo  $content["title"];?>" fancybox-description="<?php echo $content["description"]; ?>" ></a>
     </div>
+</div>
 <?php
     }
 }
