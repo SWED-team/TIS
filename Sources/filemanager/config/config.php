@@ -66,7 +66,7 @@ $config = array(
 	| with start and final /
 	|
 	*/
-	'upload_dir' => '/files/',
+	'upload_dir' => '/TIS/Sources/files/',
 
 	/*
 	|--------------------------------------------------------------------------
