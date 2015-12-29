@@ -57,7 +57,7 @@ class ModuleFormated_v{
     <h4 class="text-muted "> Module Content Data</h4>
     <hr>
     <div class="form-group">
-        <!--<label class="control-label col-sm-2" for="content">Content:</label>-->
+        <label class="control-label col-sm-2" for="content">Content:</label>
         <div class="col-sm-10">
             <textarea id="content" class="form-control formated" rows="10" name="content"><?php echo((isset($content["content"]))?$content["content"]:"");?></textarea>
         </div>
@@ -85,9 +85,9 @@ class ModuleFormated_v{
         toolbar2: "| filemanager | link unlink | image media | forecolor backcolor  | print preview code ",
         image_advtab: true,
 
-        external_filemanager_path: "/TIS/Sources/filemanager/",
+        external_filemanager_path: "./filemanager/",
         filemanager_title: "Filemanager",
-        external_plugins: { "filemanager": "/TIS/Sources/filemanager/plugin.min.js" },
+        external_plugins: { "filemanager": "../../filemanager/plugin.min.js" },
 
         content_css: ["./css/format.css"]
     });
