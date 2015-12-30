@@ -24,11 +24,50 @@
 /////script pre overenie registracnych udajov usera a naslednej registracie
 	$("#regButton").on("click",function  () {
 
-		alert("idem regfdsfsdffsdf");
+	//	alert("idem regfdsfsdffsdf");
 			ajaxRegEdit(0);
 
 	
 	
+	});
+/////swtich user menu 
+	$("#btnEdit").on("click", function () {
+
+	    
+	    ajaxUniversal("SwithUserMenu1",1,null);
+
+
+
+	});
+
+	$("#btnListM").on("click", function () {
+
+	    
+	    ajaxUniversal("SwithUserMenu2",2,"created");
+
+
+
+	});
+
+	$("#btnAddPage").on("click", function () {
+
+
+	    ajaxUniversal("SwithUserMenu4",4,"");
+
+
+
+	});
+	
+
+	
+
+	$("#btnListU").on("click", function () {
+
+
+	    ajaxUniversal("SwithUserMenu3",3,"first_name");
+
+
+
 	});
 
 
@@ -86,7 +125,8 @@
 
 ///funckia vypise vsetky errory pri reg/editacii usera
 	function printRegErrors(errors)
-	{
+		{
+	    alert("fsfdxxx");
 
 		$("#check_div").html("");
 			 $.each(errors ,function(key,value)
@@ -99,23 +139,54 @@
 		}
 		
 		
+	function ajaxUniversal(parameter1, parameter2,parameter3) {
+	    fnc =  parameter1;
+	    var sendInfo = {
+	        'function': fnc,
+
+	        "arg": {
+	            "par1": parameter2,
+	            "par2": parameter3
+
+	        }
+	    };
+
+	    //  alert(poradie);
+	    jQuery.ajax({
+	        type: "POST",
+	        url: '_controllers/ajax_handler.php',
+
+	        data: { 'json': sendInfo },
+
+
+	        success: function (data) {
+	            // alert("toto su data" + data);
+
+	            $("#infoSectionUser2").html(data);
+
+
+	        },
+	        error: function (data) {
+	            alert("chyba AJAXU");
+	        }
+	    });
+
+
+	}
+    
+
+
 	function ajaxLogin()
 	{
-		//alert("fsdfsdXXXX");
 		fnc ="Login";
 		 var sendInfo = {'function':fnc,
 
 	 	 "arg":{
-	           "loginEmail": $("#loginEmail").val(),
-	           "loginPass":$("#loginPass").val()
-	       		
-	       		
+	           "loginEmail": $("#PoploginEmail").val(),
+	           "loginPass":$("#PoploginPass").val()
 	       		
 	       		}
-
-
 	       };
-	    //   alert(sendInfo.arg.loginEmail);
 
 	    jQuery.ajax({
 	        type: "POST",
@@ -123,28 +194,30 @@
 	        
 	        data: {'json':sendInfo},
 	       
-	       
 
 	       success: function(data){
-		   alert("toto su data"+data);
+		 //  alert("toto su data"+data);
 		   if(data !==""){
-		   	
 
-		   $("#check_div").html("");
-		   
-				 location.reload();
+		     $("#check_divPop").html("");
+		     window.location = "index.php?page_id=1";
 				}
-			else {
-				   $("#check_div").append('<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong></strong> Login dont match</div>');
+		   else {
+		       $("#check_divPop").html("");
+				   $("#check_divPop").append('<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong></strong> Login dont match</div>');
+
+
+			}
+
 				
 
-				}
+				
 		
+
 
 		  },
 	  		error: function(data){
 	  			alert("chyba AJAXU");
-		    return data;
 		  }
 	    });
 		
@@ -183,14 +256,14 @@ alert("Vddolam ajax toto je id : " +id);
 	       
 
 	       success: function(data){
-		//   alert("xxxx"+JSON.parse(data));
+		  alert("xxxx");
 		   if(data=="ok" || data ==""){
 		  // 	alert("je to ok");
 
 		   $("#check_div").append("<div id='sub_error' class='btn btn-success'><i ></i><span>Edit successfull</span> </div>");
 				}
 			else {
-			//	alert("RAw data"+ data);
+				alert("RAw data"+ data);
 				data2 =jQuery.parseJSON(data);
 			//	alert("DATATYP:"+typeof data2 +data );
 					printRegErrors(data2);

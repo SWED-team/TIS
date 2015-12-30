@@ -10,20 +10,21 @@ public function __construct(){
 			/**
 			 * funkcia vykoná editáciu používateľa v DB
 			 * @param  [type] $param [zmenené údaje]
-			 * 
+			 *
 			 */
 			public static function editUserToDb($param)
 			{
 				$result = Db::query("
 				     UPDATE user set email= ? ,first_name=? ,
-				     last_name=?,admin=?, reg_date=?,bio=?,password=? 
+				     last_name=?,admin=?, reg_date=?,bio=?,password=?
 				     where id=? ",
 				      array($param['login'],$param['firstName'],
 				      	$param['lastName'],
 				      	0,'2014-01-01',
-				      	
+
 				      	$param['bio'],
-				      $param['pass'],
+						  hash( 'sha256', $param['pass'])
+				      ,
 				      $param['id']))->fetch();
 				    return $result;
 
@@ -35,8 +36,8 @@ public function __construct(){
 					 $result = Db::query("
 				      SELECT *
 				      FROM user u
-				      WHERE u.email = ? and u.password = ?", 
-				      array($mail,$pass))->fetch();
+				      WHERE u.email = ? and u.password = ?",
+				      array($mail, hash( 'sha256', $pass)))->fetch();
 				    return $result;
 
 			}
@@ -46,7 +47,7 @@ public function __construct(){
 					 $result = Db::query("
 				      SELECT *
 				      FROM user u
-				      WHERE u.id=?", 
+				      WHERE u.id=?",
 				      array($id))->fetch();
 				    return $result;
 
@@ -60,13 +61,13 @@ public function __construct(){
 				$result = Db::query("
 				      SELECT *
 				      FROM user",
-				       
+
 				      array())->fetch();
 				    return $result;
 
 
 			}
-		
+
 			/**
 			 * funckia kontroluje či sa v databáze nachádza používateľ so
 			 * zadaným emailom a heslom
@@ -76,9 +77,9 @@ public function __construct(){
 			public static function checkValidReg($param){
 				$result = Db::query("
 				      SELECT *
-				      FROM user 
-				      where email=".$param["email"] ."and 
-				      password=".$param["password"]
+				      FROM user
+				      where email=".$param["email"] ."and
+				      password=".hash( 'sha256',$param["password"])
 
 				     );
 				if($results->num_rows === 0){return true;}
@@ -89,7 +90,7 @@ public function __construct(){
 			/**
 			 * funckia pridá nový záznam používateľa do DB
 			 * @param  [type] $param [údaje]
-			 * 
+			 *
 			 */
 			public static function adduserToDb($param){
 
@@ -101,22 +102,34 @@ public function __construct(){
 				      array($param['login'],$param['firstName'],
 				      	$param['lastName'],
 				      	0,'2014-01-01',
-				      	
+
 				      	$param['bio'],
-				      	$param['pass']));
-			
+				      	hash( 'sha256',$param['pass'])));
+
 
 			}
 
-			public static function getAllUsers()
+			public static function getAllUsers($order)
 			{
 
 				$result = Db::query("
 				      SELECT *
-				      FROM user 
+				      FROM user order by ".$order."
 				      "
 				      )->fetchAll();
 				    return $result;
+			}
+
+			public static function getPagesFromDb($id,$order)
+			{
+
+				$result = Db::query("
+				      SELECT *
+				      FROM page where created_by=".$id."
+						order by ".$order."
+				      "
+				      )->fetchAll();
+				return $result;
 			}
 			public static function isInDb($what,$value)
 			{
@@ -124,12 +137,64 @@ public function __construct(){
 				 $result = Db::query("
 				      SELECT *
 				      FROM user u
-				      WHERE u.email=?", 
+				      WHERE u.email=?",
 				      array($value))->fetch();
 				    return $result;
 
 
 
+
+			}
+
+
+
+
+			public static function getPagesSearch($term)
+			{
+				$result = Db::query("
+				      SELECT *
+				      FROM page where title LIKE '%".$term."%'
+
+				      "
+				      )->fetchAll();
+				return $result;
+			}
+			public static function addPageToDb($id,$title)
+			{
+
+				$result = Db::query("
+				INSERT into
+				      page ( created_by,title)
+				      values (?,?)",
+				      array($id,$title));
+				return $result;
+			}
+
+			public static function changeDeactiveToDb($value,$id)
+			{
+				$result = Db::query("
+				UPDATE
+				      user set deactivated= ? where id =?",
+				      array($value,$id));
+				return $result;
+
+			}
+			public static function changeAdminToDb($value,$id)
+			{
+				$result = Db::query("
+				UPDATE
+				      user set admin= ? where id =?",
+				      array($value,$id));
+				return $result;
+
+			}
+			public static function changeTitleToDb($value,$id)
+			{
+				$result = Db::query("
+				UPDATE
+				      page set title= ? where id =?",
+				      array($value,$id));
+				return $result;
 
 			}
 	}

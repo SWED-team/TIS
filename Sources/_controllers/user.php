@@ -6,7 +6,7 @@
  class User{
 
 	 public $userData = array();
-	
+
 	/**
 	 * Konštruktor triedy USER , konštruktor iba načíta súbory podtried
 	 */
@@ -19,12 +19,39 @@
     if(file_exists('../_models/User_m.php')&&file_exists('../_views/User_v.php')) {
       require_once('../_models/User_m.php');
       require_once('../_views/User_v.php');
-    } 
+    }
 	}
 	/**
 	 * Funkcia zabezpečuje zobrazenie POP-UP okna pre prihlásenie
 	 */
 
+
+	public function _init_check()
+	{
+		$this->checkIfLogin();
+		$this->checkIfLogoff();
+		$show_page=true;
+		if(isset($_POST["submitProf"]))
+		{
+
+			$this->fillUserDataBySession();
+
+			echo $this->printUserSection();
+			$show_page=false;
+		}
+		else if(isset($_POST["submitReg"])){
+			echo $this->printUserSectionReg();
+			$show_page=false;
+		}
+		else if(isset($_POST["submitSearch"])){
+			echo "krava";
+			echo  $this->search($_POST["search_term"]);
+			$show_page=false;
+		}
+		return $show_page;
+
+
+	}
 	public function isLoggedIn()
 	{
 		if(isset($this->userData["id"]) && $this->userData["id"]>0)
@@ -33,7 +60,7 @@
 	}
 
 	public function getUserID(){
-		if(isset($this->userData["id"]) && $this->userData["id"]>0) 
+		if(isset($this->userData["id"]) && $this->userData["id"]>0)
 			return  $this->userData["id"];
 		return 0;
 	}
@@ -52,33 +79,33 @@
 	}
 
 	/**
-	 * funckia kontroluje či prebehlo odhlásenie a následne 
+	 * funckia kontroluje či prebehlo odhlásenie a následne
 	 * zruší SESSION premennú obsahujúcu ID užívateľa
-	 * 
+	 *
 	 */
 	public function checkIfLogoff(){
-		
-		
+
+
 
 	if(isset($_POST["submitLogoff"])){
-				
+
 				unset($_SESSION["userId"]);
 				header("Refresh:0; url=index.php");
 
 				}
-		
+
 	}
 	/**
-	 * funckia kontroluje či prebehlo prihlásenie a následne 
+	 * funckia kontroluje či prebehlo prihlásenie a následne
 	 * nastaví SESSION premennú obsahujúcu ID užívateľa
-	 * 
-	 */ 
+	 *
+	 */
 	public function checkIfLogin()
 	{
 		if(isset($_POST["submitLog"])){
 				if(isset($_POST["login"]) && isset($_POST["pass"]))
 				{
-				
+
 					$this->login($_POST["login"],$_POST["pass"]);
 
 				}
@@ -89,7 +116,7 @@
 ///
 
 
-	
+
 	/**
 	 * funkcia zabezpečí login na základe emailu a hesla a naplnenie údajov z databázy
 	 * @param  [type] $login    [email používateľa]
@@ -99,13 +126,13 @@
 	 public function login($login,$password)
 	 {
 
-	 	
+
 	 	$this->userData=User_m::getUserDataByLogin($login,$password);
 	 //	echo User_m::getUserDataByLogin($login,$password);
 	 	$_SESSION["userId"]=$this->userData["id"];
 	 //	echo $this->userData["id"];
 
-	 
+
 	  //  return "Fsdfsdfsd"+$this->userData["email"];
 	  return $this->userData["id"];
 	 }
@@ -129,7 +156,7 @@
 	 	}
 	 }
 
-	
+
 
 	 /**
 	  * funckia zobrazí formulár na registráciu
@@ -146,17 +173,17 @@
 	  */
 	 public function printUserSection()
 	 {
-	 	
+
 	 	return User_v::showUserSection($this->userData);
 
 	 }
 
-	 
-	
+
+
 
 		 /**
 		  * funcia na spracovanie registrácie po kontrole validity
-		  * 
+		  *
 		  */
 	  	public function processRegistration($parameters){
 
@@ -171,22 +198,22 @@
 		 		User_v::showUpdateForm($userData);
 		 }*/
 
- 
+
 
 		 /**
 		  * funkcia na zmazenie používateľa
 		  * @param  [type] $id [ID používateľa]
-		  * 
+		  *
 		  */
 		 public static function delete($id){
 
 		 	User_m::deleteUserFromDb($id);
 		 	__destroy();
 		 }
-	
+
 		 /**
 		  * funckia zobrazí zoznam všetkých používateľov
-		  * 
+		  *
 		  */
 		public function showUsersList()
 		{
@@ -194,7 +221,7 @@
 		}
 		/**
 		 * funkcia zobrazí zoznam žiadostí o schválenie
-		 * 
+		 *
 		 */
 		public function showApproveList()
 		{
@@ -205,47 +232,17 @@
 
 		public static function checkValidReg($param)
 		{
-			
+
 			$errors = array();
 			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
 			{$errors["email"]="Email address is not valid";}
 
 		if(sizeof(User_m::isInDb("email",$param["login"]))>1)
 			{$errors["email2"]="Entered email is already in use";}
-			
+
 
 			if(strlen($param["firstName"])<2)
 			{$errors["fname"]="First Name have to contains atleast 2 characters";}
-
-			if(strlen($param["lastName"])<2)
-			{$errors["lname"]="Last dsName have to contains atleast 2 characters";}
-
-
-			if(strlen($param["pass"])<5)
-			{$errors["pass"]="Password have to contains atleast 5 characters";}
-
-			
-			if($param["pass"]!=$param["pass2"])
-			{$errors["pass2"]="Passwords dont match";}
-			
-			return ($errors);
-			
-
-
-		}
-		public static function checkValidEdit($param)
-		{
-			
-			$errors = array();
-			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
-			{$errors["email"]="Email address is not valid";}
-
-			
-			
-
-			if(strlen($param["firstName"])<2)
-			{$errors["fname"]="First Name have to contains atleast 2 characters";}
-
 
 			if(strlen($param["lastName"])<2)
 			{$errors["lname"]="Last Name have to contains atleast 2 characters";}
@@ -254,27 +251,96 @@
 			if(strlen($param["pass"])<5)
 			{$errors["pass"]="Password have to contains atleast 5 characters";}
 
-			
-			
-			return $errors;
-			
+
+			if($param["pass"]!=$param["pass2"])
+			{$errors["pass2"]="Passwords dont match";}
+
+			return ($errors);
+
 
 
 		}
-
-
-		public function listPages()
+		public static function checkValidEdit($param)
 		{
 
-			$list = User_m::gePagesFromDb($tihs->userData["id"]);
-			foreach ($list as $key => $value) {
-				
-					echo "toto je valuie".$value;
-					
-					
-					}
+			$errors = array();
+			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
+			{$errors["email"]="Email address is not valid";}
+
+
+
+
+			if(strlen($param["firstName"])<2)
+			{$errors["fname"]="First Name have to contains atleast 2 characters";}
+
+			if(strlen($param["lastName"])<2)
+			{$errors["lname"]="Last Name have to contains atleast 2 characters";}
+
+
+			if(strlen($param["pass"])<5)
+			{$errors["pass"]="Password have to contains atleast 5 characters";}
+
+
+			if($param["pass"]!=$param["pass2"])
+			{$errors["pass2"]="Passwords dont match";}
+
+
+
+			return $errors;
+
+
+
 		}
 
+
+		public function listPagesUser($id,$order)
+		{
+
+
+			$list = User_m::getPagesFromDb($id,$order);
+
+			return User_v::showListPages($list);
+
+		}
+
+		public function listUsers($order)
+		{
+
+			$list = User_m::getAllUsers($order);
+
+			return User_v::showListUsers($list);
+
+		}
+
+
+		public function search($term)
+		{
+
+			$listP =User_m::getPagesSearch($term);
+		//	$listM =User_m::getModulesSearch($term);
+			//$listU =User_m::getUsersSearch($term);
+
+
+
+
+
+			$res='<div id="infoSectionUser2" style="width:80%;margin-left:10%;">
+
+			<span>Pages</span>
+			'.User_v::showListPages($listP).'
+
+			<span>Modules</span>
+			'.User_v::showListPages($listP).'
+
+			</div>';
+
+			return $res;
+		}
+
+		public function addPageForm($id)
+		{
+			echo User_v::showAddPage();
+		}
 
 
 

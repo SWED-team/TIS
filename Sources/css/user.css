@@ -5,7 +5,9 @@
 	
 	float: left;
 	background-color: rgba(255,255,255,.9);
-	height: 100vh;
+	min-height: 100px;
+    padding-bottom:50px;
+    width:100%;
 
 
 }
@@ -27,12 +29,18 @@
 #infoSectionUser2
 {
 	background-color: rgba(255,255,255,.9);
+    background-color: red;
+	padding-top:0px;
+	float:left;
+    clear:both;
+	width: 90%;
+    max-width:1400px;
+
+	margin-left: 5%;
+    margin:auto;
+    min-height:400px;
+
 	
-	height: 100pv;
-	width: 70%;
-	margin-top: 0%;
-	margin-left: 15%;
-	float: left;
 }
 
 #check_div
@@ -41,9 +49,9 @@
 	min-height: 0px;
 	
 	
-	float: left;
-	width: 70%;
-	margin-left: 15%;
+	
+	width: 100%;
+	
 }
 
 #sub_error
@@ -55,6 +63,38 @@
   float: left;
   color:red;
 }
+
+#listPControl{
+    
+    margin-left:15%;
+}
+
+#listPList{
+    
+    overflow-y:scroll;
+
+}
+
+#listPList div
+{
+    border:0px solid red;
+}
+#listPList div button 
+{
+    width:95%;
+    margin:auto;
+}
+#listPList div input
+{
+    width:99%;
+    margin-left:0%;
+}
+#listRow{
+    background-color:cadetblue;
+    margin-top:50px;
+}
+   
+
 /***csssko pre preklikavia user/ search v headeri*/
  #userBarIcon:hover
               {
@@ -85,7 +125,14 @@
                 position: absolute;top:0px;right: 10px;z-index: 100;
                 background-color: white; border-radius: 5px;padding-top: 5px;
            		background-color: rgba(255,255,255,.9);}
-
+              #searchBarHide button
+              {
+                  height:80%;
+              }
+                 #searchBarHide input
+              {
+                  height:80%;
+              }
                 #sub_error
                 {
                   float: left;
@@ -99,3 +146,35 @@
 
                   margin-right: 20px;}
 
+
+               #viewEdit{
+                   float:left;
+                   
+                   
+               }
+               .userRow{
+                   margin-bottom:100px;
+                 
+                   
+               }
+               .userRow1
+               {
+                   margin-bottom:30px;
+               }
+               .userRow div 
+               {
+                   float:left;
+                  
+                   
+               }
+              
+                #userRow  span
+                {
+                    text-align:center;
+                }
+                #listUsers{
+                    width:80%;
+                    margin:10%;
+                    height:300px;
+                    overflow:scroll;
+                }
