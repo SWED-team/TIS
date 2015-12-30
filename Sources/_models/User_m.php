@@ -168,10 +168,6 @@ public function __construct(){
 				      values (?,?)",
 				      array($id,$title));
 				return $result;
-
-				
-
-
 			}
 
 			public static function changeDeactiveToDb($value,$id)
