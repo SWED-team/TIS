@@ -124,11 +124,16 @@ class Page_v{
 
 
 
+
         <?php
     }
     public static function footer(){
         return '
+
+
         </section>
+
+
         <section id="modal-box" class="modal fade" role="dialog">
           <div  class="modal-dialog modal-lg">
             <div  class="modal-content">
