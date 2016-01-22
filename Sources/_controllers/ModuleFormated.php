@@ -79,7 +79,25 @@ class ModuleFormated extends Module{
      * @param  string $operation operácia ktorá sa má vykona po odoslaní formulára (insert/edit)
      */
     public function editor($operation){
-        ModuleFormated_v::editor( $this->containerData, $this->contentData, $operation);
+        
+        //natavenie url na odoslanie formulara
+        if(isset($_GET["page_id"]) && $_GET["page_id"]!=0){
+            $this->containerData['page_id'] = $_GET["page_id"];
+        }
+
+        $url = '_controllers/ModuleFormated.php?'.$operation.'=true&page_id='.$this->containerData['page_id'].'&';
+        
+        if(isset($this->containerData["id"]) && $this->containerData["id"]!=0){
+            $url = $url.'id='.$this->containerData["id"];
+            $m_id=$this->containerData["id"];
+        }
+        else{
+            $m_id=0;
+        }
+
+
+
+        ModuleFormated_v::editor( $this->containerData, $this->contentData, $url, $this->getOrderOptions($m_id));
     }
     /**
      * Funkcia uloží validné premenné odoslané z formulára a uloží ich do vnútornej štruktúry objektu
@@ -173,7 +191,7 @@ class ModuleFormated extends Module{
      * @return string ikona + typ modulu
      */
     public static function getModuleTypeName(){
-        return '<i class="fa fa-youtube-play"></i> Formated';
+        return '<i class="fa fa-font"></i> Formated';
     }
 }
 

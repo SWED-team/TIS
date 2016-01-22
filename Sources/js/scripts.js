@@ -1,3 +1,40 @@
+
+function showModal(modalId, size, header, body) {
+    var modalHtml = '\
+    <div class="modal fade" id="'+ modalId + '" role="dialog">\
+    <div class="modal-dialog modal-'+size+'">\
+      <div class="modal-content">\
+        <div class="modal-header">\
+          <button type="button" class="close" data-dismiss="modal">&times;</button>\
+          <h4 class="modal-title">'+ header + '</h4>\
+        </div>\
+        <div class="modal-body">\
+          <p>'+ body + '</p>\
+        </div>\
+        <div class="modal-footer">\
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>\
+        </div>\
+      </div>\
+    </div>\
+  </div>';
+    var modal = $("#" + modalId);
+    if (modal.size() > 0) {
+        modal.remove();
+    }
+    $("body").append(modalHtml);
+
+    $("#" + modalId).modal();
+}
+
+
+
+
+
+
+
+
+
+
 ///script na preklikvania user/search v headeri
    
   $("#userBarIcon" ).on("click",function() {

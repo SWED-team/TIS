@@ -70,7 +70,23 @@ class ModuleVideo extends Module{
      * @param  string $operation operácia ktorá sa má vykona po odoslaní formulára (insert/edit)
      */
     public function editor($operation){
-        ModuleVideo_v::editor( $this->containerData, $this->contentData, $operation,$this->file);
+                
+        //natavenie url na odoslanie formulara
+        if(isset($_GET["page_id"]) && $_GET["page_id"]!=0){
+            $this->containerData['page_id'] = $_GET["page_id"];
+        }
+
+        $url = '_controllers/ModuleVideo.php?'.$operation.'=true&page_id='.$this->containerData['page_id'].'&';
+        
+        if(isset($this->containerData["id"]) && $this->containerData["id"]!=0){
+            $url = $url.'id='.$this->containerData["id"];
+            $m_id=$this->containerData["id"];
+        }
+        else{
+            $m_id=0;
+        }
+
+        ModuleVideo_v::editor( $this->containerData, $this->contentData, $url,$this->file, $this->getOrderOptions($m_id));
     }
     /**
      * Funkcia uloží validné premenné odoslané z formulára a uloží ich do vnútornej štruktúry objektu
@@ -187,7 +203,7 @@ class ModuleVideo extends Module{
      * @return string ikona + typ modulu
      */
     public static function getModuleTypeName(){
-        return '<i class="fa fa-video"></i> Video';
+        return '<i class="fa fa-film"></i> Video';
     }
 }
 

@@ -14,11 +14,10 @@ Class Page_m{
     $result = Db::query("
       SELECT m.id, m.type
       FROM module m
-      WHERE m.page_id = ?", 
+      WHERE m.page_id = ?
+      ORDER BY m.order", 
       array($page_id))->fetchAll();
     return $result;
   }
 }
-
-
 ?>

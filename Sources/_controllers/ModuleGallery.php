@@ -70,7 +70,24 @@ class ModuleGallery extends Module{
      * @param  string $operation operácia ktorá sa má vykona po odoslaní formulára (insert/edit)
      */
     public function editor($operation){
-        ModuleGallery_v::editor( $this->containerData, $this->contentData, $operation,$this->file);
+        
+        //natavenie url na odoslanie formulara
+        if(isset($_GET["page_id"]) && $_GET["page_id"]!=0){
+            $this->containerData['page_id'] = $_GET["page_id"];
+        }
+
+        $url = '_controllers/ModuleGallery.php?'.$operation.'=true&page_id='.$this->containerData['page_id'].'&';
+        
+        if(isset($this->containerData["id"]) && $this->containerData["id"]!=0){
+            $url = $url.'id='.$this->containerData["id"];
+            $m_id=$this->containerData["id"];
+        }
+        else{
+            $m_id=0;
+        }
+
+
+        ModuleGallery_v::editor( $this->containerData, $this->contentData, $url,$this->file, $this->getOrderOptions($m_id));
     }
     /**
      * Funkcia uloží validné premenné odoslané z formulára a uloží ich do vnútornej štruktúry objektu

@@ -1,14 +1,6 @@
 <?php
 class ModuleFormated_v{
-	public static function editor($container, $content, $operation){
-        // value="'.(isset($content["title"]))?$content["title"]:"".'"
-		$url = '_controllers/ModuleFormated.php?';
-		if(isset($operation))
-			$url = $url.$operation.'=true&';
-		if(isset($_GET["page_id"]) && $_GET["page_id"]!=0)
-			$url = $url.'page_id='.$_GET["page_id"].'&';
-		if(isset($container["id"]) && $container["id"]!=0)
-			$url = $url.'id='.$container["id"].'&';
+	public static function editor($container, $content, $url, $order_options){
 ?>
 
 <form class="<?php echo $container["type"];  ?>_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
@@ -51,7 +43,12 @@ class ModuleFormated_v{
         </div>
         <label class="control-label col-sm-2" for="me-order">Order:</label>
         <div class="col-sm-4">
-            <input id="me-order" type="number" class="form-control" name="order" min="0" value="<?php echo ((isset($content["order"]))?$content["order"]:"");  ?>">
+            <select id="me-order" class="form-control" name="order">
+                <option value="0" selected>Last</option>
+                <?php
+                echo $order_options;
+                ?>
+            </select>
         </div>
     </div>
     <h4 class="text-muted "> Module Content Data</h4>
@@ -64,13 +61,13 @@ class ModuleFormated_v{
     </div>
 
     <div class="form_result"></div>
-    <button type="submit" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+    <button type="submit" onclick="return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
     <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
     <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
 
 </form>
 
-<script>
+<script>/*
     tinymce.init({
         height:500,
         selector: ".formated",
@@ -91,35 +88,9 @@ class ModuleFormated_v{
 
         content_css: ["./css/format.css"]
     });
+*/
 
-
-    $(".<?php echo $container['type'];?>_form").find("[type=\'submit\']").each(function () {
-        $(this).on("click", function (event) {
-            event.preventDefault();
-            tinyMCE.triggerSave();
-            
-            var $btn = $(this).button("loading");
-            var form = $(this).closest(".<?php echo $container['type'];?>_form");
-            var formData = new FormData(form[0]);
-            
-            $.ajax({
-                url: form.attr("action"),
-                type: form.attr("method"),
-                data: formData,
-                async: false,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (returndata) {
-                    form.find(".form_result").hide().html(returndata).fadeIn(200);
-                },
-                error: function (returndata) {
-                    form.find(".form_result").hide().html(returndata).fadeIn(200);
-                }
-            });
-            $btn.button("reset");
-        });
-    });
+   
 </script>
 <?php
     }
@@ -136,8 +107,8 @@ class ModuleFormated_v{
             </div>
             <div class="col-xs-6">
                 <span class="pull-right">
-                    <a onclick="updateModuleFormated(<?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
-                    <a onclick="deleteModuleFormated(<?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
+                    <a onclick="updateModule('ModuleAttachement', <?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
+                    <a onclick="deleteModule('ModuleAttachement', <?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
                 </span>
             </div>
         </div>
@@ -196,43 +167,8 @@ class ModuleFormated_v{
             <div class="col-xs-8"><?php echo $container["status"];?></div>
         </div>
     </div>
-    <script>
-        function updateModuleFormated(id) {
-            $.ajax({
-                url: "_controllers/ModuleFormated.php?show_editor=true",
-                data: { "id": id },
-                type: "post",
-                success: function (result) {
-                    $("#modal-box-content").html(result);
-                    $("#modal-box").modal();
-                }
-            });
-        }
-        function deleteModuleFormated(id) {
-            if (confirm("Do you really want to remove this module?")) {
-                $.ajax({
-                    url: "_controllers/ModuleFormated.php?delete=true",
-                    data: { "id": id },
-                    type: "post",
-                    success: function (result) {
-                        $.fancybox({
-                            'modal': true,
-                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
-                        });
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    },
-                    error: function (result) {
-                        $.fancybox({
-                            'modal': true,
-                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
-                        });
-                    }
-                });
-            }
-        }
-    </script>
+
+       
     <?php
         }
     ?>

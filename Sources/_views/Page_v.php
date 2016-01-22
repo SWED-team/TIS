@@ -14,12 +14,12 @@ class Page_v{
 
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="./js/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="./js/videojs/video-js.min.css" type="text/css" media="screen" />
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/format.css">
 
     <link rel="stylesheet" href="css/user.css">
+
     <script src="js/jquery-2.1.3.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="js/fancybox/source/jquery.fancybox.pack.js"></script>
@@ -27,7 +27,7 @@ class Page_v{
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
     <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript" src="js/videojs/video.js"></script>
+    <script type="text/javascript" src="js/Module.js"></script>
 
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">

@@ -12,14 +12,8 @@
  */
 class ModuleGallery_v
 {
-    public static function editor($container, $content, $operation, $file){
-        $url = '_controllers/ModuleGallery.php?';
-		if(isset($operation))
-			$url = $url.$operation.'=true&';
-		if(isset($_GET["page_id"]) && $_GET["page_id"]!=0)
-			$url = $url.'page_id='.$_GET["page_id"].'&';
-		if(isset($container["id"]) && $container["id"]!=0)
-			$url = $url.'id='.$container["id"].'&';
+    public static function editor($container, $content, $url, $file,$order_options){
+
 ?>
 
 <form class="<?php echo $container["type"];  ?>_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
@@ -60,7 +54,12 @@ class ModuleGallery_v
         </div>
         <label class="control-label col-sm-2" for="me-order">Order:</label>
         <div class="col-sm-4">
-            <input id="me-order" type="number" class="form-control" name="order" min="0" value="<?php echo ((isset($content["order"]))?$content["order"]:"");  ?>">
+            <select id="me-order" class="form-control" name="order">
+                <option value="0" selected>Last</option>
+                <?php
+                echo $order_options;
+                ?>
+            </select>
         </div>
     </div>
 
@@ -87,11 +86,14 @@ class ModuleGallery_v
 
     <div class="file-actual-buttons form-group">
         <input id="newFilePath" class="hiddenSection" type="text" value="">
-        <div class="col-sm-5 col-xs-6  col-sm-offset-2">
-            <a href="javascript:open_popup('./filemanager/dialog.php?popup=1&type=1&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-success col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-plus-square"> </i> Add Image</a>
+        <div class="col-sm-1 col-xs-1  col-sm-offset-2">
+            <button title="Select/Unselect All Items" type="button"  onclick="selectUnselectAllCheckboxesFrom('.files-actual')" class="actual-remove btn btn-primary col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-check-square"> </i></button>
         </div>
         <div class="col-sm-5 col-xs-6 ">
-            <button type="button" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove Selected Files</button>
+            <a title="Open filemanager and select files to insert" href="javascript:open_popup('filemanager/dialog.php?popup=1&type=1&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-success col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-plus-square"> </i> Add Files</a>
+        </div>
+        <div class="col-sm-4 col-xs-4 ">
+            <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>
         </div>
     </div>
 
@@ -108,7 +110,7 @@ class ModuleGallery_v
     </div>
 
     <div class="form_result"></div>
-    <button type="submit" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+    <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
     <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
     <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
 
@@ -192,50 +194,6 @@ class ModuleGallery_v
     }
     //--------- funkcie na pracu s filemanagerom --------- END
 
-    //--------- funkcie formulara --------- START
-    $(".<?php echo $container['type'];?>_form").find("[type=\'submit\']").each(function () {
-        $(this).on("click", function (event) {
-            event.preventDefault();
-
-            var $btn = $(this).button("loading");
-            var form = $(this).closest(".<?php echo $container['type'];?>_form");
-            form.find(".files-actual input[type='checkbox']").each(function () {
-                $(this).attr('checked', true);
-            });
-            var formData = new FormData(form[0]);
-
-            $.ajax({
-                url: form.attr("action"),
-                type: form.attr("method"),
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (returndata) {
-                    form.find(".form_result").hide().html(returndata).fadeIn(200);
-                },
-                error: function (returndata) {
-                    form.find(".form_result").hide().html(returndata).fadeIn(200);
-                }
-            });
-            $btn.button("reset");
-        });
-    });
-    //--------- funkcie formulara --------- END
-    //remove actual
-    $(".<?php echo $container['type'];?>_form").find(".actual-remove").each(function () {
-        $(this).on("click", function (event) {
-            event.preventDefault();
-            var $btn = $(this).button("loading");
-            var form = $(this).closest(".<?php echo $container['type'];?>_form");
-            var selected = form.find("input[name^=\'file-path\']:checked");
-            selected.each(function () {
-                $(this).parent().remove();
-            });
-            $btn.button("reset");
-        });
-    });
-
 </script>
 
 <?php
@@ -253,8 +211,8 @@ class ModuleGallery_v
             </div>
             <div class="col-xs-6">
                 <span class="pull-right">
-                    <a onclick="updateModuleGallery(<?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
-                    <a onclick="deleteModuleGallery(<?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
+                    <a onclick="updateModule('ModuleGallery', <?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
+                    <a onclick="deleteModule('ModuleGallery', <?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
                 </span>
             </div>
         </div>
@@ -314,42 +272,6 @@ class ModuleGallery_v
         </div>
     </div>
     <script>
-        function updateModuleGallery(id) {
-            $.ajax({
-                url: "_controllers/ModuleGallery.php?show_editor=true",
-                data: { "id": id },
-                type: "post",
-                success: function (result) {
-                    $("#modal-box-content").html(result);
-                    $("#modal-box").modal();
-                }
-            });
-        }
-        function deleteModuleGallery(id) {
-            if (confirm("Do you really want to remove this module?")) {
-                $.ajax({
-                    url: "_controllers/ModuleGallery.php?delete=true",
-                    data: { "id": id },
-                    type: "post",
-                    success: function (result) {
-                        $.fancybox({
-                            'modal': true,
-                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
-                        });
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    },
-                    error: function (result) {
-                        $.fancybox({
-                            'modal': true,
-                            'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
-                        });
-                    }
-                });
-            }
-        }
-
         $(document).ready(function () {
             $(".fancybox-gallery").fancybox({
                 afterLoad: function () {

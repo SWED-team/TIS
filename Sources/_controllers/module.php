@@ -178,6 +178,11 @@ abstract class Module{
             echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Number of module columns must be greater than 0.</div>';
             $success = false;   
         }
+        // Spravne zadanie orderu
+        if(!(isset($_POST['order']) && $_POST['order']>=0)){
+            echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> Wrong order value selected.</div>';
+            $success = false;   
+        }
       
         // Spravneho zadanie statusu
         if(!(isset($_POST['status']) && $_POST['status']>=0 && $_POST['status']<=1)) {
@@ -193,10 +198,63 @@ abstract class Module{
         $this->containerData["rows"] = $_POST['rows'];      // Nastavi modulu velkost - vysku
         $this->containerData["cols"] = $_POST['cols'];      // Nastavi modulu velkost - sirka
         $this->containerData["status"] = $_POST['status'];  // Nastavi modulu status - visibility
+        $module_id = (isset($this->containerData["id"]))? $this->containerData["id"] : 0; 
+        $this->containerData["order"] = $this->getNewOrderValue($this->containerData["page_id"], $_POST['order'],$module_id);
+
 
        // ----------- Overenie spravneho zadania rozmerov a statusu-------- END
     
      return $success;
     }
+  /**
+   * Funkcia vygeneruje zoznam moznosti pre select  
+   * @param  [type] $m_id [description]
+   * @return [type]       [description]
+   */
+  public function getOrderOptions($m_id){
+        //nacitanie order moznosti
+        $order_options="";
+        $modules = Module_m::getPageModules($this->containerData['page_id']);
+
+        for ($i=0; $i < sizeof($modules) ; $i++) { 
+            if($m_id == $modules[$i]["id"])
+                $order_options = $order_options. '<option selected value="'.($i+1).'">'.($i+1).' (actual)</option>';
+            else
+                $order_options = $order_options. '<option value="'.($i+1).'">'.($i+1).'</option>';
+        }
+        return $order_options;
+  }  
+  /**
+   * Funkcia vygeneruje a vráti novú order hodnotu modulu na stránke
+   * @param  [type] $page_id   [description]
+   * @param  [type] $order     [description]
+   * @param  [type] $module_id [description]
+   * @return [type]            [description]
+   */
+  public function getNewOrderValue($page_id, $order, $module_id){
+    //$order = $this->containerData["order"];
+    //$page_id = $this->containerData["page_id"];
+    
+    //ak je prvy
+    $actual = Module_m::getOrderValue($page_id, $order, $module_id);
+    if($order==1){ 
+      return $actual - 1; 
+    }
+    // ak je posledny
+    if($order == 0) { 
+      $cnt = Module_m::count("page_id", $page_id);
+      if($module_id > 0) $cnt--;
+      return Module_m::getOrderValue($page_id, $cnt, $module_id)+1;
+    }
+    
+    //ak neexistuje
+    if($actual == null){ 
+      return null; 
+    }
+
+    $prev = Module_m::getOrderValue($page_id, $order-1, $module_id);
+    $new = ($actual + $prev) / 2;
+    return $new;
+  }
 }
 ?>

@@ -110,7 +110,53 @@ class Module_m{
     //echo $result;
     return $result;
   }
+  /**
+   * Funkcia vráti počet prvkov podľa zadaných kritérií
+   * @param  Integer $whereCol Názov stĺpca pre where podmienku
+   * @param  Integer $whereVal Hodnota stĺpca pre where podmienku
+   * @return Integer           Počet vyhovujúcich riadkov
+   */
+  public static function count($whereCol, $whereVal){
+    $result = Db::query(
+      " SELECT count(*) 
+        FROM `module` 
+        WHERE `$whereCol`=?"
+      , array($whereVal));
+    return $result->fetch()[0];
+  }
+  /**
+   * Funkcia vráti "order" hodnotu riadku zadaného v parametri pre zadanú page
+   * 
+   * @param  Integer $page_id  ID stránky
+   * @param  Integer $position Poradové číslo riadka indexované od 1
+   * @return Integer/null      Hodnota order stĺpca / null ak riadok neexistuje     
+   */
+  public static function getOrderValue($page_id, $position, $module_id){
+    if($position > 0){
+      $result = Db::query(
+        " SELECT `order` 
+          FROM `module`
+          WHERE `page_id` = ? AND `id` <> $module_id
+          ORDER BY `order`
+          LIMIT 1
+          OFFSET ?
+          "
+        ,array($page_id, $position-1));
+      return $result->fetch()[0];
+    }
+    else return null;
+  }
+  public static function getPageModules($page_id){ // vrati ID a TYPE pre vsetky moduly pre page so zadanym id
+    $result = Db::query("
+      SELECT m.id, m.type
+      FROM module m
+      WHERE m.page_id = ?
+      ORDER BY m.order", 
+      array($page_id))->fetchAll();
+    return $result;
+  }
 }
+
 
 
 ?>
