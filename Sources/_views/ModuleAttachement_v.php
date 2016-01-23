@@ -13,285 +13,101 @@
 class ModuleAttachement_v
 {
     public static function editor($container, $content, $url, $file,$order_options){
-?>
+        echo "<h2>Module Attachement</h2>";
+        Module_v::moduleEditorHeader($container, $order_options, $url);
+        ?>
 
-<form class="<?php echo $container["type"];  ?>_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
-      action="<?php echo $url;?>">
-    <h1>Attachement</h1>
-    <h4 class="text-muted "> Module Container Data</h4>
-    <hr>
-
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="cols">Width:</label>
-        <div class="col-sm-4">
-            <select id="cols" class="form-control" name="cols">
-                <option value="1" <?php echo  ((isset($container["cols"]) && $container["cols"]==1)?"selected":"");  ?>>1 column</option>
-                <option value="2" <?php echo  ((isset($container["cols"]) && $container["cols"]==2)?"selected":"");  ?>>2 columns</option>
-                <option value="3" <?php echo  ((isset($container["cols"]) && $container["cols"]==3)?"selected":"");  ?>>3 columns</option>
-                <option value="4" <?php echo  ((isset($container["cols"]) && $container["cols"]==4)?"selected":"");  ?>>4 columns</option>
-            </select>
-        </div>
-        <label class="control-label col-sm-2" for="rows">Height:</label>
-        <div class="col-sm-4">
-            <select id="rows" class="form-control col-sm-2" name="rows">
-                <option value="1" <?php echo  ((isset($container["rows"]) && $container["rows"]==1)?"selected":"");  ?>>1 row</option>
-                <option value="2" <?php echo  ((isset($container["rows"]) && $container["rows"]==2)?"selected":"");  ?>>2 rows</option>
-                <option value="3" <?php echo  ((isset($container["rows"]) && $container["rows"]==3)?"selected":"");  ?>>3 rows</option>
-                <option value="4" <?php echo  ((isset($container["rows"]) && $container["rows"]==4)?"selected":"");  ?>>4 rows</option>
-                <option value="0" <?php echo  ((isset($container["rows"]) && $container["rows"]==0)?"selected":"");  ?>>auto</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="status">Status:</label>
-        <div class="col-sm-4">
-            <select id="status" class="form-control" name="status">
-                <option value="0" <?php echo ((isset($container["status"]) && $container["status"]==0)?"selected":"");  ?>>Hidden</option>
-                <option value="1" <?php echo ((isset($container["status"]) && $container["status"]==1)?"selected":"");  ?>>Published</option>
-            </select>
-        </div>
-        <label class="control-label col-sm-2" for="me-order">Order:</label>
-        <div class="col-sm-4">
-            <select id="me-order" class="form-control" name="order">
-                <option value="0" selected>Last</option>
-                <?php
-                echo $order_options;
-                ?>
-            </select>
-        </div>
-    </div>
-
-    <h4 class="text-muted "> Module Content Data</h4>
-    <hr>
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="me-title">Title:</label>
-        <div class="col-sm-10">
-            <input id="me-title" type="text" class="form-control" name="title" value="<?php echo((isset($content["title"]))?$content["title"]:"");  ?>">
-        </div>
-    </div>
-
-
-
-    <div class="form-group">
-        <label class="control-label col-sm-2">Actual files:</label>
-        <div class="col-sm-10 ">
-            <div class="files-actual bordered">
-
-
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="me-title">Title:</label>
+            <div class="col-sm-10">
+                <input id="me-title" type="text" class="form-control" name="title" value="<?php echo((isset($content["title"]))?$content["title"]:"");  ?>">
             </div>
         </div>
-    </div>
-
-    <div class="file-actual-buttons form-group">
-        <input id="newFilePath" class="hiddenSection" type="text" value="">
-        <div class="col-sm-1 col-xs-1  col-sm-offset-2">
-            <button title="Select/Unselect All Items" type="button"  onclick="selectUnselectAllCheckboxesFrom('.files-actual')" class="actual-remove btn btn-primary col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-check-square"> </i></button>
-        </div>
-        <div class="col-sm-5 col-xs-6 ">
-            <a title="Open filemanager and select files to insert" href="javascript:open_popup('filemanager/dialog.php?popup=1&type=2&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-success col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-plus-square"> </i> Add Files</a>
-        </div>
-        <div class="col-sm-4 col-xs-4 ">
-            <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="description">Description:</label>
-        <div class="col-sm-10">
-            <textarea id="description" class="form-control" rows="5" name="description"><?php echo ((isset($content["description"]))?$content["description"]:"");  ?></textarea>
-        </div>
-    </div>
-
-    <div class="form_result"></div>
-    <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
-    <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
-    <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
-
-</form>
-<script>
-    //--------- funkcie na pracu s filemanagerom --------- START
-    function UrlExists(url) {
-        var http = new XMLHttpRequest();
-        http.open('HEAD', url, false);
-        http.send();
-        return http.status != 404;
-    }
-
-    function responsive_filemanager_callback(field_id) {
-        var url = jQuery("#" + field_id).val();
-        var filename = url.replace(/^.*[\\\/]/, "");
-        var ext = filename.split(".").pop();
-        var path = "files/" + url;
-        if (UrlExists("filesthumb/" + url)) {
-            var thumb = "filesthumb/" + url;
-            var thumb_medium = "filesthumb_medium/" + url;
-        }
-        else if (UrlExists("img/ico/" + ext + ".jpg")) {
-            var thumb = "img/ico/" + ext + ".jpg";
-            var thumb_medium = thumb;
-        }
-        else {
-            var thumb = "img/ico/default.jpg";
-            var thumb_medium = thumb;
-        }
-        $(".files-actual").append(previewEdit(filename, "", path, thumb, thumb_medium));
-
-    }
-
-    function previewEdit(title, description, path, thumb, thumb_medium) {
-        return '\
-                        <label class="col-xs-12">\
-                            <input class="hiddenSection" name="file-path[]" type="checkbox" value="' + path + '">\
-                            <div class="row">\
-                                <input class="hiddenSection" name="file-thumb[]" type="text" value="' + thumb + '">\
-                                <input class="hiddenSection" name="file-thumb-medium[]" type="text" value="' + thumb_medium + '">\
-                                <div class="col-xs-3 result-file-preview" style="background-image:url(\''+ thumb + '\')"></div>\
-                                <div class="col-xs-9 "><input name="file-title[]" placeholder="title"  class="form-control" type="text" value="'+ title + '"></div>\
-                                <div class="col-xs-9 "><input name="file-description[]" placeholder="description" class="form-control" type="text" value="' + description + '"></div>\
-                            </div>\
-                        </label>\
-                                        ';
-    }
 
 
-    function preview(filename, path, thumb, thumb_medium) {
-        return '\
-                        <label class="col-xs-12">\
-                            <input class="hiddenSection" name="file-path[]" type="checkbox" value="' + path + '">\
-                            <div class="row">\
-                                <input class="hiddenSection" name="file-thumb[]" type="text" value="' + thumb + '">\
-                                <input class="hiddenSection" name="file-thumb-medium[]" type="text" value="' + thumb_medium + '">\
-                                <div class="col-xs-3 result-file-preview" style="background-image:url(\'' + thumb_medium + '\')"></div>\
-                                <div class="col-xs-9 "><a href="'+ path + '" target="_blank" title="' + filename + '">' + filename + '</a></div>\
-                                <div class="col-xs-9 "></div>\
-                            </div>\
-                        </label>';
-    }
 
-<?php
-        if( isset($file) && count($file)>0 ){
-            for($i=0;$i<count($file);$i++){
-                echo "$('.files-actual').append(previewEdit('".$file[$i]["title"]."','".$file[$i]["description"]."', '".$file[$i]["path"]."', '".$file[$i]["thumb"]."', '".$file[$i]["thumb-medium"]."'));";
-            }
-        }
-        //echo "$('.files-actual').html(preview('".basename($file["path"])."', '".$file["path"]."', '".$file["thumb"]."', '".$file["thumb-medium"]."'));";
-?>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Actual files:</label>
+            <div class="col-sm-10 ">
+                <div class="files-actual bordered">
 
-
-    function open_popup(url) {
-        var w = window.innerWidth - window.innerWidth / 15;
-        var h = window.innerHeight - window.innerHeight / 8;
-        var l = Math.floor((screen.width - w) / 2);
-        var t = Math.floor((screen.height - h) / 2);
-        var win = window.open(url, "ResponsiveFilemanager", "scrollbars=1,width=" + w + ",height=" + h + ",top=" + t + ",left=" + l);
-    }
-    //--------- funkcie na pracu s filemanagerom --------- END
-
-</script>
-
-<?php
-    }
-    public static function module($container, $content, $editable, $file){
-?>
-<div class="module-container col-sm-<?php echo $container['cols'] * 3 ;?>">
-    <?php
-        if($editable){
-    ?>
-    <div class="module-buttons">
-        <div class="row">
-            <div class="col-xs-6">
-                <?php echo($container["status"]==1?"<i class=\"fa fa-eye\"></i>":"<i class=\"fa fa-eye-slash\"></i>").' #'.$container["id"];?>
-            </div>
-            <div class="col-xs-6">
-                <span class="pull-right">
-                    <a onclick="updateModule('ModuleAttachement', <?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
-                    <a onclick="deleteModule('ModuleAttachement', <?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
-                </span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Child ID:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $content["id"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Page:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["page_id"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Type:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["type"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Created:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["created"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Created By:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["created_by"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Edited:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["edited"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Edited By:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["edited_by"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Order:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["order"];?></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-4">
-                <strong>Status:</strong>
-            </div>
-            <div class="col-xs-8"><?php echo $container["status"];?></div>
-        </div>
-    </div>
-    <script>        
-        $(function () {
-          $('[data-toggle="popover"]').popover()
-        })
-    </script>
-    <?php
-        }
-    ?>
-    <div class="module-attachement  row-<?php echo $container['rows'] ;?> module">
-        <div class="module-title ">
-            <a class="help" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><i class="fa fa-hashtag"></i><?php echo $content['title'] ; ?></a>
-        </div>
-        <div class="col-xs-12 attachements">
-            <?php for($i=0;$i<count($file);$i++){ ?>
-
-            <div class="bordered">
-                <div class="row">
-                    <div class="col-xs-3 result-file-preview" style="background-image:url('<?php echo $file[$i]['thumb'] ;?>')"></div>
-                    <a class="col-xs-9 attachement-text" download="" href="<?php echo $file[$i]['path'] ;?>" title="' + filename + '"><i class="fa fa-2x fa-download"></i> <?php echo $file[$i]['title'] ;?></a>
-                    <a class="col-xs-9 attachement-text" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<?php echo $file[$i]['description'] ;?>"><i class="fa fa-2x fa-question-circle"></i> <?php echo $file[$i]['description'] ;?></a>
 
                 </div>
             </div>
-            <?php } ?>
         </div>
-    </div>
-</div>
+
+        <div class="file-actual-buttons form-group">
+            <input id="newFilePath" class="hiddenSection" type="text" value="">
+            <div class="col-sm-1 col-xs-1  col-sm-offset-2">
+                <button title="Select/Unselect All Items" type="button"  onclick="selectUnselectAllCheckboxesFrom('.files-actual')" class="actual-remove btn btn-primary col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-check-square"> </i></button>
+            </div>
+            <div class="col-sm-5 col-xs-6 ">
+                <a title="Open filemanager and select files to insert" href="javascript:open_popup('filemanager/dialog.php?popup=1&type=2&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-success col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-plus-square"> </i> Add Files</a>
+            </div>
+            <div class="col-sm-4 col-xs-4 ">
+                <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="description">Description:</label>
+            <div class="col-sm-10">
+                <textarea id="description" class="form-control" rows="5" name="description"><?php echo ((isset($content["description"]))?$content["description"]:"");  ?></textarea>
+            </div>
+        </div>
+
+        <?php Module_v::moduleEditorFooter($container); ?>
+        
+        <script type="text/javascript">
+            // callback funkcia filemanagera
+            function responsive_filemanager_callback(field_id) {
+                handleFile(field_id,true, true, ["all"])
+            }
+
+            <?php
+            //naplnenie existujucimi po otvoreni editora
+                if( isset($file) && count($file)>0 ){
+                    for($i=0;$i<count($file);$i++){
+                        echo "$('.files-actual').append(previewEditable('".$file[$i]["title"]."','".$file[$i]["description"]."', '".$file[$i]["path"]."', '".$file[$i]["thumb"]."', '".$file[$i]["thumb-medium"]."'));";
+                    }
+                }
+            ?>
+
+        </script>
+
+    <?php
+    }
+    public static function module($container, $content, $editable, $file){ ?>
+        <div class="module-container col-sm-<?php echo $container['cols'] * 3 ;?>">
+            
+            <?php if($editable){ Module_v::moduleAdministrationPanel('ModuleAttachement', $container, $content); } ?>
+
+            <script>
+                $(function () {
+                  $('[data-toggle="popover"]').popover()
+                })
+            </script>
+
+            <div class="module-attachement  row-<?php echo $container['rows'] ;?> module">
+                <div class="module-title ">
+                    <a class="help" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><?php echo $content['title'] ; ?></a>
+                </div>
+                <div class="col-xs-12 attachements">
+                
+                <?php for($i=0;$i<count($file);$i++){ ?>
+                    <div class="bordered">
+                        <div class="row">
+                            <div class="col-xs-3 result-file-preview" style="background-image:url('<?php echo $file[$i]['thumb'] ;?>')"></div>
+                            <a class="col-xs-9 attachement-text" download="" href="<?php echo $file[$i]['path'] ;?>" title="' + filename + '"><i class="fa fa-2x fa-download"></i> <?php echo $file[$i]['title'] ;?></a>
+                            <a class="col-xs-9 attachement-text" data-container="body" data-toggle="popover" data-placement="bottom" data-content="<?php echo $file[$i]['description'] ;?>"><i class="fa fa-2x fa-question-circle"></i> <?php echo $file[$i]['description'] ;?></a>
+
+                        </div>
+                    </div>
+                <?php } ?>
+
+                </div>
+            </div>
+        </div>
 <?php
     }
 }

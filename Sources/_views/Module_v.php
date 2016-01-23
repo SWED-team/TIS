@@ -1,150 +1,166 @@
 <?php
 class Module_v{
-  private static function moduleEditorHead($type){
-    return'       
-          <form id="'.$type.'_form"  class="form-horizontal hiddenSection" role="form" enctype="multipart/form-data" method="post" 
-          action="insertModule.php?'. (isset($_GET["page_id"])?"page_id=".$_GET["page_id"]:"").'">
-            <input type="text" class="hiddenSection" name="type" value="'.$type.'">
-            <!---- Image Title ---->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="title">Title:</label>
-              <div class="col-sm-10"> 
-                <input type="text" class="form-control" name="title" >
-              </div>
-            </div>
+  /**
+   * Funkcia vypisujúca view pre hlavičku formulára na pridávanie/editovanie modulov
+   *
+   * View poskytuje možnosti na editovanie informácií obálky modulu ako 
+   *  * rows   - výška (počet riadkov modulu zobrazených na mriežke stránky) 
+   *  * cols   - šírka (počet stĺpcov modulu zobrazených na mriežke stránky) 
+   *  * status - publikovaný/nepublikovaný modul
+   *  * order  - poradie modulu na stránke
+   * @param  array $container informácie o obálke modulu
+   */
+  public static function moduleEditorHeader($container, $order_options, $url){ ?>
+    <form class="<?php echo $container["type"];  ?>_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
+          action="<?php echo $url;?>">
+        <h4 class="text-muted "> Module Container Data</h4>
+        <hr>
 
-            <!---- Image size ---->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="cols">Width:</label>
-              <div class="col-sm-3">          
-                <select class="form-control" id="edit-module-width" name="cols">
-                  <option value="1">1 column</option>
-                  <option value="2">2 columns</option>
-                  <option value="3">3 columns</option>
-                  <option value="4">4 columns</option>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="cols">Width:</label>
+            <div class="col-sm-4">
+                <select id="cols" class="form-control" name="cols">
+                    <option value="1" <?php echo  ((isset($container["cols"]) && $container["cols"]==1)?"selected":"");  ?>>1 column</option>
+                    <option value="2" <?php echo  ((isset($container["cols"]) && $container["cols"]==2)?"selected":"");  ?>>2 columns</option>
+                    <option value="3" <?php echo  ((isset($container["cols"]) && $container["cols"]==3)?"selected":"");  ?>>3 columns</option>
+                    <option value="4" <?php echo  ((isset($container["cols"]) && $container["cols"]==4)?"selected":"");  ?>>4 columns</option>
                 </select>
-              </div>
-              <label class="control-label col-sm-2" for="rows">Height:</label>
-              <div class="col-sm-3">          
-                <select class="form-control col-sm-2" id="edit-module-height" name="rows">
-                  <option value="1">1 row</option>
-                  <option value="2">2 rows</option>
-                  <option value="3">3 rows</option>
-                  <option value="4">4 rows</option>
-                  <option value="0">auto</option>
+            </div>
+            <label class="control-label col-sm-2" for="rows">Height:</label>
+            <div class="col-sm-4">
+                <select id="rows" class="form-control col-sm-2" name="rows">
+                    <option value="1" <?php echo  ((isset($container["rows"]) && $container["rows"]==1)?"selected":"");  ?>>1 row</option>
+                    <option value="2" <?php echo  ((isset($container["rows"]) && $container["rows"]==2)?"selected":"");  ?>>2 rows</option>
+                    <option value="3" <?php echo  ((isset($container["rows"]) && $container["rows"]==3)?"selected":"");  ?>>3 rows</option>
+                    <option value="4" <?php echo  ((isset($container["rows"]) && $container["rows"]==4)?"selected":"");  ?>>4 rows</option>
+                    <option value="0" <?php echo  ((isset($container["rows"]) && $container["rows"]==0)?"selected":"");  ?>>auto</option>
                 </select>
-              </div>
-            </div> 
-            ';
-  }
-  private static function moduleEditorFoot(){
-    return '
-            <button type="submit" class="btn btn-success col-sm-12">Submit</button>
-          </form>
-        ';
-  }
-  public static function moduleImage($container, $content, $file){
-    return '
-    <div class="module-container col-sm-'.$container['cols'] * 3 .'">
-      <div class="module module-image row-'.$container['rows'] .'" onclick="" style="background-image: url(\''. $file['thumb_medium'] .'\')">
-        <div class="module-title">
-          '. $content['title'].'
-        </div>
-      </div>
-    </div>';
-  }
-
-  public static function moduleImageEditor($type){
-    return Module_v::moduleEditorHead($type).'
-            <!---- Image insert method ---->
-            <div class="file-insert-method form-group">
-              <label class="control-label col-sm-2">Method:</label>
-              <label class="radio-inline col-sm-3"><input type="radio" name="upload-select" value="0">Upload new image</label>
-              <label class="radio-inline"><input type="radio" name="upload-select" value="1">Select from uploaded</label>
             </div>
-
-
-            <!---- Image upload method ---->
-            <div id="file-uploader" class="form-group">
-              <label class="control-label col-sm-2" for="upload-file">Upload:</label>
-              <div class="form-group col-sm-10">
-                <input id="upload-image-file" class="file" type="file" data-upload-url="#">
-              </div>
-            </div>
-
-            <!---- Image select method ---->
-            <div id="file-selector">
-              <!---- Image select filter ---->
-              <div class="form-group">
-                <label class="control-label col-sm-2">Filter:</label>
-                
-                <div class="col-sm-4"> 
-                  <label class="control-label" for="filter-name">Name:</label>
-                  <input id="filter-name" name="filter-name" type="text" class="form-control col-sm-2" >
-                </div>
-                
-                <div class="col-sm-3"> 
-                  <label class="control-label" for="filter-date-from">Upload by date:</label>
-                  <input id="filter-date-from" name="filter-date-from" type="date" class="form-control " >
-                </div>
-                             
-                <div class="col-sm-3"> 
-                  <label class="control-label" for="filter-date-to">Upload to date:</label>
-                  <input id="filter-date-to" name="filter-date-to" type="date" class="form-control " >
-                </div>
-              </div>
-
-              <!---- Image result ---->
-              <div class="form-group">
-                <label class="control-label col-sm-2">Result:</label>
-
-                <div class="col-sm-4"> 
-                  <label class="control-label" for="search-file-result">Filter result:</label>
-                  <select class="form-control" name="search-file-result">
-                    <option value="id?????">results row 1</option>
-                  </select>
-                </div>
-                <!---- Image result sort ---->
-                <div class="col-sm-3"> 
-                  <label class="control-label" for="filter-sort">Sort result by:</label>
-                  <select class="form-control col-sm-2" id="filter-sort" name="filter-sort">
-                    <option value="1">Upload date</option>
-                    <option value="2">Title</option>
-                    <option value="3">Size</option>
-                  </select>
-                </div>
-              </div>
-            </div>' . Module_v::moduleEditorFoot();
-  }
-
-
-
-
-
-
-
-  public static function moduleFormated($container, $content){
-    
-    return '
-   <div class="module-container col-sm-'.$container['cols'] * 3 .'">
-      <div class="module module-formated-text row-'.$container['rows'] .'">
-        <div class="module-text">
-          '. $content['content'].'
         </div>
-      </div>
-    </div>';
-    
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="status">Status:</label>
+            <div class="col-sm-4">
+                <select id="status" class="form-control" name="status">
+                    <option value="0" <?php echo ((isset($container["status"]) && $container["status"]==0)?"selected":"");  ?>>Hidden</option>
+                    <option value="1" <?php echo ((isset($container["status"]) && $container["status"]==1)?"selected":"");  ?>>Published</option>
+                </select>
+            </div>
+            <label class="control-label col-sm-2" for="me-order">Order:</label>
+            <div class="col-sm-4">
+                <select id="me-order" class="form-control" name="order">
+                    <?php
+                    echo $order_options;
+                    ?>
+                </select>
+            </div>
+        </div>
+        <h4 class="text-muted "> Module Content Data</h4>
+        <hr>
+  <?php
   }
 
+  /**
+   * Funkcia vypisujúca view pre pätu formulára na pridávanie/editovanie modulov
+   *
+   * View obsahuje tlačidlá na uloženie, resetovanie formulára a refresh aktuálnej stránky
+   *
+   * 
+   * @param  array $container informácie o obálke modulu
+   */
+  public static function moduleEditorFooter($container){ ?>
+        <div class="form_result"></div>
+        <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+        <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
+        <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
+
+    </form>
+  <?php
+  }
+
+  /**
+   * Funkcia vypisujúca view pre administráciu modulu v jeho náhľade
+   *
+   * View obsahuje tlačidlo na otvorenie editora, tlačidlo na vymazanie modulu a súhrnné informácie o module
+   * 
+   * @param  array $container informácie o obálke modulu
+   * @param  array $content   informácie o obsahu modulu
+   * @return [type]            [description]
+   */
+  public static function moduleAdministrationPanel($class, $container, $content){ ?>
+    <div class="module-buttons">
+        <div class="row">
+            <div class="col-xs-6">
+                <?php echo($container["status"]==1?"<i class=\"fa fa-eye\"></i>":"<i class=\"fa fa-eye-slash\"></i>").' #'.$container["id"];?>
+            </div>
+            <div class="col-xs-6">
+                <span class="pull-right">
+                    <a onclick="updateModule('<?php echo $class;?>', <?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
+                    <a onclick="deleteModule('<?php echo $class;?>', <?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Child ID:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $content["id"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Page:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["page_id"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Type:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["type"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Created:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["created"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Created By:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["created_by"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Edited:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["edited"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Edited By:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["edited_by"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Order:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["order"];?></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <strong>Status:</strong>
+            </div>
+            <div class="col-xs-8"><?php echo $container["status"];?></div>
+        </div>
+    </div>
+
+    <?php
+  }
 
   public static function module(){
     echo '';
-  }
-
-
-
-  public static function moduleGallery($container, $content, $images){
-
   }
 }
 

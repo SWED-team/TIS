@@ -4,6 +4,12 @@
  * ktorá definuje základnú povinnú funkčnosť pre všetky typy modulov.
  * @abstract
  */
+if(file_exists('../_views/Module_v.php'))
+    require_once('../_views/Module_v.php');
+if(file_exists('_views/Module_v.php'))
+    require_once('_views/Module_v.php');
+
+
 abstract class Module{
   /**
    * pole informácií o zakládných vlastnostiach modulu
@@ -215,13 +221,17 @@ abstract class Module{
         //nacitanie order moznosti
         $order_options="";
         $modules = Module_m::getPageModules($this->containerData['page_id']);
-
-        for ($i=0; $i < sizeof($modules) ; $i++) { 
+        for ($i=0; $i < sizeof($modules)-1 ; $i++) { 
             if($m_id == $modules[$i]["id"])
                 $order_options = $order_options. '<option selected value="'.($i+1).'">'.($i+1).' (actual)</option>';
+            
             else
                 $order_options = $order_options. '<option value="'.($i+1).'">'.($i+1).'</option>';
+            
         }
+        if($m_id==$modules[sizeof($modules)-1]["id"]) $order_options = $order_options. '<option selected value="0">Last(actual)</option>';
+        else if($m_id > 0) $order_options = $order_options. '<option value="0">Last</option>';
+        else $order_options = $order_options. '<option value="0" selected>Last</option>';
         return $order_options;
   }  
   /**
