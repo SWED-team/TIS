@@ -8,24 +8,29 @@
   require('_controllers/Page.php');
   include('_controllers/User.php');
   //$_SESSION["pages_list"]=array();
-  $page = new Page($_GET["page_id"]);
- 
-    $_user=new User();
+  
+  $page = new Page();
+  $_user=new User();
 
-  echo $page->header();
+  $page->header("TIS");
 
 
-
- 
+  $page_admin = true;
+  $page->pageContent($page_admin);
+  //$page->pageListWhere("column", "value", "orderBy");
+  $page->pageListWhere(1,1,"title");
 
   if($_user->_init_check())
    {
 
     error_reporting(1);
 
-  $page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
+  //$page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
   }
-  echo $page->footer();
+
+
+
+  $page->footer();
   $_user->printLogPop();
 ?>
 

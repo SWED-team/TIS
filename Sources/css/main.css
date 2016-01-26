@@ -99,8 +99,49 @@ header {
 }
 
 .navbar {
-    margin-bottom: 50px;
     border-radius: 0;
+    margin-bottom: 40px; 
+}
+.breadcrumb{
+    border-radius: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    text-transform: capitalize;
+}
+.breadcrumb li:last-child  a{
+    font-size: 150%;
+    color: black;
+}
+.page-info-container{
+    background-color: rgba(255,255,255,0.7);
+    position: relative;
+    padding: 10px 30px;
+}
+
+.page-info-image{
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);
+    -o-filter: blur(10px);
+    filter: blur(10px);
+
+}
+.page-info{
+    margin-top: -25px;
+    margin-bottom: 40px;
+
+}
+.page-info >div{
+    margin-bottom: 40px;
 }
 
 .affix ~ .container-fluid {
@@ -123,7 +164,7 @@ section .row {
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
-    margin-bottom: 30px;
+    margin: 15px 0;
     border: 1px solid #222;
     -webkit-transition: .1s ease-in-out;
     -moz-transition: .1s ease-in-out;
@@ -132,7 +173,8 @@ section .row {
     transition: .1s ease-in-out;
 }
 
-.module-title {
+.module-title,
+.page-title {
     color: #222222;
     font-size: 120%;
     font-weight: 800;
@@ -156,7 +198,7 @@ section .row {
     opacity: 0.2;
     position: absolute;
     right: 0;
-    top: -20px;
+    top: -5px;
     left: 15px;
     right: 15px;
     min-height: 20px;
@@ -218,19 +260,9 @@ section .row {
     height: 1475px;
     max-height: 1475px;
 }
-/*
-.module-category {
-    font-size: 90%;
-    font-weight: 600;
-    padding-left: 30px;
-    text-transform: uppercase;
-    height: 30px;
-    line-height: 30px;
-    width: 60%;
-    background-color: rgba(255,255,255,0.7);
-    position: absolute;
-}
 
+
+/*
 
     .module-title a {
         white-space: nowrap;
@@ -241,27 +273,11 @@ section .row {
 .help {
     cursor: help;
 }
-/*
-.module-text {
-    padding: 30px;
-    width: 100%;
-    background-color: rgba(255,255,255,0.8);
-    position: absolute;
-    -webkit-transition: .1s ease-in-out;
-    -moz-transition: .1s ease-in-out;
-    -ms-transition: .1s ease-in-out;
-    -o-transition: .1s ease-in-out;
-    transition: .1s ease-in-out;
-}
 
-    .module-text:hover,
-    .module-text:focus {
-        background-color: rgba(255,255,255,0.95);
-    }
-    */
 /* styl na pridavanie modulov*/
 .module-add {
-    line-height: 280px;
+    line-height: 60px;
+    height: 60px;
     font-size: 300%;
     vertical-align: middle;
     background-color: rgba(255,255,255,0.3);
@@ -394,6 +410,100 @@ position: absolute;
     overflow: hidden;
     vertical-align: bottom;
 }
+.module-link-image,
+.page-preview-image
+{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+.module-link:hover > .module-link-image,
+.module-link:focus > .module-link-image,
+.page-preview:hover > .page-preview-image,
+.page-preview:focus > .page-preview-image
+{
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);
+    -o-filter: blur(10px);
+    filter: blur(10px);
+}
+.module-link-category,
+.page-preview-category
+ {
+
+    font-size: 80%;
+    font-weight: 600;
+    padding-left: 10px;
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    width: 35%;
+    background-color: rgba(255,255,255,0.7);
+    position: absolute;
+    bottom: 0px;
+    overflow: hidden;
+}
+.module-link-href,
+.page-preview-href  {
+    font-size: 100%;
+    font-weight: 800;
+    text-transform: uppercase;
+    height: 35px;
+    line-height: 35px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    overflow: hidden;
+    text-align: center;
+}
+.module-link-href:hover,
+.module-link-href:focus,
+.page-preview-href:hover,
+.page-preview-href:focus {
+    text-decoration: none;
+}
+.module-link-text,
+.page-preview-text{
+    position: absolute;
+    top: 50px;
+    left: 35%;
+    width: 65%;
+    bottom: 35px;
+    overflow-y: scroll;
+    overflow-x: hidden; 
+    font-size: 100%;
+    font-weight: 400;
+    text-align: justify;
+    padding: 30px;
+    background-color: rgba(255,255,255,0.8);
+    -webkit-transition: .1s ease-in-out;
+    -moz-transition: .1s ease-in-out;
+    -ms-transition: .1s ease-in-out;
+    -o-transition: .1s ease-in-out;
+    transition: .1s ease-in-out;
+}
+.module-link:hover > .module-link-text,
+.module-link:focus > .module-link-text,
+.page-preview:hover > .page-preview-text,
+.page-preview:focus > .page-preview-text
+
+{
+    background-color: rgba(255,255,255,0.95);
+}
+    
+.module-link,
+.module-link
+{
+    position: relative;
+}
+
 
 
 /*

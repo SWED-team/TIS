@@ -1,157 +1,161 @@
 <?php
-
 /**
- * ModuleLink_v short summary.
+ * ModuleLink_v Trieda View-u pre kontroler ModuleLink.
  *
- * ModuleLink_v description.
+ * ModuleLink_v Trieda obsahuje view-y pre zobrazenie:
+ *  -editora s možnosou predvyplnenia polí existujúcimi dátami
+ *  -samotného modulu s možnosou zobrazenia administraèných funkcii.
+ * Trieda taktiež obsahuje javascript pravidlá pre prácu s modulom
  *
  * @version 1.0
- * @author Jozef
+ * @author KRASNAN
  */
 class ModuleLink_v{
-    public static function editor($container, $content, $operation){
-	?>
-
-	<form class="<?php echo $container["type"];  ?>_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
-      action="<?php echo $url;?>">
-            <h1>Link</h1>
-            <!--<h4 class="text-muted "> Module Container Data</h4><hr>-->
-            <hr>
-		    <div class="form-group">
-		        <label class="control-label col-sm-2" for="cols">Width:</label>
-		        <div class="col-sm-4">
-		            <select id="cols" class="form-control" name="cols">
-		                <option value="1" <?php echo  ((isset($container["cols"]) && $container["cols"]==1)?"selected":"");  ?>>1 column</option>
-		                <option value="2" <?php echo  ((isset($container["cols"]) && $container["cols"]==2)?"selected":"");  ?>>2 columns</option>
-		                <option value="3" <?php echo  ((isset($container["cols"]) && $container["cols"]==3)?"selected":"");  ?>>3 columns</option>
-		                <option value="4" <?php echo  ((isset($container["cols"]) && $container["cols"]==4)?"selected":"");  ?>>4 columns</option>
-		            </select>
-		        </div>
-		        <label class="control-label col-sm-2" for="rows">Height:</label>
-		        <div class="col-sm-4">
-		            <select id="rows" class="form-control col-sm-2" name="rows">
-		                <option value="1" <?php echo  ((isset($container["rows"]) && $container["rows"]==1)?"selected":"");  ?>>1 row</option>
-		                <option value="2" <?php echo  ((isset($container["rows"]) && $container["rows"]==2)?"selected":"");  ?>>2 rows</option>
-		                <option value="3" <?php echo  ((isset($container["rows"]) && $container["rows"]==3)?"selected":"");  ?>>3 rows</option>
-		                <option value="4" <?php echo  ((isset($container["rows"]) && $container["rows"]==4)?"selected":"");  ?>>4 rows</option>
-		                <option value="0" <?php echo  ((isset($container["rows"]) && $container["rows"]==0)?"selected":"");  ?>>auto</option>
-		            </select>
-		        </div>
-		    </div>
-
-		    <div class="form-group">
-		        <label class="control-label col-sm-2" for="status">Status:</label>
-		        <div class="col-sm-4">
-		            <select id="status" class="form-control" name="status">
-		                <option value="0" <?php echo ((isset($container["status"]) && $container["status"]==0)?"selected":"");  ?>>Hidden</option>
-		                <option value="1" <?php echo ((isset($container["status"]) && $container["status"]==1)?"selected":"");  ?>>Published</option>
-		            </select>
-		        </div>
-		        <label class="control-label col-sm-2" for="me-order">Order:</label>
-		        <div class="col-sm-4">
-		            <select id="me-order" class="form-control" name="order">
-		                <option value="0" selected>Last</option>
-		                <?php
-		                echo $order_options;
-		                ?>
-		            </select>
-		        </div>
-		    </div>
-
-           	<!-- <h4 class="text-muted "> Module Content Data</h4> --><hr>
-    	<div class="form-group">
-        
-        <div class="col-sm-6 col-xs-10 ">
-            <button  type="button"  onclick="" class="btn btn-primary btn-block" > Internal Link</button>
+    public static function editor($container, $content, $url, $file, $order_options, $pages){
+        echo "<h2>Module Link</h2>";
+        Module_v::moduleEditorHeader($container, $order_options, $url);
+        ?>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="me-title">Title:</label>
+            <div class="col-sm-10">
+                <input id="me-title" type="text" class="form-control" name="title" value="<?php echo((isset($content["title"]))?$content["title"]:"");  ?>">
+            </div>
         </div>
-        <div class="col-sm-6 col-xs-10">
-            <button  type="button"  onclick="" class="btn btn-danger btn-block "> External Link</button>
-        </div>
-    </div>
-		
-          <div class="form_result"></div>
-    	  <button type="submit" onclick="return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
-    	  <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
-    	  <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
-          </form>
 
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="description">Description:</label>
+            <div class="col-sm-10">
+                <textarea id="description" class="form-control" rows="5" name="description"><?php echo ((isset($content["description"]))?$content["description"]:"");  ?></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">Link Type:</label>
+            <div class="col-sm-10">
+                <label class="radio-inline">
+                  <input id="me-internal" type="radio" name="type" value="internal" <?php echo((isset($content["page_id"]) && $content["page_id"]>0)?"checked":"");  ?>>Internal
+                </label>
+                <label class="radio-inline">
+                  <input id="me-external" type="radio" name="type" value="external" <?php echo((isset($content["link"]) && $content["link"]!="")?"checked":"");  ?>>External
+                </label>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="me-link">External link:</label>
+            <div class="col-sm-10">
+                <input id="me-link" type="text" class="form-control" name="link" value="<?php echo((isset($content["title"]))?$content["link"]:"");  ?>" placeholder="http://">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="me-page_id">Select Page:</label>
+            <div class="col-sm-10">
+                <select id="me-page_id" class="combobox form-control" name="page_id">
+                  <option></option>
+                  <?php
+                    foreach ($pages as $key => $p) {
+                        echo '<option ' .(($p["id"] == $content["page_id"]) ? "selected" : "" ). ' value="'.$p["id"].'">id: '.$p["id"].' | title: '.$p["title"]. " | author: " .$p["author"].'</option>';
+                    }
+                  ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2">Repr. image:</label>
+            <div class="col-sm-10 ">
+                <div class="files-actual bordered">
+                    <!-- files from file manager container -->
+                </div>
+            </div>
+        </div>
+
+        <div class="file-actual-buttons form-group">
+            <input id="newFilePath" class="hiddenSection" type="text" value="">
+            <div class="col-sm-5 col-xs-6  col-sm-offset-2">
+                <a href="javascript:open_popup('./filemanager/dialog.php?popup=1&type=1&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-warning col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-pencil-square"> </i> Change Image</a>
+            </div>
+            <div class="col-sm-5 col-xs-6 ">
+                <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>
+            </div>
+        </div>
+
+
+
+        <?php Module_v::moduleEditorFooter($container); ?>
+
+        <script type="text/javascript">
+            //javascript funkcie na pracu s formularom modulu
+            $(document).ready(function(){
+                $('.combobox').combobox({bsVersion: '3'});
+            });
+            //callback funkcia filemanagera
+            function responsive_filemanager_callback(field_id) {
+                handleFile(field_id,false, false, [])
+            }
+
+            <?php
+            //naplnenie existujucim pri otvoreni editora
+                if(isset($file["path"])&&isset($file["thumb"]))
+                    echo "$('.files-actual').html(preview('".basename($file["path"])."', '".$file["path"]."', '".$file["thumb"]."', '".$file["thumb-medium"]."'));";
+            ?>
+
+            //skryvanie sekcii externy link / interna page
+            function checkLinkType(){
+                if($("#me-internal").is(":checked")){
+                    $("#me-link").parent().parent().addClass("hiddenSection");
+                    $("#me-page_id").parent().parent().removeClass("hiddenSection");
+                }
+                else if($("#me-external").is(":checked")){
+                    $("#me-page_id").parent().parent().addClass("hiddenSection");
+                    $("#me-link").parent().parent().removeClass("hiddenSection");
+                }
+                else{
+                    $("#me-link").parent().parent().addClass("hiddenSection");
+                    $("#me-page_id").parent().parent().addClass("hiddenSection");
+                }
+            }
+
+            checkLinkType();
+
+            $("input[name='type']").on("change", function(){
+                checkLinkType();
+            });
+
+        </script>
 
     <?php
     }
-    public static function module($container, $content, $editable){
-    	?>
+
+
+    public static function module($container, $content, $editable, $file){ ?>
         <div class="module-container col-sm-<?php echo $container['cols'] * 3 ;?>">
+            <?php if($editable){ Module_v::moduleAdministrationPanel('ModuleLink', $container, $content); } ?>
+            <script type="text/javascript">
+                //javascript funkcie na pracu s modulom
+            </script>
 
-		<?php
-        if($editable){
-         ?>
-			<div class="module-buttons">
-	      	<div class="row">
-		      	<div class="col-md-6">
-		      		<?php echo($container["status"]==1?"<i class=\"fa fa-eye\"></i>":"<i class=\"fa fa-eye-slash\"></i>").' #'.$container["id"];?>
-		      	</div>
-					<div class="col-md-6">
-						<span class="pull-right">
-		    				 <a onclick="updateModule('ModuleLink', <?php echo $container["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
-                    		 <a onclick="deleteModule('ModuleLink', <?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
-		    			</span>
-		    		</div>
-		    	</div>
 
-  			<div class="row">
-            	<div class="col-xs-4"><strong>Child ID:</strong></div>
-            	<div class="col-xs-8"><?php echo $content["id"];?></div>
-       		</div>
-	        <div class="row">
-	            <div class="col-xs-4"><strong>Page:</strong></div>
-	            <div class="col-xs-8"><?php echo $container["page_id"];?></div>
-	        </div>
-        	<div class="row">
-	            <div class="col-xs-4"><strong>Type:</strong></div>
-	            <div class="col-xs-8"><?php echo $container["type"];?></div>
-        	</div>
-        	<div class="row">
-        		<div class="col-xs-4"><strong>Created:</strong></div>
-            	<div class="col-xs-8"><?php echo $container["created"];?></div>
-	        </div>
-	        <div class="row">
-	            <div class="col-xs-4"><strong>Created By:</strong></div>
-	            <div class="col-xs-8"><?php echo $container["created_by"];?></div>
-	        </div>
-        	<div class="row">
-            	<div class="col-xs-4"><strong>Edited:</strong></div>
-            	<div class="col-xs-8"><?php echo $container["edited"];?></div>
-	        </div>
-	        <div class="row">
-	            <div class="col-xs-4"><strong>Edited By:</strong></div>
-	            <div class="col-xs-8"><?php echo $container["edited_by"];?></div>
-	        </div>
-	        <div class="row">
-            	<div class="col-xs-4"><strong>Order:</strong></div>
-            	<div class="col-xs-8"><?php echo $container["order"];?></div>
-        	</div>
-        <div class="row">
-            <div class="col-xs-4"><strong>Status:</strong></div>
-            <div class="col-xs-8"><?php echo $container["status"];?></div>
+            <div class="module module-link  row-<?php echo $container['rows'] ;?>" >  
+               <div class="module-link-image" style="background-image: url('<?php echo  $file["thumb-medium"]; ?>')"> </div>
+               <div class="module-title ">
+                     <a role="button" class="help" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><?php echo $content['title'] ; ?></a>
+               </div>
+               <div class="module-link-text">
+                   <?php echo $content['description'] ; ?>
+               </div>
+                <div class="module-link-category">
+                   category
+               </div>
+               <a href="<?php echo ($content['page_id']!='')? './?page='.$content['page_id']:$content['link'].'" target="_blank' ; ?>" class="btn-primary module-link-href">
+                   Open
+               </a>
+            </div>
         </div>
-    </div>
-
-<script>
-			   
-</script>
-<?php 
-	}
-?>
-<div class="module-link  row-<?php echo $container['rows'] ;?> module">
-   <div class="module-title ">
-            <a class="help" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><i class="fa fa-hashtag"></i><?php echo $content['title'] ; ?></a>
-   </div>
-
-</div>
-</div>
-
-<?php
-}
+    <?php
+    }
 }
 
 ?>

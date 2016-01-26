@@ -82,12 +82,6 @@ class ModuleAttachement_v
             
             <?php if($editable){ Module_v::moduleAdministrationPanel('ModuleAttachement', $container, $content); } ?>
 
-            <script>
-                $(function () {
-                  $('[data-toggle="popover"]').popover()
-                })
-            </script>
-
             <div class="module-attachement  row-<?php echo $container['rows'] ;?> module">
                 <div class="module-title ">
                     <a class="help" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><?php echo $content['title'] ; ?></a>

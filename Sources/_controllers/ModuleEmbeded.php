@@ -72,8 +72,8 @@ class ModuleEmbeded extends Module{
      * Funkcia vráti pohľad na modul
      * @return string html kód pohľadu na modul
      */
-    public function module(){
-        return ModuleEmbeded_v::module($this->containerData, $this->contentData, $this->loggedUser->isAdmin());
+    public function module($editable){
+        return ModuleEmbeded_v::module($this->containerData, $this->contentData, $editable);
     }
     /**
      * Funkcia vráti pohľad na editoru modulu

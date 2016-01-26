@@ -35,7 +35,7 @@ class ModuleGallery_v
 
         <div class="file-actual-buttons form-group">
             <input id="newFilePath" class="hiddenSection" type="text" value="">
-            <div class="col-sm-1 col-xs-1  col-sm-offset-2">
+            <div class="col-sm-1 col-xs-2  col-sm-offset-2">
                 <button title="Select/Unselect All Items" type="button"  onclick="selectUnselectAllCheckboxesFrom('.files-actual')" class="actual-remove btn btn-primary col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-check-square"></i></button>
             </div>
             <div class="col-sm-5 col-xs-6 ">

@@ -2,10 +2,11 @@
   session_start();
 
   mb_internal_encoding("UTF-8");
-  require('_controllers/File.php');
+//  require('_controllers/File.php');
   require('_models/Db.php');
-  require('_models/Module_m.php');
-	require('_controllers/ModuleAttachement.php');
+  require('_controllers/page.php');
+ // require('_models/Module_m.php');
+	//require('_controllers/ModuleAttachement.php');
   /*var_dump( Module_m::getOrderValue(1,1));
   var_dump( Module_m::getOrderValue(1,5));
 	var_dump( Module_m::getOrderValue(1,99999));
@@ -17,6 +18,8 @@
 	var_dump( $ma->getNewOrderValue(1,999,40));
 */
 
+	
+/*
 	function test($expression){
 		print_r($expression);
 		echo "<br>";
@@ -56,5 +59,10 @@
   test(File::getFilesFromDir("_models/", array("php")));
   test(File::getFilesFromDir("_models", array("php")));
   test(File::getFilesFromDir("_modeasdfasdls", array("php")));
+*/
 
+  $p = new Page();
+  $p->setHomePage(4);
+  $p->setNavbarPage(3);
+  $p->unsetNavbarPage(4);
 ?>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hostiteľ: 127.0.0.1
--- Čas generovania: Pi 25.Dec 2015, 21:35
+-- Čas generovania: Út 26.Jan 2016, 14:34
 -- Verzia serveru: 10.0.17-MariaDB
 -- Verzia PHP: 5.6.14
 
@@ -41,13 +41,23 @@ CREATE TABLE `edit_rights` (
 
 CREATE TABLE `file` (
   `id` int(11) NOT NULL,
-  `module_id` int(11) NOT NULL,
+  `module_id` int(11) DEFAULT NULL,
+  `page_id` int(11) DEFAULT NULL COMMENT 'ak je file priradeny stranke tak obsahje id stranky',
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov suboru',
   `description` text COLLATE utf8_slovak_ci NOT NULL,
   `path` text COLLATE utf8_slovak_ci COMMENT 'relativna cesta k suboru',
   `thumb` text COLLATE utf8_slovak_ci NOT NULL,
   `thumb-medium` text COLLATE utf8_slovak_ci COMMENT 'relativna cesta k strednemu nahladu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
+
+--
+-- Sťahujem dáta pre tabuľku `file`
+--
+
+INSERT INTO `file` (`id`, `module_id`, `page_id`, `title`, `description`, `path`, `thumb`, `thumb-medium`) VALUES
+(20, NULL, 3, '', '', 'files/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg', 'filesthumb/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg', 'filesthumb_medium/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg'),
+(22, 14, NULL, '', '', 'files/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg', 'filesthumb/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg', 'filesthumb_medium/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg'),
+(25, NULL, 5, '', '', 'files/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg', 'filesthumb/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg', 'filesthumb_medium/full-hd-nature-wallpapers-1080p-wallpaper-full-hd-nature-wallpapers.jpg');
 
 -- --------------------------------------------------------
 
@@ -65,7 +75,7 @@ CREATE TABLE `module` (
   `edited_by` int(11) DEFAULT NULL COMMENT 'id pouzivatela ktory posledny editoval stranku',
   `rows` int(11) DEFAULT '1' COMMENT 'pocet riadkov modulu na stranke',
   `cols` int(11) DEFAULT '1' COMMENT 'pocet stlpcov na stranke',
-  `order` int(11) DEFAULT NULL COMMENT 'poradie modulu na stranke',
+  `order` double DEFAULT NULL COMMENT 'poradie modulu na stranke',
   `status` int(11) DEFAULT NULL COMMENT 'status daneho modulu - schvaleny/neschvaleny'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='tabulka obsahujuca zakladne vlastnosti kazdeho modulu';
 
@@ -74,8 +84,7 @@ CREATE TABLE `module` (
 --
 
 INSERT INTO `module` (`id`, `page_id`, `type`, `created`, `edited`, `created_by`, `edited_by`, `rows`, `cols`, `order`, `status`) VALUES
-(1, 1, 'module_embeded', '2015-12-16 11:15:41', '2015-12-20 10:00:08', 1, 1, 1, 1, NULL, 1),
-(4, 1, 'module_embeded', '2015-12-16 13:24:09', '2015-12-22 17:28:38', 1, 1, 1, 2, NULL, 1);
+(14, 3, 'module_link', '2016-01-25 21:39:33', '2016-01-26 12:43:34', 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -103,14 +112,6 @@ CREATE TABLE `module_embeded` (
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'nazov embedovaneho videa',
   `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis embedovaneho videa'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='tabulka pre modul embeded video';
-
---
--- Sťahujem dáta pre tabuľku `module_embeded`
---
-
-INSERT INTO `module_embeded` (`id`, `module_id`, `link`, `title`, `description`) VALUES
-(1, 1, '<iframe width="560" height="315" src="https://www.youtube.com/embed/8XpjVlGn6_o?showinfo=0" frameborder="0" allowfullscreen></iframe>', 'volajake robotisko velke', ''),
-(4, 4, '<iframe width="560" height="315" src="https://www.youtube.com/embed/Fy7FzXLin7o" frameborder="0" allowfullscreen></iframe>asdfasdf', 'Aby tu bolo niečo dobré ', '');
 
 -- --------------------------------------------------------
 
@@ -159,10 +160,18 @@ CREATE TABLE `module_image` (
 CREATE TABLE `module_link` (
   `id` int(11) NOT NULL COMMENT 'link id',
   `module_id` int(11) NOT NULL COMMENT 'modul pre link',
-  `link` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'odkaz',
+  `page_id` int(11) DEFAULT NULL COMMENT 'id internej stranky na ktoru ukazuje',
+  `link` text COLLATE utf8_slovak_ci COMMENT 'odkaz',
   `title` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'titulka odkazu',
   `description` text COLLATE utf8_slovak_ci NOT NULL COMMENT 'popis odkazu'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci COMMENT='modul linku';
+
+--
+-- Sťahujem dáta pre tabuľku `module_link`
+--
+
+INSERT INTO `module_link` (`id`, `module_id`, `page_id`, `link`, `title`, `description`) VALUES
+(7, 14, 3, '', 'link to home', 'asdf asdas d asd ');
 
 -- --------------------------------------------------------
 
@@ -185,19 +194,45 @@ CREATE TABLE `module_video` (
 
 CREATE TABLE `page` (
   `id` int(11) NOT NULL COMMENT 'id stranky',
+  `status` int(11) DEFAULT NULL COMMENT 'ak je stranka viditelna status je 1 inak je nula',
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'datum vytvorenia stranky',
   `edited` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'datum editacie stranky',
   `created_by` int(11) DEFAULT NULL COMMENT 'id pouzivatela ktory vytvoril stranku ',
   `edited_by` int(11) DEFAULT NULL COMMENT 'id pouzivatela ktory naposledy editoval stranku',
-  `title` varchar(255) COLLATE utf8_slovak_ci NOT NULL
+  `title` text COLLATE utf8_slovak_ci NOT NULL,
+  `description` text COLLATE utf8_slovak_ci NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `is_home` tinyint(1) DEFAULT NULL COMMENT 'ak je stranka nastavena ako home',
+  `in_navbar` tinyint(1) DEFAULT NULL COMMENT 'ak ma byt stranka zobrazena v navigacii'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
 -- Sťahujem dáta pre tabuľku `page`
 --
 
-INSERT INTO `page` (`id`, `created`, `edited`, `created_by`, `edited_by`, `title`) VALUES
-(1, '2015-12-15 22:10:10', '2015-12-15 22:10:10', 1, 1, 'Home');
+INSERT INTO `page` (`id`, `status`, `created`, `edited`, `created_by`, `edited_by`, `title`, `description`, `category_id`, `is_home`, `in_navbar`) VALUES
+(3, NULL, '2016-01-24 16:43:01', '2016-01-26 12:30:06', 1, 1, 'home', 'popis stranky na viacej riadkov kludne moze byt to uz ako clovek chce tak si zada rekuuuuu', 1, 1, 0),
+(5, NULL, '2016-01-26 12:41:17', '2016-01-26 12:41:17', 1, 1, 'page 1', 'popis k page 1', 1, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Štruktúra tabuľky pre tabuľku `page_category`
+--
+
+CREATE TABLE `page_category` (
+  `id` int(11) NOT NULL,
+  `title` text NOT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Sťahujem dáta pre tabuľku `page_category`
+--
+
+INSERT INTO `page_category` (`id`, `title`, `description`) VALUES
+(1, 'Kategoria 1', 'popis kategorie'),
+(2, 'kategoria 2', 'popis 2');
 
 -- --------------------------------------------------------
 
@@ -241,7 +276,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `first_name`, `last_name`, `admin`, `reg_date`, `bio`, `password`, `deactivated`) VALUES
-(1, 'admin', 'Administrator', 'Administratorovic', 1, '2015-12-15 22:08:11', 'ja som taky velky admin muhahe', 'admin', 0);
+(1, 'admin', 'Administrator', 'Administratorovic', 1, '2015-12-15 22:08:11', 'ja som taky velky admin muhahe', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 0);
 
 --
 -- Kľúče pre exportované tabuľky
@@ -260,7 +295,8 @@ ALTER TABLE `edit_rights`
 ALTER TABLE `file`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `module_id` (`module_id`);
+  ADD KEY `module_id` (`module_id`),
+  ADD KEY `page_id` (`page_id`);
 
 --
 -- Indexy pre tabuľku `module`
@@ -318,7 +354,8 @@ ALTER TABLE `module_image`
 ALTER TABLE `module_link`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
-  ADD KEY `module_id` (`module_id`);
+  ADD KEY `module_id` (`module_id`),
+  ADD KEY `page_id` (`page_id`);
 
 --
 -- Indexy pre tabuľku `module_video`
@@ -335,7 +372,14 @@ ALTER TABLE `page`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`),
   ADD KEY `created_by` (`created_by`),
-  ADD KEY `edited_by` (`edited_by`);
+  ADD KEY `edited_by` (`edited_by`),
+  ADD KEY `category_id` (`category_id`);
+
+--
+-- Indexy pre tabuľku `page_category`
+--
+ALTER TABLE `page_category`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexy pre tabuľku `test`
@@ -359,12 +403,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pre tabuľku `file`
 --
 ALTER TABLE `file`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT pre tabuľku `module`
 --
 ALTER TABLE `module`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id modulu', AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id modulu', AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT pre tabuľku `module_attachements`
 --
@@ -374,27 +418,27 @@ ALTER TABLE `module_attachements`
 -- AUTO_INCREMENT pre tabuľku `module_embeded`
 --
 ALTER TABLE `module_embeded`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id embedovaneho videa', AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id embedovaneho videa';
 --
 -- AUTO_INCREMENT pre tabuľku `module_formated`
 --
 ALTER TABLE `module_formated`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id modulu';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id modulu', AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT pre tabuľku `module_gallery`
 --
 ALTER TABLE `module_gallery`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id galerie';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id galerie', AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT pre tabuľku `module_image`
 --
 ALTER TABLE `module_image`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id obrazka';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id obrazka', AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT pre tabuľku `module_link`
 --
 ALTER TABLE `module_link`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'link id';
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'link id', AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT pre tabuľku `module_video`
 --
@@ -404,7 +448,12 @@ ALTER TABLE `module_video`
 -- AUTO_INCREMENT pre tabuľku `page`
 --
 ALTER TABLE `page`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id stranky', AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id stranky', AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT pre tabuľku `page_category`
+--
+ALTER TABLE `page_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT pre tabuľku `test`
 --
@@ -430,7 +479,8 @@ ALTER TABLE `edit_rights`
 -- Obmedzenie pre tabuľku `file`
 --
 ALTER TABLE `file`
-  ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `file_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `file_ibfk_2` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Obmedzenie pre tabuľku `module`
@@ -474,7 +524,8 @@ ALTER TABLE `module_image`
 -- Obmedzenie pre tabuľku `module_link`
 --
 ALTER TABLE `module_link`
-  ADD CONSTRAINT `module_link_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `module_link_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `module` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `module_link_ibfk_2` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON UPDATE CASCADE;
 
 --
 -- Obmedzenie pre tabuľku `module_video`
@@ -487,7 +538,8 @@ ALTER TABLE `module_video`
 --
 ALTER TABLE `page`
   ADD CONSTRAINT `page_ibfk_2` FOREIGN KEY (`edited_by`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `page_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `page_ibfk_3` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `page_ibfk_4` FOREIGN KEY (`category_id`) REFERENCES `page_category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -71,8 +71,8 @@ class ModuleFormated extends Module{
     /**
      * Funkcia vypíše poh¾ad na modul
      */
-    public function module(){
-        ModuleFormated_v::module($this->containerData, $this->contentData, $this->loggedUser->isAdmin());
+    public function module($editable){
+        ModuleFormated_v::module($this->containerData, $this->contentData, $editable);
     }
     /**
      * Funkcia vypíše poh¾ad na editoru modulu

@@ -86,8 +86,6 @@ function deleteModule(moduleClass, id) {
             }
         });
     }
-
-
 }
 
 //funkcia na select/deselect vsetkych checkboxov v parente
@@ -257,7 +255,16 @@ function handleFile(field_id, editable, multiple, extensions){
     }
 }
 
+$(function () {
+    $('[data-toggle="popover"]').popover()
+})
 
-
+/*
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.combobox').combobox();
+  });
+</script>
+*/
 
 // --------- Filemanager Functions ------ END//

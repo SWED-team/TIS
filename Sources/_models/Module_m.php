@@ -45,7 +45,6 @@ class Module_m{
       WHERE module_id = ?",
             array($module_id))->fetchAll(PDO::FETCH_ASSOC);
       return $result;
-      return $result;
   }
   /**
    * Vloží údaje z asociativneho poľa do tabuľky
@@ -147,12 +146,22 @@ class Module_m{
     else return null;
   }
   public static function getPageModules($page_id){ // vrati ID a TYPE pre vsetky moduly pre page so zadanym id
-    $result = Db::query("
-      SELECT m.id, m.type
+    $result = Db::query(
+      "SELECT m.id, m.type
       FROM module m
       WHERE m.page_id = ?
       ORDER BY m.order", 
       array($page_id))->fetchAll();
+    return $result;
+  }
+  public static function getPages(){
+    $result = Db::query(
+      "SELECT p.*, concat(u.first_name, ' ',u.last_name) AS author 
+      FROM `page` p
+      INNER JOIN `user` u
+      ON u.id = p.created_by
+      ORDER BY p.id", 
+      array())->fetchAll();
     return $result;
   }
 }

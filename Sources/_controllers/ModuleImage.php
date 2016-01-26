@@ -7,7 +7,7 @@ if(file_exists('_controllers/Module.php'))
     require_once('_controllers/Module.php');
 
 
-/*******************************  ModuleEmbeded  *******************************/
+/*******************************  ModuleImage  *******************************/
 class ModuleImage extends Module{
     /**
      * Konštruktor triedy kontrolera modulu ModuleImage
@@ -62,8 +62,8 @@ class ModuleImage extends Module{
     /**
      * Funkcia vypíše poh¾ad na modul
      */
-    public function module(){
-        ModuleImage_v::module($this->containerData, $this->contentData, $this->loggedUser->isAdmin(),$this->file);
+    public function module($editable){
+        ModuleImage_v::module($this->containerData, $this->contentData, $editable,$this->file);
     }
     /**
      * Funkcia vypíše poh¾ad na editoru modulu
@@ -170,7 +170,7 @@ class ModuleImage extends Module{
     }
 
     /**
-     * funkcia aktualizuje údaje o module v DB
+     * Funkcia aktualizuje údaje o module v DB
      * @return boolean true ak edituje úspešne inak false
      */
     public function update(){
