@@ -177,33 +177,17 @@ class Page_v{
         </div>
     <?php
     }
-    /*
-    Funkcia zobrazí view pre sekciu na pridávanie modulov
+
+    /**
+     * Funkcia vypíše 
+     * @param  [type] $modules [description]
+     * @return [type]          [description]
      */
-    /*public static function mdulesEditSection($content){
-    return '
-    <section class="modal fade" id="module-editor" role="dialog">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-    <div class="modal-header">
-    <button type="button " class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title">Insert new module</h4>
-    </div>
-    <div class="modal-body row">
-    '.$content.'
-    </div>
-    <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-    </div>
-    </div>
-    </div>
-    </section>';
-    }*/
-    public static function moduleEditor($modules)
+    public static function moduleEditor($modules, $page=0)
     {
         $buttons = "";
         foreach ($modules as $type => $m) {
-            $editorUrl = "_controllers/".get_class($m).".php?show_editor=true".((isset($_GET["page"]) && $_GET["page"]>0)?"&page_id=".$_GET["page"]:"");
+            $editorUrl = "_controllers/".get_class($m).".php?show_editor=true".(($page>0)?"&page_id=".$page:"");
             $buttons = $buttons .'
           <div class="row">
             <button type="button" class="btn btn-info" onclick="showModuleInsertForm(\''.$editorUrl.'\')">
@@ -283,50 +267,61 @@ class Page_v{
         <?php
     }
     public static function pageListEditable($pageData){?>
-        <div class="container-fluid">
+        <div class="page-list col-xs-12 ">
             <div class="row">
-                <div class="col-xs-5">
-                    Page Info
+                <div class="col-xs-3">
+                    <h4>Page Info</h4>
                 </div>
                 <div class="col-xs-2 text-center">
-                    Home
+                    <h4>Visible</h4>
                 </div>
                 <div class="col-xs-2 text-center">
-                    Navbar
+                    <h4>Home</h4>
                 </div>
-                <div class="col-xs-3 pull-right">
-                    Operations
+                <div class="col-xs-2 text-center">
+                    <h4>Navbar</h4>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <h4>Open / Edit / Delete</h4>
                 </div>                
             </div>
             <?php
             foreach ($pageData as $key => $page) {
                 ?>
-            <div class="row">
-                <div class="col-xs-5">
+            <div class="row bordered">
+                <div class="col-xs-3">
                     <?php 
                     echo $page["id"]. " - " . $page["title"];
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
-                    if($page["is_home"]==0)
-                        echo '<a class="btn col-xs-12 btn-success" title="Set page as HomePage" onclick="setHomePage('.$page["id"].')"><i class=" fa fa-check-square-o"></i></a>';
+                    if($page["status"]==0)
+                        echo '<a class=" col-xs-12 btn btn-danger" title="Publicate this page" onclick="setStatusPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
                     else 
-                        echo '<a class="btn col-xs-12 btn-danger disabled" title="This page is currently HomePage"><i class="fa fa-check-square-o"></i></a>';
+                        echo '<a class=" col-xs-12 btn btn-success" title="Hide this pge" onclick="setStatusPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                    ?>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <?php 
+                    if($page["is_home"]==0)
+                        echo '<a class="btn col-xs-12 btn-danger" title="Set page as HomePage" onclick="setHomePage('.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                    else 
+                        echo '<a class="btn col-xs-12 btn-success disabled" title="This page is currently HomePage"><i class="fa fa-check"></i></a>';
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["in_navbar"]==0)
-                        echo '<a class=" col-xs-12 btn btn-success" title="Add page to navigation" onclick="setNavbarPage('.$page["id"].')"><i class=" fa fa-check-square-o"></i></a>';
+                        echo '<a class=" col-xs-12 btn btn-danger" title="Add page to navigation" onclick="setNavbarPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
                     else 
-                        echo '<a class=" col-xs-12 btn btn-danger" title="Remove page from navigation" onclick="unsetNavbarPage('.$page["id"].')"><i class="fa  fa-times"></i></a>';
+                        echo '<a class=" col-xs-12 btn btn-success" title="Remove page from navigation" onclick="setNavbarPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
                     ?>
                 </div>
                 <div class="col-xs-3 pull-right">
-                    <a href="?page=<?php echo $page["id"];?>" class="col-xs-offset-1 col-xs-3  btn btn-success" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
-                    <a class="col-xs-offset-1 col-xs-3 btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
-                    <a class="col-xs-offset-1 col-xs-3  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
+                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12  btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 col-xs-12  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
                 </div>                
             </div>
 

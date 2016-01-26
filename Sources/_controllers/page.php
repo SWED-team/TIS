@@ -130,7 +130,7 @@ Class Page{
         Funkcia vypíše formuláre na úpravu modulov
     */
     public function modulesEditor(){
-        return Page_v::moduleEditor($this->newModules);
+        return Page_v::moduleEditor($this->newModules, $this->pageData["id"]);
     }
     /*
     Funkcia zobrazí view pre header stránky
@@ -169,14 +169,21 @@ Class Page{
 
 
         if(sizeof($_GET)==0){
-            $this->setById(Page_m::getHomePage()["id"]);
-                
-                if($editable) $this->addModuleButton();
+            if($this->setById(Page_m::getHomePage()["id"])!=null){
+                if($editable) 
+                    $this->addModuleButton();
 
                 $count = $this->initModules()->modules($editable);
-                if($count > 0 && $editable) $this->addModuleButton();
-                
+                if($count > 0 && $editable) 
+                    $this->addModuleButton();
+                    
                 $this->modulesEditor();
+            }
+            else {
+                echo "Home page is unavailable";
+            }
+
+  
         }
 
 
@@ -226,41 +233,38 @@ Class Page{
                 echo "Kategoria neexistuje";
             }
         }
-/*
-        echo '<section class="container-fluid"><div class="row">';
-        $this->modules($editable);
-
-
-        if($admin){
-            $this->addModuleButton();
-        }
-
-        echo '</div></section>';
-
-
-        if($admin){
-            $this->modulesEditor();
-        }*/
     }
+
+
+
     public function pageListWhere($col = 1, $value = 1, $orderBy = "id"){
         $pages = Page_m::getPagesWhere($col, $value, $orderBy);
         Page_v::pageListEditable($pages);
     }
 
-    public function setHomePage($page_id){
-        Page_m::setHomePage($page_id);
+    public function setHomePage(){
+        Page_m::setHomePage($this->pageData["id"]);
 
     }
-    public function setNavbarPage($page_id){
-        Page_m::setNavbarPage($page_id, 1);
+
+
+    public function setNavbarPage( $value){
+        Page_m::setNavbarPage($this->pageData["id"], $value);
     }
-    public function unsetNavbarPage($page_id){
-        Page_m::setNavbarPage($page_id, 0);
+
+
+    public function setPageStatus($value){
+        Page_m::setStatusPage($this->pageData["id"], $value);
     }
+
+
+
     public function preview($editable,$cols){
         Page_v::preview($editable, $this->pageData, Page_m::getCategory($this->pageData["category_id"]), $this->file,$cols);
         return $this;
     }
+
+
     public function editor($operation){
         $url = '_controllers/Page.php?'.$operation.'=true';
         if(isset($this->pageData["id"]) && $this->pageData["id"]!=0) {
@@ -271,6 +275,9 @@ Class Page{
     public function printAlert($type="primary", $title, $message){
         echo '<div class="alert alert-'.$type.'" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>'.$title.' </strong> '.$message.'</div>';
     }
+
+
+
     public function getFormData(){
         $success = true;
 
@@ -358,6 +365,8 @@ Class Page{
         return $success;
     }
 
+
+
     public function insert(){
         $result = Page_m::insertInto("page", $this->pageData);
         if ($result > 0){
@@ -374,6 +383,9 @@ Class Page{
         $this->printAlert("danger", "Insertion Error:", "Problem with saving page to database.");
         return false;
     }
+
+
+
     public function update(){
         if(isset($this->pageData['id']) && $this->pageData['id'] > 0 ){
             Page_m::update("page", $this->pageData, "id",$this->pageData['id']);
@@ -405,7 +417,7 @@ if(true){
             echo $p->editor("edit");
         }
         else{
-            $m = new Page();
+            $p = new Page();
             $p->editor("insert");
         }
     }
@@ -444,29 +456,7 @@ if(true){
             echo '<strong>Delete Error:</strong> Unknown page.';
         }
     }
-     //nastavenie stranky aby sa zobrazovala v navigacii .. hodnota $_GET["set_navbar"] je id stranky
-    if ( isset($_GET["set_navbar"]) && $_GET["set_navbar"]){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            $p->setNavbarPage($_POST["id"]);
-        }
-    }
-    //nastavenie stranky aby sa nezobrazovala v navigacii .. hodnota $_GET["unset_navbar"] je id stranky
-    if ( isset($_GET["unset_navbar"]) && $_GET["unset_navbar"]){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            $p->unsetNavbarPage($_POST["id"]);
-        }
-    }
 
-    //nastavenie stranky aby sa zobrazovala ako home.. hodnota $_GET["set_home"] je id stranky
-    if ( isset($_GET["set_home"]) && $_GET["set_home"]){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            $p->setHomePage($_POST["id"]);
-        }
-    }
-    
 }
 
 // ---------- Spracovanie ajax requestov admin a pouzivatel s pravami ------------ END
@@ -474,8 +464,32 @@ if(true){
 
 // ---------- Spracovanie ajax requestov iba admin ------------ END
 
-if(true){ //overenie ci ma pravo editovat
-   
+if(true){ //overenie ci je admin 
+        //nastavenie stranky aby sa zobrazovala v navigacii .. hodnota $_POST["set_navbar"] je id stranky
+    if ( isset($_POST["set_navbar"])){
+        if(isset($_POST["id"]) && $_POST["id"]>0){
+            $p = new Page($_POST["id"]);
+            $val = ($_POST["set_navbar"] == 1)?1:0;
+            $p->setNavbarPage($val);
+        }
+    }
+
+    //nastavenie stranky aby sa zobrazovala ako home.. hodnota $_POST["set_home"] je id stranky
+    if ( isset($_POST["set_home"])){
+        if(isset($_POST["id"]) && $_POST["id"]>0){
+            $p = new Page($_POST["id"]);
+            $p->setHomePage();
+        }
+    }
+    //nastavenie stranky aby sa zobrazovala.. hodnota $_POST["set"] je id stranky
+    if ( isset($_POST["set_status"])){
+        if(isset($_POST["id"]) && $_POST["id"]>0){
+            $p = new Page($_POST["id"]);
+            $val = ($_POST["set_status"] == 1)?1:0;
+            $p->setPageStatus($val);
+        }
+    }
+    
 }
 
 ?>

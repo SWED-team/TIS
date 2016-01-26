@@ -53,8 +53,8 @@ function addPage(){
 }
 function setHomePage(id){
     $.ajax({
-        url: "_controllers/Page.php?set_home=true",
-        data: {"id" : id},
+        url: "_controllers/Page.php",
+        data: {"id" : id, "set_home" : true},
         type: "post",
         success: function (result) {
             //showModal("modalBox", "sm", "Edit Page", result);
@@ -66,10 +66,10 @@ function setHomePage(id){
         }
     });
 }
-function setNavbarPage(id){
+function setNavbarPage(value,id){
     $.ajax({
-        url: "_controllers/Page.php?set_navbar=ture",
-        data: {"id" : id},
+        url: "_controllers/Page.php",
+        data: {"id" : id, "set_navbar" : value},
         type: "post",
         success: function (result) {
             //showModal("modalBox", "sm", "Edit Page", result);
@@ -81,10 +81,10 @@ function setNavbarPage(id){
         }
     });
 }
-function unsetNavbarPage(id){
+function setStatusPage(value, id){
     $.ajax({
-        url: "_controllers/Page.php?unset_navbar=true",
-        data: {"id" : id},
+        url: "_controllers/Page.php",
+        data: {"id" : id, "set_status" : value},
         type: "post",
         success: function (result) {
             //showModal("modalBox", "sm", "Edit Page", result);
@@ -96,6 +96,7 @@ function unsetNavbarPage(id){
         }
     });
 }
+
 
 
 

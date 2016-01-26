@@ -172,5 +172,8 @@ Class Page_m{
   public static function setNavbarPage($page_id, $value){
     return Page_m::update("page", array("in_navbar"=>$value), "id", $page_id);
   }
+  public static function setStatusPage($page_id, $value){
+    return Page_m::update("page", array("status"=>$value), "id", $page_id);
+  }
 }
 ?>

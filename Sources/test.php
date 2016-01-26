@@ -65,4 +65,5 @@
   $p->setHomePage(4);
   $p->setNavbarPage(3);
   $p->unsetNavbarPage(4);
+  echo !0 == true;
 ?>
