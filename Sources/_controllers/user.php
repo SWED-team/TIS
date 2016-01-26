@@ -36,11 +36,11 @@
 
 			$this->fillUserDataBySession();
 
-			echo $this->printUserSection();
+			$this->printUserSection();
 			$show_page=false;
 		}
 		else if(isset($_POST["submitReg"])){
-			echo $this->printUserSectionReg();
+			$this->printUserSectionReg();
 			$show_page=false;
 		}
 		else if(isset($_POST["submitSearch"])){
@@ -75,7 +75,7 @@
 	public function printLogPop()
 	{
 
-		echo User_v::showLogPop();
+		User_v::showLogPop();
 	}
 
 	/**

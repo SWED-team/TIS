@@ -9,101 +9,36 @@ class User_v extends User{
 	 */
 	public static function showLogPop()
 	{
-		$res='<div id="LoginPop" class="modal fade  " role="dialog">
-		  <div class="modal-dialog modal-sm">
-
-
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <div type="button" class="close" data-dismiss="modal">&times;</div>
-		        <h4 class="modal-title">Login/Registration</h4>
-		      </div>
-		      <form method="post">
-		      <div class="modal-body">
-
-		         <input id="PoploginEmail" type="text" class="form-control col-ms-1" name="login" placeholder="zadajte email">
-		         <br>
-		          <input id="PoploginPass" type="text" class="form-control" name="pass" placeholder="zadajte heslo">
-		      </div>
-		      <div class="modal-footer">
-		         <div id="loginButton" class="btn btn-success" >Login</div>
-
-		        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-		      </form>
-
-		      </div>
+	?>
+		<div id="LoginPop" class="modal fade  " role="dialog">
+			<div class="modal-dialog modal-sm">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		        		<div type="button" class="close" data-dismiss="modal">&times;</div>
+		        		<h4 class="modal-title">Login/Registration</h4>
+		      		</div>
+		      		<form method="post">
+		      			<div class="modal-body">
+		       				<input id="PoploginEmail" type="text" class="form-control col-ms-1" name="login" placeholder="Enter email">
+		       				<br>
+		       				<input id="PoploginPass" type="text" class="form-control" name="pass" placeholder="Enter password">
+		      			</div>
+		      			<div class="modal-footer">
+		       				<div id="loginButton" class="btn btn-success" >Login</div>
+		       				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		      		</form>
+				</div>
 				<div id="check_divPop"></div>
-		    </div>
+			</div>
+		</div>
 
-			  </div>
-
-			</div>';
-
-		return $res;
+		<?php
 	}
 
 	/**
 	 * zobrazenie bočného panelu na správu používateľského konta
 	 * @return [string] [html kod panelu]
 	 */
-	public static function showNavbar($admin)
-	{
-		$res='<div id="navigationBarUser" class="col-md-12" >
-
-
-            <button type="button" class="btn btn-info col-md-12" id="btnEdit">
-              <i class="glyphicon glyphicon-edit"></i>&nbsp &nbsp Edit profile
-            </button>
-
-
-            <button type="button" class="btn btn-info col-md-12" id="btnListM" >
-              <i class="glyphicon glyphicon-list"></i>&nbsp List pages
-            </button>
-
-			 <button type="button" class="btn btn-info col-md-12" id="btnAddPage" >
-              <i class="glyphicon glyphicon-list"></i>&nbsp Add page
-            </button>
-
-            '
-	  ;
-
-		if($admin==1){
-
-			$res=$res.'
-          		 <button type="button" class="btn btn-info col-md-12" id="btnListU" >
-              <i class="glyphicon glyphicon-list"></i>&nbsp List users
-            </button>
-             <button type="button" class="btn btn-info col-md-12" id="btnListM" >
-              <i class="glyphicon glyphicon-list"></i>&nbsp List approves
-            </button></div>
-
-
-          	';
-		}
-		else {
-			echo $admin;
-			$res=$res.'</div>';
-		}
-
-		;
-		return $res;
-
-	}
-	/**
-	 * funkcia naplni celú sekciu pre administráciu konta
-	 */
-
-	public static function fillInfoSection($userData)
-	{
-
-
-		$res=
-		'<div id="infoSectionUser2" >'.
-		'</div>';
-
-		return $res;
-
-	}
 
 	public static function showListUsers($list)
 	{
@@ -201,66 +136,51 @@ class User_v extends User{
 	 */
 	public static function showEditForm($userData)
 	{
-		$res='
-			<div id="editForm">
+		?>
+		<div  class="form-group">
 			<form method="post">
 
-			 <input id="idcko" type="text" class="form-control col-ms-1 hidden" name="login" value='.$userData["id"].'>
+				<input id="idcko" type="text" class="form-control col-ms-1 hidden" name="loginID" value=<?php echo '"'.$userData["id"].'"'?>>
+	      	 	<div class="form-group col-md-6">
+			  		<label for="login">Email:</label>
+			        <input id="loginEmail" type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?> disabled>
+			    </div>
+	         	<div class="form-group col-md-6">
+			  		<label for="usr">First Name:</label>
+			        <input id="loginFirstName" type="text" class="form-control col-ms-1" name="firstName" value=<?php echo '"'.$userData["first_name"].'"'?>>
+			    </div>
+	         	<div class="form-group col-md-6">
+			  		<label for="usr">Last Name:</label>
+			        <input id="loginLastName" type="text" class="form-control col-ms-1" name="LastName" value=<?php echo '"'.$userData["last_name"].'"'?>>
+			    </div>
+	        	<div class="form-group col-md-6">
+			  		<label for="usr">Password:</label>
+			        <input id="loginPass1" type="text" class="form-control col-ms-1" name="pass" value=<?php echo '"'.$userData["password"].'"'?>>
+			    </div>
+	        	<div class="form-group col-md-6">
+			  		<label for="usr">Password again:</label>
+			        <input id="loginPass2" type="text" class="form-control col-ms-1" name="pass2" value=<?php echo '"'.$userData["password"].'"'?>>
+			    </div>
+	          	<div class="form-group col-md-6">
+			  		<label for="usr">Bio:</label>
+			        <textarea rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value=<?php echo '"'.$userData["bio"].'"'?>><?php echo $userData["bio"]?></textarea>
+			    </div>
+      			<div class="modal-footer" style="margin-top:50px;">
+         		<div id="editButton" name="submitRegUser" class="btn btn-success" >Update</div>
 
+      		</form>
+      	</div>
+      	<div id="check_div"></div>
 
-      	 <div class="form-group col-md-6">
-		  <label for="usr">Email:</label>
-		         <input id="loginEmail" type="text" class="form-control col-ms-1" name="login" value='.$userData["email"].'>
-		         </div>
-
-         <div class="form-group col-md-6">
-		  <label for="usr">First Name:</label>
-		         <input id="loginFirstName" type="text" class="form-control col-ms-1" name="firstName" value='.$userData["first_name"].'>
-		         </div>
-
-         <div class="form-group col-md-6">
-		  <label for="usr">Last Name:</label>
-		         <input id="loginLastName" type="text" class="form-control col-ms-1" name="LastName" value='.$userData["last_name"].'>
-		         </div>
-
-        <div class="form-group col-md-6">
-		  <label for="usr">Password:</label>
-		         <input id="loginPass1" type="text" class="form-control col-ms-1" name="pass" value='.$userData["password"].'>
-		         </div>
-
-        <div class="form-group col-md-6">
-		  <label for="usr">Password again:</label>
-		         <input id="loginPass2" type="text" class="form-control col-ms-1" name="pass2" value='.$userData["password"].'>
-		         </div>
-
-          <div class="form-group col-md-6">
-		  <label for="usr">Bio:</label>
-		         <textarea rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value='.$userData["bio"].'>'.$userData["bio"].'</textarea>
-		         </div>
-
-
-
-      <div class="modal-footer" style="margin-top:50px;">
-         <div id="editButton" name="submitRegUser" class="btn btn-success" >Edit</div>
-
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-      </form></div></div></div><div id="check_div">krista</div>
-<script>
-	$("#editButton").on("click",function  () {
-
-
-			id=$("#idcko").val();
-		//	alert("fsdfsdfsdfsd"+id);
-			ajaxRegEdit(id);
-
-
-
-	});
-
-
-</script>
-	';
-		return $res;
+      	<!-- Toto pride do js fillu-->
+		<script>
+			$("#editButton").on("click",function  () {
+				id=$("#idcko").val();
+				ajaxRegEdit(id);
+			});
+		</script>
+	
+	<?php
 	}
 
 	/**
@@ -271,54 +191,46 @@ class User_v extends User{
 
 	public static function showRegForm()
 	{
-
-		$res='
-	<section class="container-fluid">
-<div class="moduel-container col-sm-9">
-<div id="infoSectionUser2"  >
-
-			<div id="editForm" >
-			<form method="post">
-
-
-      	 <div class="form-group col-md-6">
-		  <label for="usr">Email:*</label>
-		         <input id="loginEmail" type="text" class="form-control col-ms-1" name="login" />
-		         </div>
-
-         <div class="form-group col-md-6">
-		  <label for="usr">First Name:*</label>
-		         <input id="loginFirstName" type="text" class="form-control col-ms-1" name="firstName"/>
-		         </div>
-
-         <div class="form-group col-md-6">
-		  <label for="usr">Last Name:*</label>
-		         <input id="loginLastName" type="text" class="form-control col-ms-1" name="LastName" />
-		         </div>
-
-        <div class="form-group col-md-6">
-		  <label for="usr">Password:*</label>
-		         <input id="loginPass1" type="text" class="form-control col-ms-1" name="pass" />
-		         </div>
-
-        <div class="form-group col-md-6">
-		  <label for="usr">Password again:*</label>
-		         <input  id="loginPass2" type="text" class="form-control col-ms-1" name="pass2" />
-		         </div>
-
-          <div class="form-group col-md-6">
-		  <label for="usr">Bio:</label>
-		         <textarea rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" ></textarea>
-		         </div>
-
-
-
-      <div class="modal-footer" style="margin-top:50px;">
-         <div id="regButton" name="submitRegUser" class="btn btn-success" >Register</div>
-
-        <input type="submit" class="btn btn-danger" data-dismiss="modal" value="Close">
-      </form></div></div><div id="check_div">krista</div></div><section>';
-		return $res;
+		?>
+		<section class="container-fluid">
+			<div class="moduel-container col-sm-9">
+				<div id="infoSectionUser2">
+					<div id="editForm" >
+						<form method="post">
+      	 					<div class="form-group col-md-6">
+		  						<label for="usr">Email:*</label>
+		        				<input id="loginEmail" type="text" class="form-control col-ms-1" name="login"/>
+		         			</div>
+         					<div class="form-group col-md-6">
+		  						<label for="usr">First Name:*</label>
+		         				<input id="loginFirstName" type="text" class="form-control col-ms-1" name="firstName"/>
+		         			</div>
+         					<div class="form-group col-md-6">
+		 						<label for="usr">Last Name:*</label>
+		         				<input id="loginLastName" type="text" class="form-control col-ms-1" name="LastName" />
+		         			</div>
+        					<div class="form-group col-md-6">
+		  						<label for="usr">Password:*</label>
+		         				<input id="loginPass1" type="text" class="form-control col-ms-1" name="pass" />
+		        			</div>
+        					<div class="form-group col-md-6">
+		  						<label for="usr">Password again:*</label>
+		         				<input id="loginPass2" type="text" class="form-control col-ms-1" name="pass2" />
+		         			</div>
+          					<div class="form-group col-md-6">
+		  						<label for="usr">Bio:</label>
+		         				<textarea rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" ></textarea>
+		         			</div>
+      						<div class="modal-footer" style="margin-top:50px;">
+         						<div id="regButton" name="submitRegUser" class="btn btn-success" >Register</div>
+        						<input type="submit" class="btn btn-danger" data-dismiss="modal" value="Close">
+      					</form>
+      				</div>
+      			</div>
+      			<div id="check_div"></div>
+      		</div>
+      	</section>
+		<?php
 	}
 
 	/**
@@ -327,21 +239,15 @@ class User_v extends User{
 	 */
 	public static function showListPages($list)
 	{
-
-
-
-		$res=
-		'<div id="listP">'.'
-					<div id="listPControl" class="col-lg-8">
-
-						<div class="btn btn-default" id="listPOrderEditDate">Order by Edit date</div>
-						<div class="btn btn-default" id="listPOrderAddDate">Order by Add date</div>
-						<div class="btn btn-default" id="listPOrderTitle">Order by Title</div>
-
-
-					</div>
-					<div id="ListPList" class="col-lg-12">';
-
+		?>
+		<div id="listP">
+			<div id="listPControl" class="col-lg-8">
+				<div class="btn btn-default" id="listPOrderEditDate">Order by Edit date</div>
+				<div class="btn btn-default" id="listPOrderAddDate">Order by Add date</div>
+				<div class="btn btn-default" id="listPOrderTitle">Order by Title</div>
+			</div>
+			<div id="ListPList" class="col-lg-12">
+		<?php
 		foreach ($list as $key => $value) {
 
 			$res=$res.'
@@ -388,49 +294,21 @@ class User_v extends User{
 
 	public static function showAddPage()
 	{
-
-		$res='<div id="infoSectionUser2" >
-
-
-			<form method="post">
-
-
-      	 <div class="form-group col-md-6">
-		  <label for="usr">Email:*</label>
-		         <input id="pageTitle" type="text" class="form-control col-ms-1" name="pageTitle" />
-			<div class="btn btn-default" id="addPagebtn">AddPage</div>
-</div>
-
-	</div>
-	<script>
-
-	$("#addPagebtn").on("click", function () {
-	   // alert($("#pageTitle").val());
-
-	    ajaxUniversal("AddPage", 0, $("#pageTitle").val());
-
-
-
-	});
-	</script>
-
-
-';
-
-		return $res;
-
-
-	}
-
-	public static function showTraceList()
-	{
-		$res='';
-		foreach ($_SESSION["pages_list"] as $key => $value) {
-			$res= $res. "<a href='index.php?page_id=".$_GET["page_id"]."'>".$value."-></a>";
-
-
-		}
-		return $res;
+		?>
+		<div id="infoSectionUser2">
+      	 		<div class="form-group col-md-6">
+		  			<label for="pageTitle">Page title:</label>
+		         	<input id="pageTitle" type="text" class="form-control col-ms-1" name="pageTitle" />
+					<div class="btn btn-default" id="addPagebtn">AddPage</div>
+				</div>
+		</div>
+		<script>
+			$("#addPagebtn").on("click", function () {
+	   			// alert($("#pageTitle").val());
+	    		ajaxUniversal("AddPage", 0, $("#pageTitle").val());
+			});
+		</script>
+		<?php
 	}
 	/**
 	 * zobrazenie kompletnej sekcie pre správu používateľského konta aj so skriptami
@@ -438,20 +316,33 @@ class User_v extends User{
 	 */
 	public static function showUserSection($userData)
 	{
-		$res='<section class="container-fluid">
-				<div class="row"><div class="moduel-container col-sm-3">
-					'.User_v::showNavbar($userData["admin"]).'
+		?>
+		<section class="container-fluid">
+			<div class="row">
+				<div class="moduel-container col-sm-3">
+					<div id="navigationBarUser" class="col-md-12" >
+			            <button type="button" class="btn btn-info col-md-12" id="btnEdit"><i class="glyphicon glyphicon-edit"></i>&nbsp &nbsp Edit profile</button>
+			            <button type="button" class="btn btn-info col-md-12" id="btnListM" ><i class="glyphicon glyphicon-list"></i>&nbsp List pages</button>
+						<button type="button" class="btn btn-info col-md-12" id="btnAddPage" ><i class="glyphicon glyphicon-list"></i>&nbsp Add page</button>
 
-				</div>
+        				<?php if($userData["admin"]==1){?>
+
+			         	<button type="button" class="btn btn-info col-md-12" id="btnListU" ><i class="glyphicon glyphicon-list"></i>&nbsp List users</button>
+			         	<button type="button" class="btn btn-info col-md-12" id="btnListM" ><i class="glyphicon glyphicon-list"></i>&nbsp List approves</button>
+			        	
+			        	<?php
+			        }
+			        ?>
+
+			        </div>
+			    </div>
 				<div class="moduel-container col-sm-9">
-
-					'.User_v::fillInfoSection($userData).'
+					<div id="infoSectionUser2"></div>'
 				</div>
 			</div>
-			</section>';
+		</section>
 
-
-		return $res;
+		<?php
 
 	}
 

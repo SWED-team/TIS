@@ -6,7 +6,7 @@ include ("User.php");
 include('../_models/User_m.php');
 //$user= new User();
   include('../_models/Db.php');
-Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
+
 
   /*echo "kravaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   echo $_POST['json']['function'];
@@ -52,7 +52,7 @@ Db::connect("127.0.0.1:3307", "root", "usbw", "tis");
 
 			   $user=new User();
 			   $user->fillUserDatabySession();
-			   echo User_v::showEditForm($user->userData);
+			   User_v::showEditForm($user->userData);
 			   break;
 
 		   case 'SwithUserMenu2':
