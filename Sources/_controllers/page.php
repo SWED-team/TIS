@@ -60,7 +60,12 @@ Class Page{
         $this->loggedUser = new User();
         $this->loggedUser->fillUserDatabySession();
 
+        $this->editors=array();
+        $this->editorsInfo=array();
         $this->pageData = array();
+
+        $this->isOwner=true;
+
         $this->setById($id);
         $this->modules=array();
 
@@ -76,6 +81,11 @@ Class Page{
 
                 $this->edited_by = new User();
                 $this->edited_by->fillUserDataById($this->pageData['edited_by']);
+                
+                $this->isOwner = $this->pageData["created_by"]==$this->loggedUser->userData["id"] || $this->loggedUser->isAdmin();
+                
+                $this->editors = Page_m::getEditors($this->pageData["id"]);
+                $this->editorsInfo = Page_m::getEditorsInfo($this->pageData["id"]);
 
                 $this->category =  Page_m::getCategory($this->pageData["category_id"]);
             }
@@ -237,9 +247,14 @@ Class Page{
 
 
 
-    public function pageListWhere($col = 1, $value = 1, $orderBy = "id"){
+    public function pageListAdminWhere($col = 1, $value = 1, $orderBy = "id"){
         $pages = Page_m::getPagesWhere($col, $value, $orderBy);
-        Page_v::pageListEditable($pages);
+        Page_v::pageListAdmin($pages);
+    }
+    public function pageListUserWhere($col = 1, $value = 1, $orderBy = "id"){
+        $pages = Page_m::getPagesWhere($col, $value, $orderBy);
+        Page_v::pageListUser($pages);
+
     }
 
     public function setHomePage(){
@@ -270,7 +285,10 @@ Class Page{
         if(isset($this->pageData["id"]) && $this->pageData["id"]!=0) {
             $url = $url.'&id='.$this->pageData["id"];
         }
-        Page_v::editor($url, $this->pageData, Page_m::getCategories(), $this->file);
+
+
+        $users = Page_m::getUsersExcept($this->loggedUser->userData["id"]);
+        Page_v::editor($url, $this->pageData, Page_m::getCategories(), $this->file, $users, $this->editorsInfo, $this->isOwner, $this->created_by->userData);
     }
     public function printAlert($type="primary", $title, $message){
         echo '<div class="alert alert-'.$type.'" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>'.$title.' </strong> '.$message.'</div>';
@@ -298,6 +316,12 @@ Class Page{
         if(isset($_GET['insert'])){
             $this->pageData["created_by"] = $this->loggedUser->getUserID();    // Nastavi modulu created_by id uzivatela ktorý ho vytvoril
             $this->pageData["edited_by"] = $this->loggedUser->getUserID();     // nastavi modulu edited_by id uzivatela ktory ho upravil
+            if(isset($_POST['editor-id'])){
+                for ($i=0; $i < count($_POST['editor-id']); $i++) { 
+                    $this->editors[] = array("user_id" => $_POST['editor-id'][$i]);            
+                }
+            }
+
         }
         // ----------- Pridanie novej stranky --------------- END
 
@@ -313,7 +337,17 @@ Class Page{
             $this->pageData["edited"] = date("Y-m-d H:i:s", time());       // Nastavenie casu kedy bol modul upravovany 
             $this->pageData["edited_by"] = $this->loggedUser->getUserID(); // Nastavi modulu edited_by id uzivatela ktory upravoval modul
             $this->pageData["id"] = $_GET['id'];                           // Nastavi modulu jeho id z url
-
+            
+            // ak je vlastnik stranky tak moze menit editorov
+            $this->editors=null;
+            if($this->loggedUser->userData["id"]==$this->pageData["created_by"] || $this->loggedUser->isAdmin()){
+                $this->editors = array();
+                if(isset($_POST['editor-id'])){
+                    for ($i=0; $i < count($_POST['editor-id']); $i++) { 
+                        $this->editors[] = array("user_id" => $_POST['editor-id'][$i],"page_id" => $this->pageData["id"]);            
+                    }
+                }
+            }
         }
         // ----------- Editacia existujucej stranky -------- END
         // 
@@ -336,7 +370,7 @@ Class Page{
         $this->pageData["description"] = $_POST['description'];
         $this->pageData["category_id"] = $_POST['category_id'];       
 
-       // ------- reprezentativny obrazok ---------------------------------------------------
+       // ------- reprezentativny obrazok ------------------------------------START
         if(isset($_POST['file-path']) && file_exists('../'.$_POST['file-path'][0])){
             $this->file["path"] = $_POST['file-path'][0];
         }
@@ -352,9 +386,7 @@ Class Page{
             $this->printAlert("danger", "File Error:", "Path to file thumbnail is incorrect.");
             $success = false;
         }
-
-
-
+         // ------- reprezentativny obrazok ------------------------------------END
 
         // --------- Ak nacitanie udajov zlyha --------------------------------
         if ($success != true){
@@ -368,16 +400,23 @@ Class Page{
 
 
     public function insert(){
-        $result = Page_m::insertInto("page", $this->pageData);
-        if ($result > 0){
-            $this->file["page_id"] = $result;
+        $this->pageData['id'] = Page_m::insertInto("page", $this->pageData);
+        if ($this->pageData['id'] > 0){
+            $this->file["page_id"] = $this->pageData['id'];
             $resultFile = Page_m::insertInto('file', $this->file);
-            if($resultFile>0){
+            $resultEditors = 1;
+            for($i=0;$i<count($this->editors);$i++){
+                $this->editors[$i]["page_id"] = $this->pageData['id'];
+                $resultEditors *= Page_m::insertInto('edit_rights', $this->editors[$i]);
+            }
+            
+            if($resultFile>0 && $resultEditors>0){
                 $this->printAlert("success", "Page was saved successfully.", "");
                 return true;
             }
             else{
-                Page_m::deleteFrom("page", $result);
+                $this->delete();
+                $this->printAlert("danger", "Insertion Error:", "Problem with saving file/editors to database.");
             }
         }
         $this->printAlert("danger", "Insertion Error:", "Problem with saving page to database.");
@@ -391,8 +430,22 @@ Class Page{
             Page_m::update("page", $this->pageData, "id",$this->pageData['id']);
             Page_m::update("file", $this->file, "page_id",$this->pageData['id']);
 
-            $this->printAlert("success", "Page was updated successfully.", "");
-            return true;
+            $resultEditors = 1;
+            if($this->editors != null && $this->loggedUser->userData["id"] = $this->pageData["created_by"]){
+                Page_m::deleteFromWhere("edit_rights", "page_id", $this->pageData['id']);
+                for($i=0;$i<count($this->editors);$i++){
+                    $resultEditors *= Page_m::insertInto('edit_rights', $this->editors[$i]);
+                }
+            }
+
+            if($resultEditors>0){
+                $this->printAlert("success", "Page was updated successfully.", "");
+                return true;
+            }
+            else{
+                $this->printAlert("danger", "Update Error:", "Problem with saving editors page to database.");
+                
+            }
         }
         $this->printAlert("danger", "Update Error:", "Problem with saving page to database.");
         return false;

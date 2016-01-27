@@ -1,0 +1,5 @@
+TODO:
+
+
+-Module link: predvyplnenie title description file podla dat zo stranky (v controlleri treba posielat informacie o pagi aj s tymito vecami)
+

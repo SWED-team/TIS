@@ -27,11 +27,10 @@ class Page_v{
     <script type="text/javascript" src="js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
-    <script type="text/javascript" src="js/tinymce/tinymce.min.js"></script>
     <script type="text/javascript" src="js/Module.js"></script>
     <script type="text/javascript" src="js/Page.js"></script>
     <script type="text/javascript" src="js/bootstrap-combobox.js"></script>
-
+    <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
 
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -129,7 +128,7 @@ class Page_v{
         </div>
     </nav>
     <div class="wrapper">
-    <section class="container-fluid">
+    <section class="container-fluid page-content">
         <div class="row">
 
 
@@ -266,8 +265,15 @@ class Page_v{
         </div>
         <?php
     }
-    public static function pageListEditable($pageData){?>
+    public static function categoryEditor(){
+
+    }
+
+    public static function pageListAdmin($pageData){?>
         <div class="page-list col-xs-12 ">
+            <div class="row">
+                <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
+            </div>
             <div class="row">
                 <div class="col-xs-3">
                     <h4>Page Info</h4>
@@ -286,42 +292,90 @@ class Page_v{
                 </div>                
             </div>
             <?php
+            $cnt=0;
             foreach ($pageData as $key => $page) {
+                $cnt++;
                 ?>
             <div class="row bordered">
-                <div class="col-xs-3">
-                    <?php 
-                    echo $page["id"]. " - " . $page["title"];
-                    ?>
+                <div class="col-xs-3 page-list-info">
+                        <?php 
+                        echo "<small class='text-muted'>#".$cnt ." </small> ". $page["title"];
+                        ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["status"]==0)
-                        echo '<a class=" col-xs-12 btn btn-danger" title="Publicate this page" onclick="setStatusPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<a class=" col-xs-12 btn-xs btn btn-danger" title="Publicate this page" onclick="setStatusPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
                     else 
-                        echo '<a class=" col-xs-12 btn btn-success" title="Hide this pge" onclick="setStatusPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                        echo '<a class=" col-xs-12 btn-xs btn btn-success" title="Hide this pge" onclick="setStatusPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["is_home"]==0)
-                        echo '<a class="btn col-xs-12 btn-danger" title="Set page as HomePage" onclick="setHomePage('.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<a class="btn col-xs-12 btn-xs btn-danger" title="Set page as HomePage" onclick="setHomePage('.$page["id"].')"><i class=" fa fa-times"></i></a>';
                     else 
-                        echo '<a class="btn col-xs-12 btn-success disabled" title="This page is currently HomePage"><i class="fa fa-check"></i></a>';
+                        echo '<a class="btn col-xs-12 btn-xs btn-success disabled" title="This page is currently HomePage"><i class="fa fa-check"></i></a>';
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["in_navbar"]==0)
-                        echo '<a class=" col-xs-12 btn btn-danger" title="Add page to navigation" onclick="setNavbarPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<a class=" col-xs-12 btn btn-xs btn-danger" title="Add page to navigation" onclick="setNavbarPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
                     else 
-                        echo '<a class=" col-xs-12 btn btn-success" title="Remove page from navigation" onclick="setNavbarPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                        echo '<a class=" col-xs-12 btn btn-xs btn-success" title="Remove page from navigation" onclick="setNavbarPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
                     ?>
                 </div>
                 <div class="col-xs-3 pull-right">
-                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12  btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
-                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
-                    <a class="col-sm-offset-1 col-sm-3 col-xs-12  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
+                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
+                </div>
+            </div>
+
+                <?php
+            }
+            ?>
+        </div>
+
+
+    <?php }
+    public static function pageListUser($pageData){?>
+        <div class="page-list col-xs-12 ">
+            <div class="row">
+                <div class="col-xs-5">
+                    <h4>Page Info</h4>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <h4>Visible</h4>
+                </div>
+                <div class="col-xs-5 text-center">
+                    <h4>Open / Edit / Delete</h4>
+                </div>                
+            </div>
+            <?php
+            $cnt=0;
+            foreach ($pageData as $key => $page) {
+                $cnt++;
+                ?>
+            <div class="row bordered">
+                <div class="col-xs-5 page-list-info">
+                        <?php 
+                        echo "<small class='text-muted'>#".$cnt ." </small> ". $page["title"];
+                        ?>
+                </div>
+                <div class="col-xs-2 text-center">
+                    <?php 
+                    if($page["status"]==0)
+                        echo '<a class=" col-xs-12 btn-xs btn btn-danger" title="Publicate this page" onclick="setStatusPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                    else 
+                        echo '<a class=" col-xs-12 btn-xs btn btn-success" title="Hide this pge" onclick="setStatusPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                    ?>
+                </div>
+                <div class="col-xs-5 pull-right">
+                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12  btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
                 </div>                
             </div>
 
@@ -405,7 +459,7 @@ class Page_v{
     }
 
 
-    public static function editor($url, $content, $category, $file){ ?>
+    public static function editor($url, $content, $category, $file, $users=array(), $editors=array(), $isOwner=false, $owner=null){ ?>
         <form class="form-horizontal page_form" role="form" enctype="multipart/form-data" method="post" action="<?php echo $url;?>">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="me-title">Title:</label>
@@ -453,15 +507,66 @@ class Page_v{
                     <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>
                 </div>
             </div>
+            <?php
+                if($owner!=null){ ?>
+                <div class="form-group">
+                    <label class="control-label col-sm-2">Page Owner:</label>
+                    <div class="col-sm-10 ">
+                        <div class="bordered">
+                            <?php echo$owner['first_name']." ".$owner['last_name']." (".$owner['email'].")"; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                } 
+            ?>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Actual Editors:</label>
+                <div class="col-sm-10 ">
+                    <div class="editors-actual bordered">
+                        <!-- actual users container -->
+                    </div>
+                </div>
+            </div>
+
+            <?php
+                if($isOwner){
+            ?>  
+
+                <div class="form-group">               
+                    <label class="control-label col-sm-2" for="new-editor">Add Editor:</label>
+                    <div class="col-sm-6">
+                        <select id="new-editor" class="combobox form-control btn-block  " name="page_id">
+                          <option></option>
+                          <?php
+                            foreach ($users as $key => $u) {
+                                $info = $u['first_name']." ".$u['last_name']." (".$u['email'].")";
+                                echo '<option value="'.$u["id"].':|:'.$info.'">'.$u["first_name"].' '.$u["last_name"].' ('.$u["email"]. ')</option>';
+                            }
+                          ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn-block  btn btn-success" onclick="addUserToEditors()" tabindex="0" data-content="Select user, which is not actual editor of page." data-toggle="popover" data-trigger="focus" data-placement="top" >Add</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.editors-actual')" class="btn btn-danger btn-block " data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>
+                    </div> 
+                </div>
+            <?php
+                }
+            ?>
+
         <hr>
         <div class="form_result"></div>
-        <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.page_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+        <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; selectAllCheckboxesFrom('.editors-actual') ; return submitForm(this, '.page_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
         <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
         <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
     </form>
 
     <script type="text/javascript">
             //--------- funkcie na pracu s filemanagerom --------- START
+            //
             //callback funkcia filemanagera
             function responsive_filemanager_callback(field_id) {
                 handleFile(field_id,false, false, [])
@@ -472,10 +577,44 @@ class Page_v{
                 if(isset($file["path"])&&isset($file["thumb"]))
                     echo "$('.files-actual').html(preview('".basename($file["path"])."', '".$file["path"]."', '".$file["thumb"]."', '".$file["thumb-medium"]."'));";
             ?>
+            function editorPreview(user_id, info){
+                return '\
+                    <label class="col-xs-12">\
+                        <input class="hiddenSection page-editor-id" name="editor-id[]" type="checkbox" value="' + user_id + '">\
+                        <div class="row">\
+                            <div class="col-xs-12">'+info+'</div>\
+                        </div>\
+                    </label>';
+            }
+            $(document).ready(function(){
+                $('.combobox').combobox({bsVersion: '3'});
+            });
+
+            function addUserToEditors(){
+                var val = $("#new-editor").val().split(":|:");
+                var selector = '.page-editor-id[value="'+val[0]+'"]'
+                if(val.length > 1 && $(selector).length==0)
+                    $('.editors-actual').append(editorPreview(val[0], val[1]));
+                else{
+                    $('[data-toggle="popover"]').popover("show");
+                }
+                    
+            }   
+            <?php 
+            if($editors != null){
+                foreach ($editors as $key => $e) {
+                    $info = $e['first_name']." ".$e['last_name']." (".$e['email'].")";
+                    echo "$('.editors-actual').append(editorPreview('".$e["id"]."', '".$info."'));";
+                }
+            }
+
+
+            ?>
+
     </script>
 
 
-            <?php
+            <?php 
     }
 
 }

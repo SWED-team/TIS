@@ -20,7 +20,8 @@ Class Page_m{
     $sql="INSERT INTO `$table`(`$fieldlist`) VALUES (${qs}?)";
     $result = Db::insert($sql, $values);
     return $result;
-  }
+  }  
+
   /**
    * Funkcia vymaže položku z tabuľky
    * @param  String  $table  tabuľka z ktorej sa majú údaje vumazať
@@ -84,13 +85,48 @@ Class Page_m{
    * @return [type]             [description]
    */
   public static function getPageImage($page_id){
-      $result = Db::query("
+    $result = Db::query("
       SELECT *
       FROM `file`
       WHERE page_id = ?",
             array($page_id))->fetch(PDO::FETCH_ASSOC);
       return $result;
   }
+  public static function getUsersExcept($user_id){
+    $result = Db::query("
+      SELECT id, first_name, last_name, email
+      FROM `user`
+      WHERE id<>?
+      ", array($user_id))->fetchAll(PDO::FETCH_ASSOC);
+      return $result;
+  }
+  public static function getEditors($page_id){
+    $result = Db::query(
+      "SELECT *
+      FROM `edit_rights`
+      WHERE page_id=?
+      ", array($page_id))->fetchAll(PDO::FETCH_ASSOC);
+      return $result;
+  }
+  public static function getUser($user_id){
+    $result = Db::query("
+      SELECT id, first_name, last_name, email
+      FROM `user`
+      WHERE id=?
+      ", array($user_id))->fetch(PDO::FETCH_ASSOC);
+      return $result;
+  }
+  public static function getEditorsInfo($page_id){
+    $result = Db::query(
+      "SELECT u.id, first_name, last_name, email
+      FROM `edit_rights` er
+      INNER JOIN `user` u
+      ON er.user_id=u.id 
+      WHERE er.page_id=?
+      ", array($page_id))->fetchAll(PDO::FETCH_ASSOC);
+      return $result;
+  }
+
 
   public static function getModules($page_id){ // vrati ID a TYPE pre vsetky moduly pre page so zadanym id
     $result = Db::query("

@@ -152,6 +152,9 @@ header {
 .page-list .row{
     margin-bottom: 5px;
 }
+.page-list-info{
+    font-size: 110%;
+}
 
 .affix ~ .container-fluid {
     position: relative;
@@ -161,7 +164,9 @@ header {
 section .row {
     margin: 0 0 0 0;
 }
-
+.page-content{
+    max-width: 1400px;
+}
 
 /*****************  styly pre moduly  ****************/
 
@@ -321,29 +326,7 @@ section .row {
         display: block;
         margin: 0 auto;
     }
-    /*
 
-  .module-image-title .module-category{
-    bottom: 50px;
-  }
-   .module-image-title .module-title{
-    top: 0;
-  }
-
-  .module-image-text .module-title{
-    left: 50%;
-    width: 50%;
-  }
-  .module-image-text .module-text{
-    top: 50px;
-    left: 50%;
-    width: 50%;
-    bottom: 0;
-    overflow-y: scroll;
-    font-size: 100%;
-    font-weight: 400;
-    text-align: justify;
-}*/
     .module-image .module-title,
     .module-embeded .module-title,
     .module-video .module-title,
@@ -514,25 +497,10 @@ position: absolute;
 }
 
 
-
-/*
-  .module-formated-text .module-text{
-    top: 0;
-    bottom: 0;
-    overflow-x: scroll;
-  }*/
-
 .modal {
     z-index: 10050;
 }
-/*
-  .fancybox-overlay{
-    z-index: 99998;
-  }
-  .fancybox-opened{
-    z-index: 99999 ;
-  }
-  */
+
 .fancybox-skin {
     background: rgba(255,255,255,0.6);
     webkit-border-radius: 0px;
@@ -678,8 +646,10 @@ position: absolute;
     background-size: contain;
 }
 
-.files-actual {
-    min-height: 100px;
+.files-actual,
+.editors-actual
+{
+    min-height: 30px;
     max-height: 350px;
     overflow-y: scroll;
 }
@@ -691,39 +661,22 @@ position: absolute;
 }
 
 input[name="selected-file"] + div,
-input[name^="file-path"] + div {
+input[name^="file-path"] + div,
+input[name^="editor-id"] + div  
+{
     overflow: hidden;
     padding: 4px;
     border: 3px solid rgba(81, 203, 238, 0);
 }
 
 input[name="selected-file"]:checked + div,
-input[name^="file-path"]:checked + div {
+input[name^="file-path"]:checked + div,
+input[name^="editor-id"]:checked + div {
     border: 3px solid rgba(81, 203, 238, 1);
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(81, 203, 238, 0.7);
     background: rgba(81, 203, 238, 1);
 }
-
-/*
-input[name="selected-file"],
-input[name^="actual-file-id"] {    
-    display:none;
+.cke_dialog, .cke_combopanel
+{
+    z-index: 100055 !important;
 }
-input[name="selected-file"] + div,
-input[name^="actual-file-id"] + div {
-    padding: 4px;
-    border: 3px solid rgba(81, 203, 238, 0);
-}
-input[name="selected-file"]:checked + div,
-input[name^="actual-file-id"]:checked + div {
-    border: 3px solid rgba(81, 203, 238, 1);
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(81, 203, 238, 0.7);
-    background:  rgba(81, 203, 238, 1);
-}
-
-.file-select-result-single,
-.file-select-result-multiple {
-    height:150px;
-    overflow-y:scroll;
-}
-*/
