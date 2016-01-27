@@ -1,30 +1,8 @@
-﻿// inicializacia tiniMCE pluginu
-    tinymce.init({
-        height:500,
-        selector: "textarea.formated",
-        //theme: "modern",
-        //skin: 'light',
-        plugins: [
-             "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-             "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-             "table contextmenu directionality emoticons paste textcolor responsivefilemanager code "
-        ],
-        toolbar1: "undo redo | styleselect fontsizeselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent ",
-        toolbar2: "| filemanager | link unlink | image media | forecolor backcolor  | print preview code ",
-        image_advtab: true,
-
-        external_filemanager_path: "/TIS/Sources/filemanager/",
-        filemanager_title: "Filemanager",
-        external_plugins: { "filemanager": "/TIS/Sources/filemanager/plugin.min.js" },
-
-        content_css: ["./css/format.css"]
-    });
-
+﻿
 // volanie ajaxu na ulozenie formularu
 function submitForm(element ,formSelector) {
             event.preventDefault();
-            tinyMCE.triggerSave();
-            //CKEDITOR.instances.content.updateElement();
+            CKEDITOR.instances.editor1.updateElement();
             var $btn = $(element).button("loading");
             var form = $(element).closest(formSelector);
             var formData = new FormData(form[0]);
