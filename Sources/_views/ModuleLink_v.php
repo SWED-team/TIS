@@ -75,7 +75,7 @@ class ModuleLink_v{
         <div class="file-actual-buttons form-group">
             <input id="newFilePath" class="hiddenSection" type="text" value="">
             <div class="col-sm-5 col-xs-6  col-sm-offset-2">
-                <a href="javascript:open_popup('./filemanager/dialog.php?popup=1&type=1&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-warning col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-pencil-square"> </i> Change Image</a>
+                <a href="javascript:open_popup('1')" class="btn btn-warning col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-pencil-square"> </i> Change Image</a>
             </div>
             <div class="col-sm-5 col-xs-6 ">
                 <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>

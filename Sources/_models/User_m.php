@@ -1,9 +1,13 @@
 <?php
+if(file_exists('../_models/Db.php'))
+  require_once('../_models/Db.php');
+if(file_exists('_models/Db.php'))
+  require_once('_models/Db.php');
 
 	class User_m extends User{
 
 public function __construct(){
-	require('../models/Db.php');
+	
 
 
 }

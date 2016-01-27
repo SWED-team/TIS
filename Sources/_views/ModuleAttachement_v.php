@@ -42,7 +42,7 @@ class ModuleAttachement_v
                 <button title="Select/Unselect All Items" type="button"  onclick="selectUnselectAllCheckboxesFrom('.files-actual')" class="actual-remove btn btn-primary col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-check-square"> </i></button>
             </div>
             <div class="col-sm-5 col-xs-6 ">
-                <a title="Open filemanager and select files to insert" href="javascript:open_popup('filemanager/dialog.php?popup=1&type=2&amp;field_id=newFilePath&amp;relative_url=1')" class="btn btn-success col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-plus-square"> </i> Add Files</a>
+               <a title="Open filemanager and select files to insert" href="javascript:open_popup('2')" class="btn btn-success col-md-5 btn-block  btn-xs" type="button"><i class="fa fa-plus-square"> </i> Add Files</a>
             </div>
             <div class="col-sm-4 col-xs-4 ">
                 <button title="Remove selected items" type="button"  onclick="removeSelectedItemsFrom('.files-actual')" class="actual-remove btn btn-danger col-md-5 btn-block  btn-xs" data-loading-text="working..." autocomplete="off"><i class="fa fa-minus-square"> </i> Remove</button>

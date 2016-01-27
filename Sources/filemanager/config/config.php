@@ -1,5 +1,5 @@
 <?php
-session_start();
+ if(!isset($_SESSION))session_start();
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Rome');
 
@@ -21,7 +21,7 @@ date_default_timezone_set('Europe/Rome');
 |
 */
 
-define('USE_ACCESS_KEYS', false); // TRUE or FALSE
+define('USE_ACCESS_KEYS', true); // TRUE or FALSE
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ $config = array(
 	| with start and final /
 	|
 	*/
-	'upload_dir' => '/TIS/Sources/files/',
+	'upload_dir' => '/TIS/Sources/file/',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -105,7 +105,7 @@ $config = array(
 	|
 	*/
 
-	'access_keys' => array(),
+	'access_keys' => array( '189dqwSdq1q32SdFeec6S4486aASdcxQ432s1S3121S1445DED8713ADWEX84321159ASsaasd'),
 
 	//--------------------------------------------------------------------------------------------------------
 	// YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS

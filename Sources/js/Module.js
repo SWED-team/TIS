@@ -205,13 +205,17 @@ function preview(filename, path, thumb, thumb_medium) {
                     </label>';
 }
 // otvori okno s filemanagerom
-function open_popup(url) {
+function open_popup(type) {
+
     var w = window.innerWidth - window.innerWidth / 15;
     var h = window.innerHeight - window.innerHeight / 8;
     var l = Math.floor((screen.width - w) / 2);
     var t = Math.floor((screen.height - h) / 2);
-    var win = window.open(url, "ResponsiveFilemanager", "scrollbars=1,width=" + w + ",height=" + h + ",top=" + t + ",left=" + l);
-}
+
+    var win = window.open("filemanager/filemanager.php?type="+type, "ResponsiveFilemanager", "scrollbars=1,width=" + w + ",height=" + h + ",top=" + t + ",left=" + l);
+
+    }
+
 /*
 //callback funkcia filemanagera
 function responsive_filemanager_callback(field_id) {

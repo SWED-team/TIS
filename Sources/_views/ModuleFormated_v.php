@@ -13,13 +13,6 @@ class ModuleFormated_v{
 
         <?php Module_v::moduleEditorFooter($container); ?>
 
-        <!--<style type="text/css">
-        .mce-menu {
-        position: absolute;
-
-        }
-        </style>
-        -->
         <script>
 
             CKEDITOR.replace( 'editor1' ,{
