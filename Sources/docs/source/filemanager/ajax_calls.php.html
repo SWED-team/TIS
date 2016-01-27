@@ -1,0 +1,634 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 26 Jan 2016 23:51:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>filemanager\ajax_calls.php (SWEDTeamTitle)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\ajax_calls.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>filemanager\ajax_calls.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>$config = include 'config/config.php';
+<a name="line4"></a>//TODO switch to array
+<a name="line5"></a>extract($config, EXTR_OVERWRITE);
+<a name="line6"></a>
+<a name="line7"></a>include 'include/utils.php';
+<a name="line8"></a>
+<a name="line9"></a>if ($_SESSION['RF']["verify"] != "RESPONSIVEfilemanager")
+<a name="line10"></a>{
+<a name="line11"></a>	response('forbiden', 403)->send();
+<a name="line12"></a>	exit;
+<a name="line13"></a>}
+<a name="line14"></a>
+<a name="line15"></a>if (isset($_SESSION['RF']['language_file']) && file_exists($_SESSION['RF']['language_file']))
+<a name="line16"></a>{
+<a name="line17"></a>	include $_SESSION['RF']['language_file'];
+<a name="line18"></a>}
+<a name="line19"></a>else
+<a name="line20"></a>{
+<a name="line21"></a>	response('Language file is missing!', 500)->send();
+<a name="line22"></a>	exit;
+<a name="line23"></a>}
+<a name="line24"></a>
+<a name="line25"></a>if(isset($_GET['action']))
+<a name="line26"></a>{
+<a name="line27"></a>    switch($_GET['action'])
+<a name="line28"></a>    {
+<a name="line29"></a>		case 'view':
+<a name="line30"></a>		    if(isset($_GET['type']))
+<a name="line31"></a>			{
+<a name="line32"></a>				$_SESSION['RF']["view_type"] = $_GET['type'];
+<a name="line33"></a>			}
+<a name="line34"></a>			else
+<a name="line35"></a>			{
+<a name="line36"></a>				response('view type number missing', 400)->send();
+<a name="line37"></a>				exit;
+<a name="line38"></a>			}
+<a name="line39"></a>			break;
+<a name="line40"></a>		case 'filter':
+<a name="line41"></a>			if (isset($_GET['type']))
+<a name="line42"></a>			{
+<a name="line43"></a>				if (isset($remember_text_filter) && $remember_text_filter)
+<a name="line44"></a>				{
+<a name="line45"></a>					$_SESSION['RF']["filter"] = $_GET['type'];
+<a name="line46"></a>				}
+<a name="line47"></a>			}
+<a name="line48"></a>			else {
+<a name="line49"></a>				response('view type number missing', 400);
+<a name="line50"></a>				exit;
+<a name="line51"></a>			}
+<a name="line52"></a>			break;
+<a name="line53"></a>		case 'sort':
+<a name="line54"></a>			if (isset($_GET['sort_by']))
+<a name="line55"></a>			{
+<a name="line56"></a>				$_SESSION['RF']["sort_by"] = $_GET['sort_by'];
+<a name="line57"></a>			}
+<a name="line58"></a>
+<a name="line59"></a>			if (isset($_GET['descending']))
+<a name="line60"></a>			{
+<a name="line61"></a>				$_SESSION['RF']["descending"] = $_GET['descending'] === "TRUE";
+<a name="line62"></a>			}
+<a name="line63"></a>			break;
+<a name="line64"></a>		case 'image_size': // not used
+<a name="line65"></a>			$pos = strpos($_POST['path'], $upload_dir);
+<a name="line66"></a>			if ($pos !== false)
+<a name="line67"></a>			{
+<a name="line68"></a>				$info = getimagesize(substr_replace($_POST['path'], $current_path, $pos, strlen($upload_dir)));
+<a name="line69"></a>				response($info)->send();
+<a name="line70"></a>				exit;
+<a name="line71"></a>			}
+<a name="line72"></a>			break;
+<a name="line73"></a>		case 'save_img':
+<a name="line74"></a>			$info = pathinfo($_POST['name']);
+<a name="line75"></a>
+<a name="line76"></a>			if (
+<a name="line77"></a>				strpos($_POST['path'], '/') === 0
+<a name="line78"></a>				|| strpos($_POST['path'], '../') !== false
+<a name="line79"></a>				|| strpos($_POST['path'], './') === 0
+<a name="line80"></a>				|| (strpos($_POST['url'], 'http://s3.amazonaws.com/feather') !== 0 
+<a name="line81"></a>				&& strpos($_POST['url'], 'https://s3.amazonaws.com/feather') !== 0)
+<a name="line82"></a>				|| $_POST['name'] != fix_filename($_POST['name'], $transliteration, $convert_spaces, $replace_with)
+<a name="line83"></a>				|| ! in_array(strtolower($info['extension']), array( 'jpg', 'jpeg', 'png' ))
+<a name="line84"></a>			)
+<a name="line85"></a>			{
+<a name="line86"></a>				response('wrong data', 400)->send();
+<a name="line87"></a>				exit;
+<a name="line88"></a>			}
+<a name="line89"></a>			$image_data = get_file_by_url($_POST['url']);
+<a name="line90"></a>			if ($image_data === false)
+<a name="line91"></a>			{
+<a name="line92"></a>				response(trans('Aviary_No_Save'), 400)->send();
+<a name="line93"></a>				exit;
+<a name="line94"></a>			}
+<a name="line95"></a>			file_put_contents($current_path . $_POST['path'] . $_POST['name'],$image_data);
+<a name="line96"></a>			create_img($current_path . $_POST['path'] . $_POST['name'], $thumbs_base_path.$_POST['path'].$_POST['name'], 122, 91);
+<a name="line97"></a>		    // TODO something with this function cause its blowing my mind
+<a name="line98"></a>		    new_thumbnails_creation(
+<a name="line99"></a>				$current_path.$_POST['path'],
+<a name="line100"></a>				$current_path.$_POST['path'].$_POST['name'],
+<a name="line101"></a>				$_POST['name'],
+<a name="line102"></a>				$current_path,
+<a name="line103"></a>				$relative_image_creation,
+<a name="line104"></a>				$relative_path_from_current_pos,
+<a name="line105"></a>				$relative_image_creation_name_to_prepend,
+<a name="line106"></a>				$relative_image_creation_name_to_append,
+<a name="line107"></a>				$relative_image_creation_width,
+<a name="line108"></a>				$relative_image_creation_height,
+<a name="line109"></a>				$relative_image_creation_option,
+<a name="line110"></a>				$fixed_image_creation,
+<a name="line111"></a>				$fixed_path_from_filemanager,
+<a name="line112"></a>				$fixed_image_creation_name_to_prepend,
+<a name="line113"></a>				$fixed_image_creation_to_append,
+<a name="line114"></a>				$fixed_image_creation_width,
+<a name="line115"></a>				$fixed_image_creation_height,
+<a name="line116"></a>				$fixed_image_creation_option
+<a name="line117"></a>			);
+<a name="line118"></a>		    break;
+<a name="line119"></a>		case 'extract':
+<a name="line120"></a>			if (strpos($_POST['path'], '/') === 0 || strpos($_POST['path'], '../') !== false || strpos($_POST['path'], './') === 0)
+<a name="line121"></a>			{
+<a name="line122"></a>				response('wrong path', 400)->send();
+<a name="line123"></a>				exit;
+<a name="line124"></a>			}
+<a name="line125"></a>
+<a name="line126"></a>			$path = $current_path . $_POST['path'];
+<a name="line127"></a>			$info = pathinfo($path);
+<a name="line128"></a>			$base_folder = $current_path . fix_dirname($_POST['path']) . "/";
+<a name="line129"></a>
+<a name="line130"></a>			switch ($info['extension'])
+<a name="line131"></a>			{
+<a name="line132"></a>				case "zip":
+<a name="line133"></a>					$zip = new ZipArchive;
+<a name="line134"></a>					if ($zip->open($path) === true)
+<a name="line135"></a>					{
+<a name="line136"></a>						//make all the folders
+<a name="line137"></a>						for ($i = 0; $i < $zip->numFiles; $i++)
+<a name="line138"></a>						{
+<a name="line139"></a>							$OnlyFileName = $zip->getNameIndex($i);
+<a name="line140"></a>							$FullFileName = $zip->statIndex($i);
+<a name="line141"></a>							if (substr($FullFileName['name'], -1, 1) == "/")
+<a name="line142"></a>							{
+<a name="line143"></a>								create_folder($base_folder . $FullFileName['name']);
+<a name="line144"></a>							}
+<a name="line145"></a>						}
+<a name="line146"></a>						//unzip into the folders
+<a name="line147"></a>						for ($i = 0; $i < $zip->numFiles; $i++)
+<a name="line148"></a>						{
+<a name="line149"></a>							$OnlyFileName = $zip->getNameIndex($i);
+<a name="line150"></a>							$FullFileName = $zip->statIndex($i);
+<a name="line151"></a>
+<a name="line152"></a>							if ( ! (substr($FullFileName['name'], -1, 1) == "/"))
+<a name="line153"></a>							{
+<a name="line154"></a>								$fileinfo = pathinfo($OnlyFileName);
+<a name="line155"></a>								if (in_array(strtolower($fileinfo['extension']), $ext))
+<a name="line156"></a>								{
+<a name="line157"></a>									copy('zip://' . $path . '#' . $OnlyFileName, $base_folder . $FullFileName['name']);
+<a name="line158"></a>								}
+<a name="line159"></a>							}
+<a name="line160"></a>						}
+<a name="line161"></a>						$zip->close();
+<a name="line162"></a>					}
+<a name="line163"></a>					else
+<a name="line164"></a>					{
+<a name="line165"></a>						response(trans('Zip_No_Extract'), 500)->send();
+<a name="line166"></a>						exit;
+<a name="line167"></a>					}
+<a name="line168"></a>
+<a name="line169"></a>					break;
+<a name="line170"></a>
+<a name="line171"></a>				case "gz":
+<a name="line172"></a>					$p = new PharData($path);
+<a name="line173"></a>					$p->decompress(); // creates files.tar
+<a name="line174"></a>
+<a name="line175"></a>					break;
+<a name="line176"></a>
+<a name="line177"></a>				case "tar":
+<a name="line178"></a>					// unarchive from the tar
+<a name="line179"></a>					$phar = new PharData($path);
+<a name="line180"></a>					$phar->decompressFiles();
+<a name="line181"></a>					$files = array();
+<a name="line182"></a>					check_files_extensions_on_phar($phar, $files, '', $ext);
+<a name="line183"></a>					$phar->extractTo($current_path . fix_dirname($_POST['path']) . "/", $files, true);
+<a name="line184"></a>
+<a name="line185"></a>					break;
+<a name="line186"></a>
+<a name="line187"></a>				default:
+<a name="line188"></a>					response(trans('Zip_Invalid'), 400)->send();
+<a name="line189"></a>					exit;
+<a name="line190"></a>			}
+<a name="line191"></a>			break;
+<a name="line192"></a>		case 'media_preview':
+<a name="line193"></a>			$preview_file = $current_path . $_GET["file"];
+<a name="line194"></a>			$info = pathinfo($preview_file);
+<a name="line195"></a>			ob_start();
+<a name="line196"></a>			?>
+<a name="line197"></a>			<div id="jp_container_1" class="jp-video " style="margin:0 auto;">
+<a name="line198"></a>			    <div class="jp-type-single">
+<a name="line199"></a>			      <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+<a name="line200"></a>			      <div class="jp-gui">
+<a name="line201"></a>			        <div class="jp-video-play">
+<a name="line202"></a>			          <a href="javascript:;" class="jp-video-play-icon" tabindex="1">play</a>
+<a name="line203"></a>			        </div>
+<a name="line204"></a>			        <div class="jp-interface">
+<a name="line205"></a>			          <div class="jp-progress">
+<a name="line206"></a>			            <div class="jp-seek-bar">
+<a name="line207"></a>			              <div class="jp-play-bar"></div>
+<a name="line208"></a>			            </div>
+<a name="line209"></a>			          </div>
+<a name="line210"></a>			          <div class="jp-current-time"></div>
+<a name="line211"></a>			          <div class="jp-duration"></div>
+<a name="line212"></a>			          <div class="jp-controls-holder">
+<a name="line213"></a>			            <ul class="jp-controls">
+<a name="line214"></a>			              <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+<a name="line215"></a>			              <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+<a name="line216"></a>			              <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+<a name="line217"></a>			              <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+<a name="line218"></a>			              <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+<a name="line219"></a>			              <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+<a name="line220"></a>			            </ul>
+<a name="line221"></a>			            <div class="jp-volume-bar">
+<a name="line222"></a>			              <div class="jp-volume-bar-value"></div>
+<a name="line223"></a>			            </div>
+<a name="line224"></a>			            <ul class="jp-toggles">
+<a name="line225"></a>			              <li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen">full screen</a></li>
+<a name="line226"></a>			              <li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen">restore screen</a></li>
+<a name="line227"></a>			              <li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
+<a name="line228"></a>			              <li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
+<a name="line229"></a>			            </ul>
+<a name="line230"></a>			          </div>
+<a name="line231"></a>			          <div class="jp-title" style="display:none;">
+<a name="line232"></a>			            <ul>
+<a name="line233"></a>			              <li></li>
+<a name="line234"></a>			            </ul>
+<a name="line235"></a>			          </div>
+<a name="line236"></a>			        </div>
+<a name="line237"></a>			      </div>
+<a name="line238"></a>			      <div class="jp-no-solution">
+<a name="line239"></a>			        <span>Update Required</span>
+<a name="line240"></a>			        To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+<a name="line241"></a>			      </div>
+<a name="line242"></a>			    </div>
+<a name="line243"></a>			  </div>
+<a name="line244"></a>			<?php if(in_array(strtolower($info['extension']), $ext_music)): ?>
+<a name="line245"></a>
+<a name="line246"></a>				<script type="text/javascript">
+<a name="line247"></a>				    $(document).ready(function(){
+<a name="line248"></a>
+<a name="line249"></a>				      $("#jquery_jplayer_1").jPlayer({
+<a name="line250"></a>				        ready: function () {
+<a name="line251"></a>				          $(this).jPlayer("setMedia", {
+<a name="line252"></a>					    title:"<?php $_GET['title']; ?>",
+<a name="line253"></a>				            mp3: "<?php echo $preview_file; ?>",
+<a name="line254"></a>				            m4a: "<?php echo $preview_file; ?>",
+<a name="line255"></a>					    oga: "<?php echo $preview_file; ?>",
+<a name="line256"></a>				            wav: "<?php echo $preview_file; ?>"
+<a name="line257"></a>				          });
+<a name="line258"></a>				        },
+<a name="line259"></a>				        swfPath: "js",
+<a name="line260"></a>					solution:"html,flash",
+<a name="line261"></a>				        supplied: "mp3, m4a, midi, mid, oga,webma, ogg, wav",
+<a name="line262"></a>					smoothPlayBar: true,
+<a name="line263"></a>					keyEnabled: false
+<a name="line264"></a>				      });
+<a name="line265"></a>				    });
+<a name="line266"></a>				  </script>
+<a name="line267"></a>
+<a name="line268"></a>			<?php elseif(in_array(strtolower($info['extension']), $ext_video)):	?>
+<a name="line269"></a>
+<a name="line270"></a>			    <script type="text/javascript">
+<a name="line271"></a>			    $(document).ready(function(){
+<a name="line272"></a>
+<a name="line273"></a>			      $("#jquery_jplayer_1").jPlayer({
+<a name="line274"></a>			        ready: function () {
+<a name="line275"></a>			          $(this).jPlayer("setMedia", {
+<a name="line276"></a>				    title:"<?php $_GET['title']; ?>",
+<a name="line277"></a>			            m4v: "<?php echo $preview_file; ?>",
+<a name="line278"></a>			            ogv: "<?php echo $preview_file; ?>"
+<a name="line279"></a>			          });
+<a name="line280"></a>			        },
+<a name="line281"></a>			        swfPath: "js",
+<a name="line282"></a>				solution:"html,flash",
+<a name="line283"></a>			        supplied: "mp4, m4v, ogv, flv, webmv, webm",
+<a name="line284"></a>				smoothPlayBar: true,
+<a name="line285"></a>				keyEnabled: false
+<a name="line286"></a>			    });
+<a name="line287"></a>
+<a name="line288"></a>			    });
+<a name="line289"></a>			  </script>
+<a name="line290"></a>
+<a name="line291"></a>			<?php endif;
+<a name="line292"></a>
+<a name="line293"></a>			$content = ob_get_clean();
+<a name="line294"></a>
+<a name="line295"></a>			response($content)->send();
+<a name="line296"></a>			exit;
+<a name="line297"></a>
+<a name="line298"></a>			break;
+<a name="line299"></a>		case 'copy_cut':
+<a name="line300"></a>			if ($_POST['sub_action'] != 'copy' && $_POST['sub_action'] != 'cut')
+<a name="line301"></a>			{
+<a name="line302"></a>				response('wrong sub-action', 400)->send();
+<a name="line303"></a>				exit;
+<a name="line304"></a>			}
+<a name="line305"></a>
+<a name="line306"></a>			if (trim($_POST['path']) == '')
+<a name="line307"></a>			{
+<a name="line308"></a>				response('no path', 400)->send();
+<a name="line309"></a>				exit;
+<a name="line310"></a>			}
+<a name="line311"></a>
+<a name="line312"></a>			$path = $current_path . $_POST['path'];
+<a name="line313"></a>
+<a name="line314"></a>			if (is_dir($path))
+<a name="line315"></a>			{
+<a name="line316"></a>				// can't copy/cut dirs
+<a name="line317"></a>				if ($copy_cut_dirs === false)
+<a name="line318"></a>				{
+<a name="line319"></a>					response(sprintf(trans('Copy_Cut_Not_Allowed'), ($_POST['sub_action'] == 'copy' ? lcfirst(trans('Copy')) : lcfirst(trans('Cut'))), trans('Folders')), 403)->send();
+<a name="line320"></a>					exit;
+<a name="line321"></a>				}
+<a name="line322"></a>				
+<a name="line323"></a>				// size over limit 
+<a name="line324"></a>				if ($copy_cut_max_size !== false && is_int($copy_cut_max_size)) {
+<a name="line325"></a>					list($sizeFolderToCopy,$fileNum,$foldersCount) = folder_info($path);
+<a name="line326"></a>					if (($copy_cut_max_size * 1024 * 1024) < $sizeFolderToCopy) {
+<a name="line327"></a>						response(sprintf(trans('Copy_Cut_Size_Limit'), ($_POST['sub_action'] == 'copy' ? lcfirst(trans('Copy')) : lcfirst(trans('Cut'))), $copy_cut_max_size), 400)->send(); 
+<a name="line328"></a>						exit;
+<a name="line329"></a>					}
+<a name="line330"></a>				}
+<a name="line331"></a>
+<a name="line332"></a>				// file count over limit
+<a name="line333"></a>				if ($copy_cut_max_count !== false && is_int($copy_cut_max_count))
+<a name="line334"></a>				{
+<a name="line335"></a>					if ($copy_cut_max_count < filescount($path))
+<a name="line336"></a>					{
+<a name="line337"></a>						response(sprintf(trans('Copy_Cut_Count_Limit'), ($_POST['sub_action'] == 'copy' ? lcfirst(trans('Copy')) : lcfirst(trans('Cut'))), $copy_cut_max_count), 400)->send();
+<a name="line338"></a>						exit;
+<a name="line339"></a>					}
+<a name="line340"></a>				}
+<a name="line341"></a>			}
+<a name="line342"></a>			else
+<a name="line343"></a>			{
+<a name="line344"></a>				// can't copy/cut files
+<a name="line345"></a>				if ($copy_cut_files === false)
+<a name="line346"></a>				{
+<a name="line347"></a>					response(sprintf(trans('Copy_Cut_Not_Allowed'), ($_POST['sub_action'] == 'copy' ? lcfirst(trans('Copy')) : lcfirst(trans('Cut'))), trans('Files')), 403)->send();
+<a name="line348"></a>					exit;
+<a name="line349"></a>				}
+<a name="line350"></a>			}
+<a name="line351"></a>
+<a name="line352"></a>			$_SESSION['RF']['clipboard']['path'] = $_POST['path'];
+<a name="line353"></a>			$_SESSION['RF']['clipboard_action'] = $_POST['sub_action'];
+<a name="line354"></a>			break;
+<a name="line355"></a>		case 'clear_clipboard':
+<a name="line356"></a>			$_SESSION['RF']['clipboard'] = null;
+<a name="line357"></a>			$_SESSION['RF']['clipboard_action'] = null;
+<a name="line358"></a>			break;
+<a name="line359"></a>		case 'chmod':
+<a name="line360"></a>			$path = $current_path . $_POST['path'];
+<a name="line361"></a>			if (
+<a name="line362"></a>				(is_dir($path) && $chmod_dirs === false)
+<a name="line363"></a>				|| (is_file($path) && $chmod_files === false)
+<a name="line364"></a>				|| (is_function_callable("chmod") === false) )
+<a name="line365"></a>			{
+<a name="line366"></a>				response(sprintf(trans('File_Permission_Not_Allowed'), (is_dir($path) ? lcfirst(trans('Folders')) : lcfirst(trans('Files'))), 403), 400)->send();
+<a name="line367"></a>				exit;
+<a name="line368"></a>			}
+<a name="line369"></a>			else
+<a name="line370"></a>			{
+<a name="line371"></a>				$perm = decoct(fileperms($path) & 0777);
+<a name="line372"></a>				$perm_user = substr($perm, 0, 1);
+<a name="line373"></a>				$perm_group = substr($perm, 1, 1);
+<a name="line374"></a>				$perm_all = substr($perm, 2, 1);
+<a name="line375"></a>
+<a name="line376"></a>				$ret = '<div id="files_permission_start">
+<a name="line377"></a>				<form id="chmod_form">
+<a name="line378"></a>					<table class="table file-perms-table">
+<a name="line379"></a>						<thead>
+<a name="line380"></a>							<tr>
+<a name="line381"></a>								<td></td>
+<a name="line382"></a>								<td>r&nbsp;&nbsp;</td>
+<a name="line383"></a>								<td>w&nbsp;&nbsp;</td>
+<a name="line384"></a>								<td>x&nbsp;&nbsp;</td>
+<a name="line385"></a>							</tr>
+<a name="line386"></a>						</thead>
+<a name="line387"></a>						<tbody>
+<a name="line388"></a>							<tr>
+<a name="line389"></a>								<td>'.trans('User').'</td>
+<a name="line390"></a>								<td><input id="u_4" type="checkbox" data-value="4" data-group="user" '.(chmod_logic_helper($perm_user, 4) ? " checked" : "").'></td>
+<a name="line391"></a>								<td><input id="u_2" type="checkbox" data-value="2" data-group="user" '.(chmod_logic_helper($perm_user, 2) ? " checked" : "").'></td>
+<a name="line392"></a>								<td><input id="u_1" type="checkbox" data-value="1" data-group="user" '.(chmod_logic_helper($perm_user, 1) ? " checked" : "").'></td>
+<a name="line393"></a>							</tr>
+<a name="line394"></a>							<tr>
+<a name="line395"></a>								<td>'.trans('Group').'</td>
+<a name="line396"></a>								<td><input id="g_4" type="checkbox" data-value="4" data-group="group" '.(chmod_logic_helper($perm_group, 4) ? " checked" : "").'></td>
+<a name="line397"></a>								<td><input id="g_2" type="checkbox" data-value="2" data-group="group" '.(chmod_logic_helper($perm_group, 2) ? " checked" : "").'></td>
+<a name="line398"></a>								<td><input id="g_1" type="checkbox" data-value="1" data-group="group" '.(chmod_logic_helper($perm_group, 1) ? " checked" : "").'></td>
+<a name="line399"></a>							</tr>
+<a name="line400"></a>							<tr>
+<a name="line401"></a>								<td>'.trans('All').'</td>
+<a name="line402"></a>								<td><input id="a_4" type="checkbox" data-value="4" data-group="all" '.(chmod_logic_helper($perm_all, 4) ? " checked" : "").'></td>
+<a name="line403"></a>								<td><input id="a_2" type="checkbox" data-value="2" data-group="all" '.(chmod_logic_helper($perm_all, 2) ? " checked" : "").'></td>
+<a name="line404"></a>								<td><input id="a_1" type="checkbox" data-value="1" data-group="all" '.(chmod_logic_helper($perm_all, 1) ? " checked" : "").'></td>
+<a name="line405"></a>							</tr>
+<a name="line406"></a>							<tr>
+<a name="line407"></a>								<td></td>
+<a name="line408"></a>								<td colspan="3"><input type="text" class="input-block-level" name="chmod_value" id="chmod_value" value="'.$perm.'" data-def-value="'.$perm.'"></td>
+<a name="line409"></a>							</tr>
+<a name="line410"></a>						</tbody>
+<a name="line411"></a>					</table>';
+<a name="line412"></a>
+<a name="line413"></a>				if (is_dir($path))
+<a name="line414"></a>				{
+<a name="line415"></a>					$ret .= '<div class="hero-unit" style="padding:10px;">'.trans('File_Permission_Recursive').'<br/><br/>
+<a name="line416"></a>							<ul class="unstyled">
+<a name="line417"></a>								<li><label class="radio"><input value="none" name="apply_recursive" type="radio" checked> '.trans('No').'</label></li>
+<a name="line418"></a>								<li><label class="radio"><input value="files" name="apply_recursive" type="radio"> '.trans('Files').'</label></li>
+<a name="line419"></a>								<li><label class="radio"><input value="folders" name="apply_recursive" type="radio"> '.trans('Folders').'</label></li>
+<a name="line420"></a>								<li><label class="radio"><input value="both" name="apply_recursive" type="radio"> '.trans('Files').' & '.trans('Folders').'</label></li>
+<a name="line421"></a>							</ul>
+<a name="line422"></a>							</div>';
+<a name="line423"></a>				}
+<a name="line424"></a>
+<a name="line425"></a>				$ret .= '</form></div>';
+<a name="line426"></a>
+<a name="line427"></a>				response($ret)->send();
+<a name="line428"></a>				exit;
+<a name="line429"></a>			}
+<a name="line430"></a>			break;
+<a name="line431"></a>		case 'get_lang':
+<a name="line432"></a>			if ( ! file_exists('lang/languages.php'))
+<a name="line433"></a>			{
+<a name="line434"></a>				response(trans('Lang_Not_Found'), 404)->send();
+<a name="line435"></a>				exit;
+<a name="line436"></a>			}
+<a name="line437"></a>
+<a name="line438"></a>			$languages = include 'lang/languages.php';
+<a name="line439"></a>			if ( ! isset($languages) || ! is_array($languages))
+<a name="line440"></a>			{
+<a name="line441"></a>				response(trans('Lang_Not_Found'), 404)->send();
+<a name="line442"></a>				exit;
+<a name="line443"></a>			}
+<a name="line444"></a>
+<a name="line445"></a>			$curr = $_SESSION['RF']['language'];
+<a name="line446"></a>
+<a name="line447"></a>			$ret = '<select id="new_lang_select">';
+<a name="line448"></a>			foreach ($languages as $code => $name)
+<a name="line449"></a>			{
+<a name="line450"></a>				$ret .= '<option value="' . $code . '"' . ($code == $curr ? ' selected' : '') . '>' . $name . '</option>';
+<a name="line451"></a>			}
+<a name="line452"></a>			$ret .= '</select>';
+<a name="line453"></a>
+<a name="line454"></a>			response($ret)->send();
+<a name="line455"></a>			exit;
+<a name="line456"></a>
+<a name="line457"></a>			break;
+<a name="line458"></a>		case 'change_lang':
+<a name="line459"></a>			$choosen_lang = $_POST['choosen_lang'];
+<a name="line460"></a>
+<a name="line461"></a>			if ( ! file_exists('lang/' . $choosen_lang . '.php'))
+<a name="line462"></a>			{
+<a name="line463"></a>				response(trans('Lang_Not_Found'), 404)->send();
+<a name="line464"></a>				exit;
+<a name="line465"></a>			}
+<a name="line466"></a>
+<a name="line467"></a>			$_SESSION['RF']['language'] = $choosen_lang;
+<a name="line468"></a>			$_SESSION['RF']['language_file'] = 'lang/' . $choosen_lang . '.php';
+<a name="line469"></a>
+<a name="line470"></a>			break;
+<a name="line471"></a>		case 'get_file': // preview or edit
+<a name="line472"></a>			$sub_action = $_GET['sub_action'];
+<a name="line473"></a>			$preview_mode = $_GET["preview_mode"];
+<a name="line474"></a>
+<a name="line475"></a>			if ($sub_action != 'preview' && $sub_action != 'edit')
+<a name="line476"></a>			{
+<a name="line477"></a>				response("wrong action")->send();
+<a name="line478"></a>				exit;
+<a name="line479"></a>			}
+<a name="line480"></a>
+<a name="line481"></a>			$selected_file = ($sub_action == 'preview' ? $current_path . $_GET['file'] : $current_path . $_POST['path']);
+<a name="line482"></a>			$info = pathinfo($selected_file);
+<a name="line483"></a>
+<a name="line484"></a>			if ( ! file_exists($selected_file))
+<a name="line485"></a>			{
+<a name="line486"></a>				response(trans('File_Not_Found'), 404)->send();
+<a name="line487"></a>				exit;
+<a name="line488"></a>			}
+<a name="line489"></a>
+<a name="line490"></a>			if ($preview_mode == 'text')
+<a name="line491"></a>			{
+<a name="line492"></a>				$is_allowed = ($sub_action == 'preview' ? $preview_text_files : $edit_text_files);
+<a name="line493"></a>				$allowed_file_exts = ($sub_action == 'preview' ? $previewable_text_file_exts : $editable_text_file_exts);
+<a name="line494"></a>			}
+<a name="line495"></a>			elseif ($preview_mode == 'viewerjs')
+<a name="line496"></a>			{
+<a name="line497"></a>				$is_allowed = $viewerjs_enabled;
+<a name="line498"></a>				$allowed_file_exts = $viewerjs_file_exts;
+<a name="line499"></a>			}
+<a name="line500"></a>			elseif ($preview_mode == 'google')
+<a name="line501"></a>			{
+<a name="line502"></a>				$is_allowed = $googledoc_enabled;
+<a name="line503"></a>				$allowed_file_exts = $googledoc_file_exts;
+<a name="line504"></a>			}
+<a name="line505"></a>
+<a name="line506"></a>			if ( ! isset($allowed_file_exts) || ! is_array($allowed_file_exts))
+<a name="line507"></a>			{
+<a name="line508"></a>				$allowed_file_exts = array();
+<a name="line509"></a>			}
+<a name="line510"></a>
+<a name="line511"></a>			if ( ! in_array($info['extension'], $allowed_file_exts)
+<a name="line512"></a>				|| ! isset($is_allowed)
+<a name="line513"></a>				|| $is_allowed === false
+<a name="line514"></a>				|| ! is_readable($selected_file)
+<a name="line515"></a>			)
+<a name="line516"></a>			{
+<a name="line517"></a>				response(sprintf(trans('File_Open_Edit_Not_Allowed'), ($sub_action == 'preview' ? strtolower(trans('Open')) : strtolower(trans('Edit')))), 403)->send();
+<a name="line518"></a>				exit;
+<a name="line519"></a>			}
+<a name="line520"></a>			echo $sub_action ;
+<a name="line521"></a>			echo $preview_mode;
+<a name="line522"></a>			if ($sub_action == 'preview')
+<a name="line523"></a>			{
+<a name="line524"></a>				if ($preview_mode == 'text')
+<a name="line525"></a>				{
+<a name="line526"></a>					// get and sanities
+<a name="line527"></a>					$data = stripslashes(htmlspecialchars(file_get_contents($selected_file)));
+<a name="line528"></a>
+<a name="line529"></a>					$ret = '';
+<a name="line530"></a>
+<a name="line531"></a>					if ( ! in_array($info['extension'],$previewable_text_file_exts_no_prettify))
+<a name="line532"></a>					{
+<a name="line533"></a>						$ret .= '<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang='.$info['extension'].'&skin=sunburst"></script>';
+<a name="line534"></a>						$ret .= '<div class="text-center"><strong>'.$info['basename'].'</strong></div><pre class="prettyprint">'.$data.'</pre>';
+<a name="line535"></a>					}
+<a name="line536"></a>					else
+<a name="line537"></a>					{
+<a name="line538"></a>						$ret .= '<div class="text-center"><strong>'.$info['basename'].'</strong></div><pre class="no-prettify">'.$data.'</pre>';
+<a name="line539"></a>					}
+<a name="line540"></a>
+<a name="line541"></a>				}
+<a name="line542"></a>				elseif ($preview_mode == 'viewerjs')
+<a name="line543"></a>				{
+<a name="line544"></a>					$ret = '<iframe id="viewer" src="js/ViewerJS/../../'.$_GET["file"].'" allowfullscreen="" webkitallowfullscreen="" class="viewer-iframe"></iframe>';
+<a name="line545"></a>
+<a name="line546"></a>				}
+<a name="line547"></a>				elseif ($preview_mode == 'google')
+<a name="line548"></a>				{
+<a name="line549"></a>					$url_file = $base_url . $upload_dir . str_replace($current_path, '', $_GET["file"]);
+<a name="line550"></a>					$googledoc_url = urlencode($url_file);
+<a name="line551"></a>					$googledoc_html = "<iframe src=\"http://docs.google.com/viewer?url=" . $googledoc_url . "&embedded=true\" class=\"google-iframe\"></iframe>";
+<a name="line552"></a>					$ret = '<div class="text-center"><strong>' . $info['basename'] . '</strong></div>' . $googledoc_html . '';
+<a name="line553"></a>				}
+<a name="line554"></a>			}
+<a name="line555"></a>			else
+<a name="line556"></a>			{
+<a name="line557"></a>				$data = stripslashes(htmlspecialchars(file_get_contents($selected_file)));
+<a name="line558"></a>				$ret = '<textarea id="textfile_edit_area" style="width:100%;height:300px;">'.$data.'</textarea>';
+<a name="line559"></a>			}
+<a name="line560"></a>
+<a name="line561"></a>			response($ret)->send();
+<a name="line562"></a>			exit;
+<a name="line563"></a>
+<a name="line564"></a>			break;
+<a name="line565"></a>	    default: response('no action passed', 400)->send();
+<a name="line566"></a>			exit;
+<a name="line567"></a>    }
+<a name="line568"></a>}
+<a name="line569"></a>else
+<a name="line570"></a>{
+<a name="line571"></a>	response('no action passed', 400)->send();
+<a name="line572"></a>	exit;
+<a name="line573"></a>}
+<a name="line574"></a></pre>
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\ajax_calls.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

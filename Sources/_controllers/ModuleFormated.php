@@ -8,10 +8,16 @@ if(file_exists('_controllers/Module.php'))
 
 
 /*******************************  ModuleFormated  *******************************/
+/**
+* @author name-text
+* @deprecated deprecated-text
+* @package package-name
+* @abstract is a new tag defining a class or method as abstract.
+*/
 class ModuleFormated extends Module{
     /**
-     * Konötruktor triedy kontrolera modulu ModuleFormated
-     * @param integer $id ID modulu(ak je ID = 0 tak sa vytvorÌ pr·zdny objekt)
+     * Kon≈°truktor triedy kontrolera modulu ModuleFormated
+     * @param integer $id ID modulu(ak je ID = 0 tak sa vytvor√≠ pr√°zdny objekt)
      */
     public function __construct($id=0){
         $this->module_type = "module_formated";
@@ -41,7 +47,7 @@ class ModuleFormated extends Module{
 
     }
     /**
-     * Funkcia naËÌta inform·cie z DB pre model so zadan˝m ID
+     * Funkcia na√®√≠ta inform√°cie z DB pre model so zadan√Ωm ID
      * @param integer $id ID modulu
      */
     public function setById($id=0){
@@ -53,10 +59,10 @@ class ModuleFormated extends Module{
         }
     }
     /**
-     * Funkcia nastavÌ obsah modulu podæa vstupn˝ch parametrov
+     * Funkcia nastav√≠ obsah modulu pod¬æa vstupn√Ωch parametrov
      * @param integer $module_id   id modulu
-     * @param string  $link        Odkaz na embedovanÈ video
-     * @param string  $title       N·zov modulu
+     * @param string  $link        Odkaz na embedovan√© video
+     * @param string  $title       N√°zov modulu
      * @param string  $description Popis modulu
      */
     public function setContentData($module_id=0,$link="",$title="",$description=""){
@@ -69,14 +75,18 @@ class ModuleFormated extends Module{
     }
 
     /**
-     * Funkcia vypÌöe pohæad na modul
+     * Funkcia vyp√≠≈°e poh¬æad na modul
+     * @param TypVstupnejPremenej1   $premena1    "Opis premenej1"
+     * @param TypVstupnejPremenej2   $premena2   "Opis premenej2"
+     * @return return-type description
+    *  @see package.class#member
      */
     public function module($editable){
         ModuleFormated_v::module($this->containerData, $this->contentData, $editable);
     }
     /**
-     * Funkcia vypÌöe pohæad na editoru modulu
-     * @param  string $operation oper·cia ktor· sa m· vykonaù po odoslanÌ formul·ra (insert/edit)
+     * Funkcia vyp√≠≈°e poh¬æad na editoru modulu
+     * @param  string $operation oper√°cia ktor√° sa m√° vykona¬ù po odoslan√≠ formul√°ra (insert/edit)
      */
     public function editor($operation){
         
@@ -100,8 +110,8 @@ class ModuleFormated extends Module{
         ModuleFormated_v::editor( $this->containerData, $this->contentData, $url, $this->getOrderOptions($m_id));
     }
     /**
-     * Funkcia uloûÌ validnÈ premennÈ odoslanÈ z formul·ra a uloûÌ ich do vn˙tornej ötrukt˙ry objektu
-     * @return boolean true ak s˙ d·ta posielanÈ z formul·ra validnÈ / inak false
+     * Funkcia ulo≈æ√≠ validn√© premenn√© odoslan√© z formul√°ra a ulo≈æ√≠ ich do vn√∫tornej ≈°trukt√∫ry objektu
+     * @return boolean true ak s√∫ d√°ta posielan√© z formul√°ra validn√© / inak false
      */
     public function getFormData(){
         // Overenie zakladnych informaci o Userovi,Page a Module
@@ -138,8 +148,8 @@ class ModuleFormated extends Module{
     }
 
     /**
-     * funkcia vloûÌ modul do DB
-     * @return boolean true ak vloûÌ ˙speöne false ak nastane chyba
+     * funkcia vlo≈æ√≠ modul do DB
+     * @return boolean true ak vlo≈æ√≠ √∫spe≈°ne false ak nastane chyba
      */
     public function insert(){
 
@@ -160,8 +170,8 @@ class ModuleFormated extends Module{
     }
 
     /**
-     * funkcia aktualizuje ˙daje o module v DB
-     * @return boolean true ak edituje ˙speöne inak false
+     * funkcia aktualizuje √∫daje o module v DB
+     * @return boolean true ak edituje √∫spe≈°ne inak false
      */
     public function update(){
         if(isset($this->containerData['id'])&& isset($this->contentData['module_id']) && $this->containerData['id'] > 0 && $this->contentData['module_id'] > 0){
@@ -175,8 +185,8 @@ class ModuleFormated extends Module{
     }
 
     /**
-     * Funkcia vymaûe modul z DB
-     * @return boolean true ak vymaûe false ak nastane chyba
+     * Funkcia vyma≈æe modul z DB
+     * @return boolean true ak vyma≈æe false ak nastane chyba
      */
     public function delete(){
         if(isset($this->containerData['id'])&& isset($this->contentData['module_id']) && $this->containerData['id'] > 0 && $this->contentData['module_id'] > 0){
@@ -187,7 +197,7 @@ class ModuleFormated extends Module{
     }
 
     /**
-     * Funkcia vr·ti typ modulu s ikonou pre editor modulov
+     * Funkcia vr√°ti typ modulu s ikonou pre editor modulov
      * @return string ikona + typ modulu
      */
     public static function getModuleTypeName(){

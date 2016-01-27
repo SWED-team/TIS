@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 27 Jan 2016 00:15:07 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>Response (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>Filemanager\Response</h2>
+
+</header><p class="signature">public  class <strong>Response</strong></p>
+
+<div class="comment"><p>Class Response
+Simplified copy of Symfony/Http-Foundation Response
+to allow compatibility with frameworks</p></div>
+
+<h3>Constants</h3>
+<table>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_ACCEPTED">HTTP_ACCEPTED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_ALREADY_REPORTED">HTTP_ALREADY_REPORTED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_BAD_GATEWAY">HTTP_BAD_GATEWAY</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_BAD_REQUEST">HTTP_BAD_REQUEST</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_CONFLICT">HTTP_CONFLICT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_CONTINUE">HTTP_CONTINUE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_CREATED">HTTP_CREATED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_EXPECTATION_FAILED">HTTP_EXPECTATION_FAILED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_FAILED_DEPENDENCY">HTTP_FAILED_DEPENDENCY</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_FORBIDDEN">HTTP_FORBIDDEN</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_FOUND">HTTP_FOUND</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_GATEWAY_TIMEOUT">HTTP_GATEWAY_TIMEOUT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_GONE">HTTP_GONE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_IM_USED">HTTP_IM_USED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_INSUFFICIENT_STORAGE">HTTP_INSUFFICIENT_STORAGE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_INTERNAL_SERVER_ERROR">HTTP_INTERNAL_SERVER_ERROR</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_I_AM_A_TEAPOT">HTTP_I_AM_A_TEAPOT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_LENGTH_REQUIRED">HTTP_LENGTH_REQUIRED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_LOCKED">HTTP_LOCKED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_LOOP_DETECTED">HTTP_LOOP_DETECTED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_METHOD_NOT_ALLOWED">HTTP_METHOD_NOT_ALLOWED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_MOVED_PERMANENTLY">HTTP_MOVED_PERMANENTLY</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_MULTIPLE_CHOICES">HTTP_MULTIPLE_CHOICES</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_MULTI_STATUS">HTTP_MULTI_STATUS</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NETWORK_AUTHENTICATION_REQUIRED">HTTP_NETWORK_AUTHENTICATION_REQUIRED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NON_AUTHORITATIVE_INFORMATION">HTTP_NON_AUTHORITATIVE_INFORMATION</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NOT_ACCEPTABLE">HTTP_NOT_ACCEPTABLE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NOT_EXTENDED">HTTP_NOT_EXTENDED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NOT_FOUND">HTTP_NOT_FOUND</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NOT_IMPLEMENTED">HTTP_NOT_IMPLEMENTED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NOT_MODIFIED">HTTP_NOT_MODIFIED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_NO_CONTENT">HTTP_NO_CONTENT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_OK">HTTP_OK</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PARTIAL_CONTENT">HTTP_PARTIAL_CONTENT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PAYMENT_REQUIRED">HTTP_PAYMENT_REQUIRED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PERMANENTLY_REDIRECT">HTTP_PERMANENTLY_REDIRECT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PRECONDITION_FAILED">HTTP_PRECONDITION_FAILED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PRECONDITION_REQUIRED">HTTP_PRECONDITION_REQUIRED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PROCESSING">HTTP_PROCESSING</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_PROXY_AUTHENTICATION_REQUIRED">HTTP_PROXY_AUTHENTICATION_REQUIRED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_REQUESTED_RANGE_NOT_SATISFIABLE">HTTP_REQUESTED_RANGE_NOT_SATISFIABLE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_REQUEST_ENTITY_TOO_LARGE">HTTP_REQUEST_ENTITY_TOO_LARGE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE">HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_REQUEST_TIMEOUT">HTTP_REQUEST_TIMEOUT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_REQUEST_URI_TOO_LONG">HTTP_REQUEST_URI_TOO_LONG</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_RESERVED">HTTP_RESERVED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_RESERVED_FOR_WEBDAV_ADVANCED_COLLECTIONS_EXPIRED_PROPOSAL">HTTP_RESERVED_FOR_WEBDAV_ADVANCED_COLLECTIONS_EXPIRED_PROPOSAL</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_RESET_CONTENT">HTTP_RESET_CONTENT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_SEE_OTHER">HTTP_SEE_OTHER</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_SERVICE_UNAVAILABLE">HTTP_SERVICE_UNAVAILABLE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_SWITCHING_PROTOCOLS">HTTP_SWITCHING_PROTOCOLS</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_TEMPORARY_REDIRECT">HTTP_TEMPORARY_REDIRECT</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_TOO_MANY_REQUESTS">HTTP_TOO_MANY_REQUESTS</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_UNAUTHORIZED">HTTP_UNAUTHORIZED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_UNPROCESSABLE_ENTITY">HTTP_UNPROCESSABLE_ENTITY</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_UNSUPPORTED_MEDIA_TYPE">HTTP_UNSUPPORTED_MEDIA_TYPE</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_UPGRADE_REQUIRED">HTTP_UPGRADE_REQUIRED</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_USE_PROXY">HTTP_USE_PROXY</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL">HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL</a></p></td>
+</tr>
+<tr>
+<td class="type">final static  int</td>
+<td class="description"><p class="name"><a href="#HTTP_VERSION_NOT_SUPPORTED">HTTP_VERSION_NOT_SUPPORTED</a></p></td>
+</tr>
+</table>
+
+<h3>Fields</h3>
+<table>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#headers">$headers</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">static  array</td>
+<td class="description"><p class="name"><a href="#statusTexts">$statusTexts</a></p><p class="description">Status codes translation table.
+</p></td>
+</tr>
+</table>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed content, int statusCode, array headers)</p><p class="description">Construct the response</p></td>
+</tr>
+<tr>
+<td class="type"> $this</td>
+<td class="description"><p class="name"><a href="#header()">header</a>(string key, string value, bool replace)</p><p class="description">Set a header on the Response.</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#isInvalid()">isInvalid</a>()</p><p class="description">Is response invalid?</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../filemanager/response.html">Response</a></td>
+<td class="description"><p class="name"><a href="#send()">send</a>()</p><p class="description">Sends HTTP headers and content.</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../filemanager/response.html">Response</a></td>
+<td class="description"><p class="name"><a href="#sendContent()">sendContent</a>()</p><p class="description">Sends content for the current web response.</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../filemanager/response.html">Response</a></td>
+<td class="description"><p class="name"><a href="#sendHeaders()">sendHeaders</a>()</p><p class="description">Sends HTTP headers.</p></td>
+</tr>
+<tr>
+<td class="type"> $this</td>
+<td class="description"><p class="name"><a href="#setContent()">setContent</a>(mixed content)</p><p class="description">Set the content on the response.</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../filemanager/response.html">Response</a></td>
+<td class="description"><p class="name"><a href="#setStatusCode()">setStatusCode</a>(int code, mixed text)</p><p class="description">Sets the response status code.</p></td>
+</tr>
+</table>
+
+<h3>Details</h3>
+<code class="signature" id="HTTP_ACCEPTED">public final static  int <strong>HTTP_ACCEPTED</strong> = 202</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_ALREADY_REPORTED">public final static  int <strong>HTTP_ALREADY_REPORTED</strong> = 208</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_BAD_GATEWAY">public final static  int <strong>HTTP_BAD_GATEWAY</strong> = 502</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_BAD_REQUEST">public final static  int <strong>HTTP_BAD_REQUEST</strong> = 400</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_CONFLICT">public final static  int <strong>HTTP_CONFLICT</strong> = 409</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_CONTINUE">public final static  int <strong>HTTP_CONTINUE</strong> = 100</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_CREATED">public final static  int <strong>HTTP_CREATED</strong> = 201</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_EXPECTATION_FAILED">public final static  int <strong>HTTP_EXPECTATION_FAILED</strong> = 417</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_FAILED_DEPENDENCY">public final static  int <strong>HTTP_FAILED_DEPENDENCY</strong> = 424</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_FORBIDDEN">public final static  int <strong>HTTP_FORBIDDEN</strong> = 403</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_FOUND">public final static  int <strong>HTTP_FOUND</strong> = 302</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_GATEWAY_TIMEOUT">public final static  int <strong>HTTP_GATEWAY_TIMEOUT</strong> = 504</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_GONE">public final static  int <strong>HTTP_GONE</strong> = 410</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_IM_USED">public final static  int <strong>HTTP_IM_USED</strong> = 226</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_INSUFFICIENT_STORAGE">public final static  int <strong>HTTP_INSUFFICIENT_STORAGE</strong> = 507</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_INTERNAL_SERVER_ERROR">public final static  int <strong>HTTP_INTERNAL_SERVER_ERROR</strong> = 500</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_I_AM_A_TEAPOT">public final static  int <strong>HTTP_I_AM_A_TEAPOT</strong> = 418</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_LENGTH_REQUIRED">public final static  int <strong>HTTP_LENGTH_REQUIRED</strong> = 411</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_LOCKED">public final static  int <strong>HTTP_LOCKED</strong> = 423</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_LOOP_DETECTED">public final static  int <strong>HTTP_LOOP_DETECTED</strong> = 508</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_METHOD_NOT_ALLOWED">public final static  int <strong>HTTP_METHOD_NOT_ALLOWED</strong> = 405</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_MOVED_PERMANENTLY">public final static  int <strong>HTTP_MOVED_PERMANENTLY</strong> = 301</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_MULTIPLE_CHOICES">public final static  int <strong>HTTP_MULTIPLE_CHOICES</strong> = 300</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_MULTI_STATUS">public final static  int <strong>HTTP_MULTI_STATUS</strong> = 207</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NETWORK_AUTHENTICATION_REQUIRED">public final static  int <strong>HTTP_NETWORK_AUTHENTICATION_REQUIRED</strong> = 511</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NON_AUTHORITATIVE_INFORMATION">public final static  int <strong>HTTP_NON_AUTHORITATIVE_INFORMATION</strong> = 203</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NOT_ACCEPTABLE">public final static  int <strong>HTTP_NOT_ACCEPTABLE</strong> = 406</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NOT_EXTENDED">public final static  int <strong>HTTP_NOT_EXTENDED</strong> = 510</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NOT_FOUND">public final static  int <strong>HTTP_NOT_FOUND</strong> = 404</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NOT_IMPLEMENTED">public final static  int <strong>HTTP_NOT_IMPLEMENTED</strong> = 501</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NOT_MODIFIED">public final static  int <strong>HTTP_NOT_MODIFIED</strong> = 304</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_NO_CONTENT">public final static  int <strong>HTTP_NO_CONTENT</strong> = 204</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_OK">public final static  int <strong>HTTP_OK</strong> = 200</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PARTIAL_CONTENT">public final static  int <strong>HTTP_PARTIAL_CONTENT</strong> = 206</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PAYMENT_REQUIRED">public final static  int <strong>HTTP_PAYMENT_REQUIRED</strong> = 402</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PERMANENTLY_REDIRECT">public final static  int <strong>HTTP_PERMANENTLY_REDIRECT</strong> = 308</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PRECONDITION_FAILED">public final static  int <strong>HTTP_PRECONDITION_FAILED</strong> = 412</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PRECONDITION_REQUIRED">public final static  int <strong>HTTP_PRECONDITION_REQUIRED</strong> = 428</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PROCESSING">public final static  int <strong>HTTP_PROCESSING</strong> = 102</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_PROXY_AUTHENTICATION_REQUIRED">public final static  int <strong>HTTP_PROXY_AUTHENTICATION_REQUIRED</strong> = 407</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_REQUESTED_RANGE_NOT_SATISFIABLE">public final static  int <strong>HTTP_REQUESTED_RANGE_NOT_SATISFIABLE</strong> = 416</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_REQUEST_ENTITY_TOO_LARGE">public final static  int <strong>HTTP_REQUEST_ENTITY_TOO_LARGE</strong> = 413</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE">public final static  int <strong>HTTP_REQUEST_HEADER_FIELDS_TOO_LARGE</strong> = 431</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_REQUEST_TIMEOUT">public final static  int <strong>HTTP_REQUEST_TIMEOUT</strong> = 408</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_REQUEST_URI_TOO_LONG">public final static  int <strong>HTTP_REQUEST_URI_TOO_LONG</strong> = 414</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_RESERVED">public final static  int <strong>HTTP_RESERVED</strong> = 306</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_RESERVED_FOR_WEBDAV_ADVANCED_COLLECTIONS_EXPIRED_PROPOSAL">public final static  int <strong>HTTP_RESERVED_FOR_WEBDAV_ADVANCED_COLLECTIONS_EXPIRED_PROPOSAL</strong> = 425</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_RESET_CONTENT">public final static  int <strong>HTTP_RESET_CONTENT</strong> = 205</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_SEE_OTHER">public final static  int <strong>HTTP_SEE_OTHER</strong> = 303</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_SERVICE_UNAVAILABLE">public final static  int <strong>HTTP_SERVICE_UNAVAILABLE</strong> = 503</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_SWITCHING_PROTOCOLS">public final static  int <strong>HTTP_SWITCHING_PROTOCOLS</strong> = 101</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_TEMPORARY_REDIRECT">public final static  int <strong>HTTP_TEMPORARY_REDIRECT</strong> = 307</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_TOO_MANY_REQUESTS">public final static  int <strong>HTTP_TOO_MANY_REQUESTS</strong> = 429</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_UNAUTHORIZED">public final static  int <strong>HTTP_UNAUTHORIZED</strong> = 401</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_UNPROCESSABLE_ENTITY">public final static  int <strong>HTTP_UNPROCESSABLE_ENTITY</strong> = 422</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_UNSUPPORTED_MEDIA_TYPE">public final static  int <strong>HTTP_UNSUPPORTED_MEDIA_TYPE</strong> = 415</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_UPGRADE_REQUIRED">public final static  int <strong>HTTP_UPGRADE_REQUIRED</strong> = 426</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_USE_PROXY">public final static  int <strong>HTTP_USE_PROXY</strong> = 305</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL">public final static  int <strong>HTTP_VARIANT_ALSO_NEGOTIATES_EXPERIMENTAL</strong> = 506</code>
+<div class="details">
+</div>
+
+<code class="signature" id="HTTP_VERSION_NOT_SUPPORTED">public final static  int <strong>HTTP_VERSION_NOT_SUPPORTED</strong> = 505</code>
+<div class="details">
+</div>
+
+<code class="signature" id="headers">public  array <strong>$headers</strong></code>
+<div class="details">
+<p></p></div>
+
+<code class="signature" id="statusTexts">public static  array <strong>$statusTexts</strong> = array(...)</code>
+<div class="details">
+<p>Status codes translation table.</p><p>The list of codes is complete according to the
+<code><a href="http://www.iana.org/assignments/http-status-codes/">Hypertext Transfer Protocol (HTTP) Status Code Registry</a></code>
+(last updated 2012-02-13).</p><p>Unless otherwise noted, the status code is defined in RFC2616.</p></div>
+
+<code class="signature" id="__construct">public  void <strong>__construct</strong>(mixed content, int statusCode, array headers)</code>
+<div class="details">
+<p>Construct the response</p></div>
+
+<code class="signature" id="header">public  $this <strong>header</strong>(string key, string value, bool replace)</code>
+<div class="details">
+<p>Set a header on the Response.</p></div>
+
+<code class="signature" id="isInvalid">public  bool <strong>isInvalid</strong>()</code>
+<div class="details">
+<p>Is response invalid?</p><table>
+<tr><th>Api</th>
+</tr></table>
+</div>
+
+<code class="signature" id="send">public  <a href="../filemanager/response.html">Response</a> <strong>send</strong>()</code>
+<div class="details">
+<p>Sends HTTP headers and content.</p><table>
+<tr><th>Api</th>
+</tr></table>
+</div>
+
+<code class="signature" id="sendContent">public  <a href="../filemanager/response.html">Response</a> <strong>sendContent</strong>()</code>
+<div class="details">
+<p>Sends content for the current web response.</p></div>
+
+<code class="signature" id="sendHeaders">public  <a href="../filemanager/response.html">Response</a> <strong>sendHeaders</strong>()</code>
+<div class="details">
+<p>Sends HTTP headers.</p></div>
+
+<code class="signature" id="setContent">public  $this <strong>setContent</strong>(mixed content)</code>
+<div class="details">
+<p>Set the content on the response.</p></div>
+
+<code class="signature" id="setStatusCode">public  <a href="../filemanager/response.html">Response</a> <strong>setStatusCode</strong>(int code, mixed text)</code>
+<div class="details">
+<p>Sets the response status code.</p><table>
+<tr><th>Parameters</th>
+<td>code - HTTP status code</td>
+<td>text - HTTP status text If the status text is null it will be automatically populated for the known status codes and left empty otherwise.</td>
+</tr><tr><th>Throws</th>
+<td>\InvalidArgumentException - When the HTTP status code is not valid</td>
+</tr><tr><th>Api</th>
+</tr></table>
+</div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

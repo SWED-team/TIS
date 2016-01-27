@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 27 Jan 2016 00:15:07 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>JUpload (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>Swed TEAM\JUpload</h2>
+
+</header><p class="signature">public  class <strong>JUpload</strong></p>
+
+<div class="comment"><p>This class manage upload, with use of the JUpload applet. It's both a sample to show how to use the applet, and
+a class you can use directly into your own application.</p><p>Recommandation: Don't update its code !</p><p>By doing this, you'll be able to reuse directly any update coming from the JUpload project, instead of reporting your
+modifications into any new version of this class. This guarantees you that your project can use the last version of
+JUpload, without any code modification. We work so that the applet behavior remains unchanged, but from time to time,
+a change can appear.</p><p>Sample:
+- See the index.php samples, in the same folder.</p><p>Notes:
+- maxChunkSize: this class use a default maxChunkSize of 500K (or less, depending on the script max size). This allows
+upload of FILES OF ANY SIZE on quite all ISP hosting. If it's too big for you (the max upload size of your ISP is less
+than 500K), or if you want no chunk at all, you can, of course, override this default value.</p><p></p><p>Parameters:</p>
+<ul>
+<li>$appletparams contains a map for applet parameters: key is the applet parameter name. The value is the value to transmit
+to the applet. See the applet documentation for information on all applet parameters.</li>
+<li>$classparams contains the parameter specific for the JUpload class below. Here are the main class parameters:</li>
+<li>demo_mode. Files are uploaded to the server, but not stored on its hard drive. That is: you can simulate the global
+behavior, but won't consume hard drive space. This mode is used on sourceforge web site.</li>
+</ul>
+<p>Output generated for uploaded files:</p>
+<ul>
+<li><p class="list">$files is an array of array. This can be managed by (a) the function given in the callbackAfterUploadManagement class
+parameter, or (b) within the page whose URL is given in the afterUploadURL applet parameter, or (c) you can Extend the
+class and redeclare defaultAfterUploadManagement() to your needs.
+See the defaultAfterUploadManagement() for a sample on howto manage this array.</p><p class="list">This array contains:</p></li>
+<li>One entry per file. Each entry is an array, that contains all files properties, stored as $key=>$value.
+The available keys are:</li>
+<li>name: the filename, as it is now stored on the system.</li>
+<li>size: the file size</li>
+<li>path: the absolute path, where the file has been stored.</li>
+<li>fullName: the canonical file name (i.e. including the absolute path)</li>
+<li>md5sum: the md5sum of the file, if further control is needed.</li>
+<li>mimetype: the calculated mime type of the file</li>
+<li><p class="list">If the formData applet parameter is used: all attributes (key and value) uploaded by the applet, are put here,
+repeated for each file.</p><p class="list">Note: if you are using a callback function (i.e. callbackAfterUploadManagement) and you do not see a global 'object' you</p></li>
+</ul>
+<p>are expecting then it might have been destroyed by PHP - c.f. http://bugs.php.net/bug.php?id=39693</p></div>
+
+<h3>Fields</h3>
+<table>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#appletparams">$appletparams</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#classparams">$classparams</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#files">$files</a></p></td>
+</tr>
+</table>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed appletparams)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#defaultAfterUploadManagement()">defaultAfterUploadManagement</a>()</p><p class="description">Example function to process the files uploaded. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#interceptAfterUpload()">interceptAfterUpload</a>(mixed str)</p><p class="description">This function displays the uploaded files description in the current page (see tag_flist class parameter)This *must* be public, because it is called from PHP's output buffering.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#interceptBeforeUpload()">interceptBeforeUpload</a>(mixed str)</p><p class="description">This function is called when constructing the page, when we're not reveiving uploaded files. </p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#logDebug()">logDebug</a>(mixed function, mixed msg, bool htmlComment)</p><p class="description">Log a message on the current output, as a HTML comment.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#logPHPDebug()">logPHPDebug</a>(mixed function, mixed msg)</p><p class="description">Log a message to the PHP log.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#uploadedfiles()">uploadedfiles</a>()</p><p class="description">Return an array of uploaded files * The array contains: name, size, tmp_name, error,
+relativePath, md5sum, mimetype, fullName, path</p></td>
+</tr>
+</table>
+
+<h3>Details</h3>
+<code class="signature" id="appletparams">public  mixed <strong>$appletparams</strong> = '5.0.0'</code>
+<div class="details">
+</div>
+
+<code class="signature" id="classparams">public  mixed <strong>$classparams</strong></code>
+<div class="details">
+</div>
+
+<code class="signature" id="files">public  mixed <strong>$files</strong></code>
+<div class="details">
+</div>
+
+<code class="signature" id="__construct">public  void <strong>__construct</strong>(mixed appletparams)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="defaultAfterUploadManagement">public  void <strong>defaultAfterUploadManagement</strong>()</code>
+<div class="details">
+<p>Example function to process the files uploaded.  This one simply displays the files' data.</p></div>
+
+<code class="signature" id="interceptAfterUpload">public  void <strong>interceptAfterUpload</strong>(mixed str)</code>
+<div class="details">
+<p>This function displays the uploaded files description in the current page (see tag_flist class parameter)</p><p>This *must* be public, because it is called from PHP's output buffering.</p></div>
+
+<code class="signature" id="interceptBeforeUpload">public  void <strong>interceptBeforeUpload</strong>(mixed str)</code>
+<div class="details">
+<p>This function is called when constructing the page, when we're not reveiving uploaded files. It 'just' construct
+the applet tag, by calling the relevant function.</p><p>This *must* be public, because it is called from PHP's output buffering</p></div>
+
+<code class="signature" id="logDebug">protected  void <strong>logDebug</strong>(mixed function, mixed msg, bool htmlComment)</code>
+<div class="details">
+<p>Log a message on the current output, as a HTML comment.</p></div>
+
+<code class="signature" id="logPHPDebug">protected  void <strong>logPHPDebug</strong>(mixed function, mixed msg)</code>
+<div class="details">
+<p>Log a message to the PHP log.
+Declared "protected" so it may be Extended if you require customised logging (e.g. particular log file location).</p></div>
+
+<code class="signature" id="uploadedfiles">public  void <strong>uploadedfiles</strong>()</code>
+<div class="details">
+<p>Return an array of uploaded files * The array contains: name, size, tmp_name, error,
+relativePath, md5sum, mimetype, fullName, path</p></div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,833 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 26 Jan 2016 23:51:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>filemanager\uploader\jupload.php (SWEDTeamTitle)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\uploader\jupload.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>filemanager\uploader\jupload.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This class manage upload, with use of the JUpload applet. It's both a sample to show how to use the applet, and
+<a name="line5"></a> * a class you can use directly into your own application.
+<a name="line6"></a> *
+<a name="line7"></a> * Recommandation: Don't update its code !
+<a name="line8"></a> *
+<a name="line9"></a> * By doing this, you'll be able to reuse directly any update coming from the JUpload project, instead of reporting your
+<a name="line10"></a> * modifications into any new version of this class. This guarantees you that your project can use the last version of
+<a name="line11"></a> * JUpload, without any code modification. We work so that the applet behavior remains unchanged, but from time to time,
+<a name="line12"></a> * a change can appear.
+<a name="line13"></a> *
+<a name="line14"></a> * Sample:
+<a name="line15"></a> * - See the index.php samples, in the same folder.
+<a name="line16"></a> *
+<a name="line17"></a> * Notes:
+<a name="line18"></a> * - maxChunkSize: this class use a default maxChunkSize of 500K (or less, depending on the script max size). This allows
+<a name="line19"></a> * upload of FILES OF ANY SIZE on quite all ISP hosting. If it's too big for you (the max upload size of your ISP is less
+<a name="line20"></a> * than 500K), or if you want no chunk at all, you can, of course, override this default value.
+<a name="line21"></a> *
+<a name="line22"></a> *
+<a name="line23"></a> *
+<a name="line24"></a> * Parameters:
+<a name="line25"></a> * - $appletparams contains a map for applet parameters: key is the applet parameter name. The value is the value to transmit
+<a name="line26"></a> * 		to the applet. See the applet documentation for information on all applet parameters.
+<a name="line27"></a> * - $classparams contains the parameter specific for the JUpload class below. Here are the main class parameters:
+<a name="line28"></a> * 		- demo_mode. Files are uploaded to the server, but not stored on its hard drive. That is: you can simulate the global
+<a name="line29"></a> * 		behavior, but won't consume hard drive space. This mode is used on sourceforge web site.
+<a name="line30"></a> *
+<a name="line31"></a> *
+<a name="line32"></a> * Output generated for uploaded files:
+<a name="line33"></a> * - $files is an array of array. This can be managed by (a) the function given in the callbackAfterUploadManagement class
+<a name="line34"></a> * 		parameter, or (b) within the page whose URL is given in the afterUploadURL applet parameter, or (c) you can Extend the
+<a name="line35"></a> * 		class and redeclare defaultAfterUploadManagement() to your needs.
+<a name="line36"></a> * 	See the defaultAfterUploadManagement() for a sample on howto manage this array.
+<a name="line37"></a> *
+<a name="line38"></a> *   This array contains:
+<a name="line39"></a> *     - One entry per file. Each entry is an array, that contains all files properties, stored as $key=>$value.
+<a name="line40"></a> * 		The available keys are:
+<a name="line41"></a> * 		  - name: the filename, as it is now stored on the system.
+<a name="line42"></a> * 		  - size: the file size
+<a name="line43"></a> * 		  - path: the absolute path, where the file has been stored.
+<a name="line44"></a> * 			- fullName: the canonical file name (i.e. including the absolute path)
+<a name="line45"></a> * 		  - md5sum: the md5sum of the file, if further control is needed.
+<a name="line46"></a> * 			- mimetype: the calculated mime type of the file
+<a name="line47"></a> * 		  - If the formData applet parameter is used: all attributes (key and value) uploaded by the applet, are put here,
+<a name="line48"></a> * 			repeated for each file.
+<a name="line49"></a> *
+<a name="line50"></a> * 		Note: if you are using a callback function (i.e. callbackAfterUploadManagement) and you do not see a global 'object' you
+<a name="line51"></a> * 					are expecting then it might have been destroyed by PHP - c.f. http://bugs.php.net/bug.php?id=39693
+<a name="line52"></a> *
+<a name="line53"></a> */
+<a name="line54"></a>
+<a name="line55"></a>class JUpload {
+<a name="line56"></a>
+<a name="line57"></a>	var $appletparams;
+<a name="line58"></a>	var $classparams;
+<a name="line59"></a>	var $files;
+<a name="line60"></a>
+<a name="line61"></a>	public function JUpload($appletparams = array(), $classparams = array()) {
+<a name="line62"></a>		if (gettype($classparams) != 'array')
+<a name="line63"></a>		$this->abort('Invalid type of parameter classparams: Expecting an array');
+<a name="line64"></a>		if (gettype($appletparams) != 'array')
+<a name="line65"></a>		$this->abort('Invalid type of parameter appletparams: Expecting an array');
+<a name="line66"></a>
+<a name="line67"></a>		// set some defaults for the applet params
+<a name="line68"></a>		if (!isset($appletparams['afterUploadURL']))
+<a name="line69"></a>		$appletparams['afterUploadURL'] = $_SERVER['PHP_SELF'] . '?afterupload=1';
+<a name="line70"></a>		if (!isset($appletparams['name']))
+<a name="line71"></a>		$appletparams['name'] = 'JUpload';
+<a name="line72"></a>		if (!isset($appletparams['archive']))
+<a name="line73"></a>		$appletparams['archive'] = 'wjhk.jupload.jar';
+<a name="line74"></a>		if (!isset($appletparams['code']))
+<a name="line75"></a>		$appletparams['code'] = 'wjhk.jupload2.JUploadApplet';
+<a name="line76"></a>		if (!isset($appletparams['debugLevel']))
+<a name="line77"></a>		$appletparams['debugLevel'] = 0;
+<a name="line78"></a>		if (!isset($appletparams['httpUploadParameterType']))
+<a name="line79"></a>		$appletparams['httpUploadParameterType'] = 'array';
+<a name="line80"></a>		if (!isset($appletparams['showLogWindow']))
+<a name="line81"></a>		$appletparams['showLogWindow'] = ($appletparams['debugLevel'] > 0) ? 'true' : 'false';
+<a name="line82"></a>		if (!isset($appletparams['width']))
+<a name="line83"></a>		$appletparams['width'] = 640;
+<a name="line84"></a>		if (!isset($appletparams['height']))
+<a name="line85"></a>		$appletparams['height'] = ($appletparams['showLogWindow'] == 'true') ? 500 : 300;
+<a name="line86"></a>		if (!isset($appletparams['mayscript']))
+<a name="line87"></a>		$appletparams['mayscript'] = 'true';
+<a name="line88"></a>		if (!isset($appletparams['scriptable']))
+<a name="line89"></a>		$appletparams['scriptable'] = 'false';
+<a name="line90"></a>		//if (!isset($appletparams['stringUploadSuccess']))
+<a name="line91"></a>		$appletparams['stringUploadSuccess'] = 'SUCCESS';
+<a name="line92"></a>		//if (!isset($appletparams['stringUploadError']))
+<a name="line93"></a>		$appletparams['stringUploadError'] = 'ERROR: (.*)';
+<a name="line94"></a>		$maxpost = $this->tobytes(ini_get('post_max_size'));
+<a name="line95"></a>		$maxmem = $this->tobytes(ini_get('memory_limit'));
+<a name="line96"></a>		$maxfs = $this->tobytes(ini_get('upload_max_filesize'));
+<a name="line97"></a>		$obd = ini_get('open_basedir');
+<a name="line98"></a>		if (!isset($appletparams['maxChunkSize'])) {
+<a name="line99"></a>			$maxchunk = ($maxpost < $maxmem) ? $maxpost : $maxmem;
+<a name="line100"></a>			$maxchunk = ($maxchunk < $maxfs) ? $maxchunk : $maxfs;
+<a name="line101"></a>			$maxchunk /= 4;
+<a name="line102"></a>			$optchunk = (500000 > $maxchunk) ? $maxchunk : 500000;
+<a name="line103"></a>			$appletparams['maxChunkSize'] = $optchunk;
+<a name="line104"></a>		}
+<a name="line105"></a>		$appletparams['maxChunkSize'] = $this->tobytes($appletparams['maxChunkSize']);
+<a name="line106"></a>		if (!isset($appletparams['maxFileSize']))
+<a name="line107"></a>		$appletparams['maxFileSize'] = $maxfs;
+<a name="line108"></a>		$appletparams['maxFileSize'] = $this->tobytes($appletparams['maxFileSize']);
+<a name="line109"></a>		if (isset($classparams['errormail'])) {
+<a name="line110"></a>			$appletparams['urlToSendErrorTo'] = $_SERVER["PHP_SELF"] . '?errormail';
+<a name="line111"></a>		}
+<a name="line112"></a>
+<a name="line113"></a>		// Same for class parameters
+<a name="line114"></a>		if (!isset($classparams['demo_mode']))
+<a name="line115"></a>		$classparams['demo_mode'] = false;
+<a name="line116"></a>		if ($classparams['demo_mode']) {
+<a name="line117"></a>			$classparams['create_destdir'] = false;
+<a name="line118"></a>			$classparams['allow_subdirs'] = true;
+<a name="line119"></a>			$classparams['allow_zerosized'] = true;
+<a name="line120"></a>			$classparams['duplicate'] = 'overwrite';
+<a name="line121"></a>		}
+<a name="line122"></a>		if (!isset($classparams['debug_php']))											// set true to log some messages in PHP log
+<a name="line123"></a>		$classparams['debug_php'] = false;
+<a name="line124"></a>		if (!isset($this->classparams['allowed_mime_types']))				// array of allowed MIME type
+<a name="line125"></a>		$classparams['allowed_mime_types'] = 'all';
+<a name="line126"></a>		if (!isset($this->classparams['allowed_file_extensions'])) 	// array of allowed file extensions
+<a name="line127"></a>		$classparams['allowed_file_extensions'] = 'all';
+<a name="line128"></a>		if (!isset($classparams['verbose_errors']))						// shouldn't display server info on a production site!
+<a name="line129"></a>		$classparams['verbose_errors'] = true;
+<a name="line130"></a>		if (!isset($classparams['session_regenerate']))
+<a name="line131"></a>		$classparams['session_regenerate'] = false;
+<a name="line132"></a>		if (!isset($classparams['create_destdir']))
+<a name="line133"></a>		$classparams['create_destdir'] = true;
+<a name="line134"></a>		if (!isset($classparams['allow_subdirs']))
+<a name="line135"></a>		$classparams['allow_subdirs'] = false;
+<a name="line136"></a>		if (!isset($classparams['spaces_in_subdirs']))
+<a name="line137"></a>		$classparams['spaces_in_subdirs'] = false;
+<a name="line138"></a>		if (!isset($classparams['convert_spaces']))         // set to true to convert spaces in filenames to _
+<a name="line139"></a>		$classparams['convert_spaces'] = false;
+<a name="line140"></a>		if (!isset($classparams['allow_zerosized']))
+<a name="line141"></a>		$classparams['allow_zerosized'] = false;
+<a name="line142"></a>		if (!isset($classparams['duplicate']))
+<a name="line143"></a>		$classparams['duplicate'] = 'rename';
+<a name="line144"></a>		if (!isset($classparams['dirperm']))
+<a name="line145"></a>		$classparams['dirperm'] = 0755;
+<a name="line146"></a>		if (!isset($classparams['fileperm']))
+<a name="line147"></a>		$classparams['fileperm'] = 0644;
+<a name="line148"></a>		if (!isset($classparams['destdir'])) {
+<a name="line149"></a>			if ($obd != '')
+<a name="line150"></a>			$classparams['destdir'] = $obd;
+<a name="line151"></a>			else
+<a name="line152"></a>			$classparams['destdir'] = '/var/tmp/jupload_test';
+<a name="line153"></a>		}else{
+<a name="line154"></a>			$classparams['destdir']=str_replace('~',' ',$classparams['destdir']);
+<a name="line155"></a>		}
+<a name="line156"></a>		if ($classparams['create_destdir']) {
+<a name="line157"></a>			$_umask = umask(0); 	// override the system mask
+<a name="line158"></a>			@mkdir($classparams['destdir'], $classparams['dirperm']);
+<a name="line159"></a>			umask($_umask);
+<a name="line160"></a>		}
+<a name="line161"></a>		if (!is_dir($classparams['destdir']) && is_writable($classparams['destdir']))
+<a name="line162"></a>		$this->abort('Destination dir not accessible');
+<a name="line163"></a>		if (!isset($classparams['tmp_prefix']))
+<a name="line164"></a>		$classparams['tmp_prefix'] = 'jutmp.';
+<a name="line165"></a>		if (!isset($classparams['var_prefix']))
+<a name="line166"></a>		$classparams['var_prefix'] = 'juvar.';
+<a name="line167"></a>		if (!isset($classparams['jscript_wrapper']))
+<a name="line168"></a>		$classparams['jscript_wrapper'] = 'JUploadSetProperty';
+<a name="line169"></a>		if (!isset($classparams['tag_jscript']))
+<a name="line170"></a>		$classparams['tag_jscript'] = '<!--JUPLOAD_JSCRIPT-->';
+<a name="line171"></a>		if (!isset($classparams['tag_applet']))
+<a name="line172"></a>		$classparams['tag_applet'] = '<!--JUPLOAD_APPLET-->';
+<a name="line173"></a>		if (!isset($classparams['tag_flist']))
+<a name="line174"></a>		$classparams['tag_flist'] = '<!--JUPLOAD_FILES-->';
+<a name="line175"></a>		if (!isset($classparams['http_flist_start']))
+<a name="line176"></a>		$classparams['http_flist_start'] =
+<a name="line177"></a>            		"<table border='1'><TR><TH>Filename</TH><TH>file size</TH><TH>Relative path</TH><TH>Full name</TH><TH>md5sum</TH><TH>Specific parameters</TH></TR>";
+<a name="line178"></a>		if (!isset($classparams['http_flist_end']))
+<a name="line179"></a>		$classparams['http_flist_end'] = "</table>\n";
+<a name="line180"></a>		if (!isset($classparams['http_flist_file_before']))
+<a name="line181"></a>		$classparams['http_flist_file_before'] = "<tr><td>";
+<a name="line182"></a>		if (!isset($classparams['http_flist_file_between']))
+<a name="line183"></a>		$classparams['http_flist_file_between'] = "</td><td>";
+<a name="line184"></a>		if (!isset($classparams['http_flist_file_after']))
+<a name="line185"></a>		$classparams['http_flist_file_after'] = "</td></tr>\n";
+<a name="line186"></a>
+<a name="line187"></a>		$this->appletparams = $appletparams;
+<a name="line188"></a>		$this->classparams = $classparams;
+<a name="line189"></a>		$this->page_start();
+<a name="line190"></a>	}
+<a name="line191"></a>
+<a name="line192"></a>	/**
+<a name="line193"></a>	 * Return an array of uploaded files * The array contains: name, size, tmp_name, error,
+<a name="line194"></a>	 * relativePath, md5sum, mimetype, fullName, path
+<a name="line195"></a>	 */
+<a name="line196"></a>	public function uploadedfiles() {
+<a name="line197"></a>		return $this->files;
+<a name="line198"></a>	}
+<a name="line199"></a>
+<a name="line200"></a>	/**
+<a name="line201"></a>	 * Log a message on the current output, as a HTML comment.
+<a name="line202"></a>	 */
+<a name="line203"></a>	protected function logDebug($function, $msg, $htmlComment=true) {
+<a name="line204"></a>		$output = "[DEBUG] [$function] $msg";
+<a name="line205"></a>		if ($htmlComment) {
+<a name="line206"></a>			echo("<!-- $output -->\r\n");
+<a name="line207"></a>		} else {
+<a name="line208"></a>			echo("$output\r\n");
+<a name="line209"></a>		}
+<a name="line210"></a>	}
+<a name="line211"></a>
+<a name="line212"></a>	/**
+<a name="line213"></a>	 * Log a message to the PHP log.
+<a name="line214"></a>	 * Declared "protected" so it may be Extended if you require customised logging (e.g. particular log file location).
+<a name="line215"></a>	 */
+<a name="line216"></a>	protected function logPHPDebug($function, $msg) {
+<a name="line217"></a>		if ($this->classparams['debug_php'] === true) {
+<a name="line218"></a>			$output = "[DEBUG] [$function] ".$this->arrayexpand($msg);
+<a name="line219"></a>			error_log($output);
+<a name="line220"></a>		}
+<a name="line221"></a>	}
+<a name="line222"></a>
+<a name="line223"></a>	private function arrayexpand($array) {
+<a name="line224"></a>		$output = '';
+<a name="line225"></a>		if (is_array($array)) {
+<a name="line226"></a>			foreach ($array as $key => $value) {
+<a name="line227"></a>				$output .= "\n ".$key.' => '.$this->arrayexpand($value);
+<a name="line228"></a>			}
+<a name="line229"></a>		} else {
+<a name="line230"></a>			$output .= $array;
+<a name="line231"></a>		}
+<a name="line232"></a>		return $output;
+<a name="line233"></a>	}
+<a name="line234"></a>
+<a name="line235"></a>
+<a name="line236"></a>	/**
+<a name="line237"></a>	 * Convert a value ending in 'G','M' or 'K' to bytes
+<a name="line238"></a>	 *
+<a name="line239"></a>	 */
+<a name="line240"></a>	private function tobytes($val) {
+<a name="line241"></a>		$val = trim($val);
+<a name="line242"></a>		$last = fix_strtolower($val{strlen($val)-1});
+<a name="line243"></a>		switch($last) {
+<a name="line244"></a>			case 'g':
+<a name="line245"></a>				$val *= 1024;
+<a name="line246"></a>			case 'm':
+<a name="line247"></a>				$val *= 1024;
+<a name="line248"></a>			case 'k':
+<a name="line249"></a>				$val *= 1024;
+<a name="line250"></a>		}
+<a name="line251"></a>		return $val;
+<a name="line252"></a>	}
+<a name="line253"></a>
+<a name="line254"></a>	/**
+<a name="line255"></a>	 * Build a string, containing a javascript wrapper function
+<a name="line256"></a>	 * for setting applet properties via JavaScript. This is necessary,
+<a name="line257"></a>	 * because we use the "modern" method of including the applet (using
+<a name="line258"></a>	 * <object> resp. <embed> tags) in order to trigger automatic JRE downloading.
+<a name="line259"></a>	 * Therefore, in Netscape-like browsers, the applet is accessible via
+<a name="line260"></a>	 * the document.embeds[] array while in others, it is accessible via the
+<a name="line261"></a>	 * document.applets[] array.
+<a name="line262"></a>	 *
+<a name="line263"></a>	 * @return A string, containing the necessary wrapper function (named JUploadSetProperty)
+<a name="line264"></a>	 */
+<a name="line265"></a>	private function str_jsinit() {
+<a name="line266"></a>		$N = "\n";
+<a name="line267"></a>		$name = $this->appletparams['name'];
+<a name="line268"></a>		$ret = '<script type="text/javascript">'.$N;
+<a name="line269"></a>		$ret .= '<!--'.$N;
+<a name="line270"></a>		$ret .= 'function '.$this->classparams['jscript_wrapper'].'(name, value) {'.$N;
+<a name="line271"></a>		$ret .= '  document.applets["'.$name.'"] == null || document.applets["'.$name.'"].setProperty(name,value);'.$N;
+<a name="line272"></a>		$ret .= '  document.embeds["'.$name.'"] == null || document.embeds["'.$name.'"].setProperty(name,value);'.$N;
+<a name="line273"></a>		$ret .= '}'.$N;
+<a name="line274"></a>		$ret .= '//-->'.$N;
+<a name="line275"></a>		$ret .= '</script>';
+<a name="line276"></a>		return $ret;
+<a name="line277"></a>	}
+<a name="line278"></a>
+<a name="line279"></a>	/**
+<a name="line280"></a>	 * Build a string, containing the applet tag with all parameters.
+<a name="line281"></a>	 *
+<a name="line282"></a>	 * @return A string, containing the applet tag
+<a name="line283"></a>	 */
+<a name="line284"></a>	private function str_applet() {
+<a name="line285"></a>		$N = "\n";
+<a name="line286"></a>		$params = $this->appletparams;
+<a name="line287"></a>		// return the actual applet tag
+<a name="line288"></a>		$ret = '<object classid = "clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"'.$N;
+<a name="line289"></a>		$ret .= '  codebase = "http://java.sun.com/update/1.5.0/jinstall-1_5-windows-i586.cab#Version=5,0,0,3"'.$N;
+<a name="line290"></a>		$ret .= '  width = "'.$params['width'].'"'.$N;
+<a name="line291"></a>		$ret .= '  height = "'.$params['height'].'"'.$N;
+<a name="line292"></a>		$ret .= '  name = "'.$params['name'].'">'.$N;
+<a name="line293"></a>		foreach ($params as $key => $val) {
+<a name="line294"></a>			if ($key != 'width' && $key != 'height')
+<a name="line295"></a>			$ret .= '  <param name = "'.$key.'" value = "'.$val.'" />'.$N;
+<a name="line296"></a>		}
+<a name="line297"></a>		$ret .= '  <comment>'.$N;
+<a name="line298"></a>		$ret .= '    <embed'.$N;
+<a name="line299"></a>		$ret .= '      type = "application/x-java-applet;version=1.5"'.$N;
+<a name="line300"></a>		foreach ($params as $key => $val)
+<a name="line301"></a>		$ret .= '      '.$key.' = "'.$val.'"'.$N;
+<a name="line302"></a>		$ret .= '      pluginspage = "http://java.sun.com/products/plugin/index.html#download">'.$N;
+<a name="line303"></a>		$ret .= '      <noembed>'.$N;
+<a name="line304"></a>		$ret .= '        Java 1.5 or higher plugin required.'.$N;
+<a name="line305"></a>		$ret .= '      </noembed>'.$N;
+<a name="line306"></a>		$ret .= '    </embed>'.$N;
+<a name="line307"></a>		$ret .= '  </comment>'.$N;
+<a name="line308"></a>		$ret .= '</object>';
+<a name="line309"></a>		return $ret;
+<a name="line310"></a>	}
+<a name="line311"></a>
+<a name="line312"></a>	private function abort($msg = '') {
+<a name="line313"></a>		$this->cleanup();
+<a name="line314"></a>		if ($msg != '')
+<a name="line315"></a>		die(str_replace('(.*)',$msg,$this->appletparams['stringUploadError'])."\n");
+<a name="line316"></a>		exit;
+<a name="line317"></a>	}
+<a name="line318"></a>
+<a name="line319"></a>	private function warning($msg = '') {
+<a name="line320"></a>		$this->cleanup();
+<a name="line321"></a>		if ($msg != '')
+<a name="line322"></a>		echo('WARNING: '.$msg."\n");
+<a name="line323"></a>		echo $this->appletparams['stringUploadSuccess']."\n";
+<a name="line324"></a>		exit;
+<a name="line325"></a>	}
+<a name="line326"></a>
+<a name="line327"></a>	private function cleanup() {
+<a name="line328"></a>		// remove all uploaded files of *this* request
+<a name="line329"></a>		if (isset($_FILES)) {
+<a name="line330"></a>			foreach ($_FILES as $key => $val)
+<a name="line331"></a>			@unlink($val['tmp_name']);
+<a name="line332"></a>		}
+<a name="line333"></a>		// remove accumulated file, if any.
+<a name="line334"></a>		@unlink($this->classparams['destdir'].'/'.$this->classparams['tmp_prefix'].session_id());
+<a name="line335"></a>		@unlink($this->classparams['destdir'].'/'.$this->classparams['tmp_prefix'].'tmp'.session_id());
+<a name="line336"></a>		// reset session var
+<a name="line337"></a>		$_SESSION['RF'][$this->classparams['var_prefix'].'size'] = 0;
+<a name="line338"></a>		return;
+<a name="line339"></a>	}
+<a name="line340"></a>
+<a name="line341"></a>	private function mkdirp($path) {
+<a name="line342"></a>		// create subdir (hierary) below destdir;
+<a name="line343"></a>		$dirs = explode('/', $path);
+<a name="line344"></a>		$path = $this->classparams['destdir'];
+<a name="line345"></a>		foreach ($dirs as $dir) {
+<a name="line346"></a>			$path .= '/'.$dir;
+<a name="line347"></a>			if (!file_exists($path)) {  // @ does NOT always supress the error!
+<a name="line348"></a>				$_umask = umask(0); 	// override the system mask
+<a name="line349"></a>				@mkdir($path, $this->classparams['dirperm']);
+<a name="line350"></a>				umask($_umask);
+<a name="line351"></a>			}
+<a name="line352"></a>		}
+<a name="line353"></a>		if (!is_dir($path) && is_writable($path))
+<a name="line354"></a>		$this->abort('Destination dir not accessible');
+<a name="line355"></a>	}
+<a name="line356"></a>
+<a name="line357"></a>	/**
+<a name="line358"></a>	 * This method:
+<a name="line359"></a>	 * - Replaces some potentially dangerous characters by '_' (in the given name an relative path)
+<a name="line360"></a>	 * - Checks if a files of the same name already exists.
+<a name="line361"></a>	 * 		- If no: no problem.
+<a name="line362"></a>	 * 		- If yes, and the duplicate class param is set to rename, the file is renamed.
+<a name="line363"></a>	 * 		- If yes, and the duplicate class param is set to overwrite, the file is not renamed. The existing one will be erased.
+<a name="line364"></a>	 * 		- If yes, and the duplicate class param is set to reject, an error is thrown.
+<a name="line365"></a>	 */
+<a name="line366"></a>	private function dstfinal(&$name, &$subdir) {
+<a name="line367"></a>		$name = preg_replace('![`$\\\\/|]!', '_', $name);
+<a name="line368"></a>		if ($this->classparams['convert_spaces']) {
+<a name="line369"></a>            $name = str_replace(' ', '_', $name);
+<a name="line370"></a>		}
+<a name="line371"></a>		if ($this->classparams['allow_subdirs'] && ($subdir != '')) {
+<a name="line372"></a>			$subdir = trim(preg_replace('!\\\\!','/',$subdir),'/');
+<a name="line373"></a>			$subdir = preg_replace('![`$|]!', '_', $subdir);
+<a name="line374"></a>			if (!$this->classparams['spaces_in_subdirs']) {
+<a name="line375"></a>				$subdir = str_replace(' ','_',$subdir);
+<a name="line376"></a>			}
+<a name="line377"></a>			// recursively create subdir
+<a name="line378"></a>			if (!$this->classparams['demo_mode'])
+<a name="line379"></a>			$this->mkdirp($subdir);
+<a name="line380"></a>			// append a slash
+<a name="line381"></a>			$subdir .= '/';
+<a name="line382"></a>		} else {
+<a name="line383"></a>			$subdir = '';
+<a name="line384"></a>		}
+<a name="line385"></a>		$ret = $this->classparams['destdir'].'/'.$subdir.$name;
+<a name="line386"></a>		if (file_exists($ret)) {
+<a name="line387"></a>			if ($this->classparams['duplicate'] == 'overwrite') {
+<a name="line388"></a>				return $ret;
+<a name="line389"></a>			}
+<a name="line390"></a>			if ($this->classparams['duplicate'] == 'reject') {
+<a name="line391"></a>				$this->abort('A file with the same name already exists');
+<a name="line392"></a>			}
+<a name="line393"></a>			if ($this->classparams['duplicate'] == 'warning') {
+<a name="line394"></a>				$this->warning("File $name already exists - rejected");
+<a name="line395"></a>			}
+<a name="line396"></a>			if ($this->classparams['duplicate'] == 'rename') {
+<a name="line397"></a>				$cnt = 1;
+<a name="line398"></a>				$dir = $this->classparams['destdir'].'/'.$subdir;
+<a name="line399"></a>				$ext = strrchr($name, '.');
+<a name="line400"></a>				if ($ext) {
+<a name="line401"></a>					$nameWithoutExtension = substr($name, 0, strlen($name) - strlen($ext));
+<a name="line402"></a>				} else {
+<a name="line403"></a>					$ext = '';
+<a name="line404"></a>					$nameWithoutExtension = $name;
+<a name="line405"></a>				}
+<a name="line406"></a>
+<a name="line407"></a>				$rtry = $dir.$nameWithoutExtension.'_'.$cnt.$ext;
+<a name="line408"></a>				while (file_exists($rtry)) {
+<a name="line409"></a>					$cnt++;
+<a name="line410"></a>					$rtry = $dir.$nameWithoutExtension.'._'.$cnt.$ext;
+<a name="line411"></a>				}
+<a name="line412"></a>				//We store the result name in the byReference name parameter.
+<a name="line413"></a>				$name = $nameWithoutExtension.'_'.$cnt.$ext;
+<a name="line414"></a>				$ret = $rtry;
+<a name="line415"></a>			}
+<a name="line416"></a>		}
+<a name="line417"></a>		return $ret;
+<a name="line418"></a>	}
+<a name="line419"></a>
+<a name="line420"></a>	/**
+<a name="line421"></a>	 * Example function to process the files uploaded.  This one simply displays the files' data.
+<a name="line422"></a>	 *
+<a name="line423"></a>	 */
+<a name="line424"></a>	public function defaultAfterUploadManagement() {
+<a name="line425"></a>		$flist = '[defaultAfterUploadManagement] Nb uploaded files is: ' . sizeof($this->files);
+<a name="line426"></a>		$flist = $this->classparams['http_flist_start'];
+<a name="line427"></a>		foreach ($this->files as $f) {
+<a name="line428"></a>			//$f is an array, that contains all info about the uploaded file.
+<a name="line429"></a>			$this->logDebug('defaultAfterUploadManagement', "  Reading file ${f['name']}");
+<a name="line430"></a>			$flist .= $this->classparams['http_flist_file_before'];
+<a name="line431"></a>			$flist .= $f['name'];
+<a name="line432"></a>			$flist .= $this->classparams['http_flist_file_between'];
+<a name="line433"></a>			$flist .= $f['size'];
+<a name="line434"></a>			$flist .= $this->classparams['http_flist_file_between'];
+<a name="line435"></a>			$flist .= $f['relativePath'];
+<a name="line436"></a>			$flist .= $this->classparams['http_flist_file_between'];
+<a name="line437"></a>			$flist .= $f['fullName'];
+<a name="line438"></a>			$flist .= $this->classparams['http_flist_file_between'];
+<a name="line439"></a>			$flist .= $f['md5sum'];
+<a name="line440"></a>			$addBR = false;
+<a name="line441"></a>			foreach ($f as $key=>$value) {
+<a name="line442"></a>				//If it's a specific key, let's display it:
+<a name="line443"></a>				if ($key != 'name' && $key != 'size' && $key != 'relativePath' && $key != 'fullName' && $key != 'md5sum') {
+<a name="line444"></a>					if ($addBR) {
+<a name="line445"></a>						$flist .= "<br>";
+<a name="line446"></a>					} else {
+<a name="line447"></a>						// First line. We must add a new 'official' list separator.
+<a name="line448"></a>						$flist .= $this->classparams['http_flist_file_between'];
+<a name="line449"></a>						$addBR = true;
+<a name="line450"></a>					}
+<a name="line451"></a>					$flist .= "$key => $value";
+<a name="line452"></a>				}
+<a name="line453"></a>			}
+<a name="line454"></a>			$flist .= $this->classparams['http_flist_file_after'];
+<a name="line455"></a>	}
+<a name="line456"></a>	$flist .= $this->classparams['http_flist_end'];
+<a name="line457"></a>
+<a name="line458"></a>	return $flist;
+<a name="line459"></a>}
+<a name="line460"></a>
+<a name="line461"></a>/**
+<a name="line462"></a> * Generation of the applet tag, and necessary things around (js content). Insertion of this into the content of the
+<a name="line463"></a> * page.
+<a name="line464"></a> * See the tag_jscript and tag_applet class parameters.
+<a name="line465"></a> */
+<a name="line466"></a>private function generateAppletTag($str) {
+<a name="line467"></a>	$this->logDebug('generateAppletTag', 'Entering function');
+<a name="line468"></a>	$str = preg_replace('/'.$this->classparams['tag_jscript'].'/', $this->str_jsinit(), $str);
+<a name="line469"></a>	return preg_replace('/'.$this->classparams['tag_applet'].'/', $this->str_applet(), $str);
+<a name="line470"></a>}
+<a name="line471"></a>
+<a name="line472"></a>/**
+<a name="line473"></a> * This function is called when constructing the page, when we're not reveiving uploaded files. It 'just' construct
+<a name="line474"></a> * the applet tag, by calling the relevant function.
+<a name="line475"></a> *
+<a name="line476"></a> * This *must* be public, because it is called from PHP's output buffering
+<a name="line477"></a> */
+<a name="line478"></a>public function interceptBeforeUpload($str) {
+<a name="line479"></a>	$this->logDebug('interceptBeforeUpload', 'Entering function');
+<a name="line480"></a>	return $this->generateAppletTag($str);
+<a name="line481"></a>}
+<a name="line482"></a>
+<a name="line483"></a>/**
+<a name="line484"></a> * This function displays the uploaded files description in the current page (see tag_flist class parameter)
+<a name="line485"></a> *
+<a name="line486"></a> * This *must* be public, because it is called from PHP's output buffering.
+<a name="line487"></a> */
+<a name="line488"></a>public function interceptAfterUpload($str) {
+<a name="line489"></a>	$this->logDebug('interceptAfterUpload', 'Entering function');
+<a name="line490"></a>	$this->logPHPDebug('interceptAfterUpload', $this->files);
+<a name="line491"></a>
+<a name="line492"></a>	if (count($this->files) > 0) {
+<a name="line493"></a>		if (isset($this->classparams['callbackAfterUploadManagement'])) {
+<a name="line494"></a>			$this->logDebug('interceptAfterUpload', 'Before call of ' .$this->classparams['callbackAfterUploadManagement']);
+<a name="line495"></a>			$strForFListContent = call_user_func($this->classparams['callbackAfterUploadManagement'], $this, $this->files);
+<a name="line496"></a>		} else {
+<a name="line497"></a>			$strForFListContent = $this->defaultAfterUploadManagement();
+<a name="line498"></a>		}
+<a name="line499"></a>		$str = preg_replace('/'.$this->classparams['tag_flist'].'/', $strForFListContent, $str);
+<a name="line500"></a>	}
+<a name="line501"></a>	return $this->generateAppletTag($str);
+<a name="line502"></a>}
+<a name="line503"></a>
+<a name="line504"></a>/**
+<a name="line505"></a> * This method manages the receiving of the debug log, when an error occurs.
+<a name="line506"></a> */
+<a name="line507"></a>private function receive_debug_log() {
+<a name="line508"></a>	// handle error report
+<a name="line509"></a>	if (isset($_POST['description']) && isset($_POST['log'])) {
+<a name="line510"></a>		$msg = $_POST['log'];
+<a name="line511"></a>		mail($this->classparams['errormail'], $_POST['description'], $msg);
+<a name="line512"></a>	} else {
+<a name="line513"></a>		if (isset($_SERVER['SERVER_ADMIN']))
+<a name="line514"></a>		mail($_SERVER['SERVER_ADMIN'], 'Empty jupload error log',
+<a name="line515"></a>                    'An empty log has just been posted.');
+<a name="line516"></a>		$this->logPHPDebug('receive_debug_log', 'Empty error log received');
+<a name="line517"></a>	}
+<a name="line518"></a>	exit;
+<a name="line519"></a>}
+<a name="line520"></a>
+<a name="line521"></a>/**
+<a name="line522"></a> * This method is the heart of the system. It manage the files sent by the applet, check the incoming parameters (md5sum) and
+<a name="line523"></a> * reconstruct the files sent in chunk mode.
+<a name="line524"></a> *
+<a name="line525"></a> * The result is stored in the $files array, and can then be managed by the function given in the callbackAfterUploadManagement
+<a name="line526"></a> * class parameter, or within the page whose URL is given in the afterUploadURL applet parameter.
+<a name="line527"></a> * Or you can Extend the class and redeclare defaultAfterUploadManagement() to your needs.
+<a name="line528"></a> */
+<a name="line529"></a>private function receive_uploaded_files() {
+<a name="line530"></a>	$this->logDebug('receive_uploaded_files', 'Entering POST management');
+<a name="line531"></a>
+<a name="line532"></a>	if (session_id() == '') {
+<a name="line533"></a>		session_start();
+<a name="line534"></a>	}
+<a name="line535"></a>	// we check for the session *after* handling possible error log
+<a name="line536"></a>	// because an error could have happened because the session-id is missing.
+<a name="line537"></a>	if (!isset($_SESSION['RF'][$this->classparams['var_prefix'].'size'])) {
+<a name="line538"></a>		$this->abort('Invalid session (in afterupload, POST, check of size)');
+<a name="line539"></a>	}
+<a name="line540"></a>	if (!isset($_SESSION['RF'][$this->classparams['var_prefix'].'files'])) {
+<a name="line541"></a>		$this->abort('Invalid session (in afterupload, POST, check of files)');
+<a name="line542"></a>	}
+<a name="line543"></a>	$this->files = $_SESSION['RF'][$this->classparams['var_prefix'].'files'];
+<a name="line544"></a>	if (!is_array($this->files)) {
+<a name="line545"></a>		$this->abort('Invalid session (in afterupload, POST, is_array(files))');
+<a name="line546"></a>	}
+<a name="line547"></a>	if ($this->appletparams['sendMD5Sum'] == 'true'  &&  !isset($_POST['md5sum'])) {
+<a name="line548"></a>		$this->abort('Required POST variable md5sum is missing');
+<a name="line549"></a>	}
+<a name="line550"></a>	$cnt = 0;
+<a name="line551"></a>	foreach ($_FILES as $key => $value) {
+<a name="line552"></a>		//Let's read the $_FILES data
+<a name="line553"></a>		if (isset($files_data)) {
+<a name="line554"></a>			unset($files_data);
+<a name="line555"></a>		}
+<a name="line556"></a>		$jupart			= (isset($_POST['jupart']))		 		? (int)$_POST['jupart']		: 0;
+<a name="line557"></a>		$jufinal		= (isset($_POST['jufinal']))	 		? (int)$_POST['jufinal']	: 1;
+<a name="line558"></a>		$relpaths		= (isset($_POST['relpathinfo'])) 	? $_POST['relpathinfo']		: null;
+<a name="line559"></a>		$md5sums		= (isset($_POST['md5sum']))				? $_POST['md5sum']				: null;
+<a name="line560"></a>		$mimetypes 	= (isset($_POST['mimetype'])) 	 	? $_POST['mimetype'] 			: null;
+<a name="line561"></a>		//$relpaths = (isset($_POST["relpathinfo$cnt"])) ? $_POST["relpathinfo$cnt"] : null;
+<a name="line562"></a>		//$md5sums = (isset($_POST["md5sum$cnt"])) ? $_POST["md5sum$cnt"] : null;
+<a name="line563"></a>
+<a name="line564"></a>		if (gettype($relpaths) == 'string') {
+<a name="line565"></a>			$relpaths = array($relpaths);
+<a name="line566"></a>		}
+<a name="line567"></a>		if (gettype($md5sums) == 'string') {
+<a name="line568"></a>			$md5sums = array($md5sums);
+<a name="line569"></a>		}
+<a name="line570"></a>		if ($this->appletparams['sendMD5Sum'] == 'true'  && !is_array($md5sums)) {
+<a name="line571"></a>			$this->abort('Expecting an array of MD5 checksums');
+<a name="line572"></a>		}
+<a name="line573"></a>		if (!is_array($relpaths)) {
+<a name="line574"></a>			$this->abort('Expecting an array of relative paths');
+<a name="line575"></a>		}
+<a name="line576"></a>		if (!is_array($mimetypes)) {
+<a name="line577"></a>			$this->abort('Expecting an array of MIME types');
+<a name="line578"></a>		}
+<a name="line579"></a>		// Check the MIME type (note: this is easily forged!)
+<a name="line580"></a>		if (isset($this->classparams['allowed_mime_types']) && is_array($this->classparams['allowed_mime_types'])) {
+<a name="line581"></a>			if (!in_array($mimetypes[$cnt], $this->classparams['allowed_mime_types'])) {
+<a name="line582"></a>				$this->abort('MIME type '.$mimetypes[$cnt].' not allowed');
+<a name="line583"></a>			}
+<a name="line584"></a>		}
+<a name="line585"></a>		if (isset($this->classparams['allowed_file_extensions']) && is_array($this->classparams['allowed_file_extensions'])) {
+<a name="line586"></a>			$fileExtension = substr(strrchr($value['name'][$cnt], "."), 1);
+<a name="line587"></a>			if (!in_array($fileExtension, $this->classparams['allowed_file_extensions'])) {
+<a name="line588"></a>				$this->abort('File extension '.$fileExtension.' not allowed');
+<a name="line589"></a>			}
+<a name="line590"></a>		}
+<a name="line591"></a>
+<a name="line592"></a>		$dstdir = $this->classparams['destdir'];
+<a name="line593"></a>		$dstname = $dstdir.'/'.$this->classparams['tmp_prefix'].session_id();
+<a name="line594"></a>		$tmpname = $dstdir.'/'.$this->classparams['tmp_prefix'].'tmp'.session_id();
+<a name="line595"></a>
+<a name="line596"></a>		// Controls are now done. Let's store the current uploaded files properties in an array, for future use.
+<a name="line597"></a>		$files_data['name']					= $value['name'][$cnt];
+<a name="line598"></a>		$files_data['size']					= 'not calculated yet';
+<a name="line599"></a>		$files_data['tmp_name']			= $value['tmp_name'][$cnt];
+<a name="line600"></a>		$files_data['error']    		= $value['error'][$cnt];
+<a name="line601"></a>		$files_data['relativePath'] = $relpaths[$cnt];
+<a name="line602"></a>		$files_data['md5sum']  			= $md5sums[$cnt];
+<a name="line603"></a>		$files_data['mimetype']  		= $mimetypes[$cnt];
+<a name="line604"></a>
+<a name="line605"></a>		if (!move_uploaded_file($files_data['tmp_name'], $tmpname)) {
+<a name="line606"></a>			if ($classparams['verbose_errors']) {
+<a name="line607"></a>				$this->abort("Unable to move uploaded file (from ${files_data['tmp_name']} to $tmpname)");
+<a name="line608"></a>		} else {
+<a name="line609"></a>			trigger_error("Unable to move uploaded file (from ${files_data['tmp_name']} to $tmpname)",E_USER_WARNING);
+<a name="line610"></a>			$this->abort("Unable to move uploaded file");
+<a name="line611"></a>	}
+<a name="line612"></a>}
+<a name="line613"></a>
+<a name="line614"></a>// In demo mode, no file storing is done. We just delete the newly uploaded file.
+<a name="line615"></a>if ($this->classparams['demo_mode']) {
+<a name="line616"></a>	if ($jufinal || (!$jupart)) {
+<a name="line617"></a>		if ($jupart) {
+<a name="line618"></a>			$files_data['size']		= ($jupart-1) * $this->appletparams['maxChunkSize'] + filesize($tmpname);
+<a name="line619"></a>		} else {
+<a name="line620"></a>			$files_data['size']		= filesize($tmpname);
+<a name="line621"></a>		}
+<a name="line622"></a>		$files_data['fullName']	= 'Demo mode<BR>No file storing';
+<a name="line623"></a>		array_push($this->files, $files_data);
+<a name="line624"></a>	}
+<a name="line625"></a>	unlink($tmpname);
+<a name="line626"></a>	$cnt++;
+<a name="line627"></a>	continue;
+<a name="line628"></a>}
+<a name="line629"></a>//If we get here, the upload is a real one (no demo)
+<a name="line630"></a>if ($jupart) {
+<a name="line631"></a>	// got a chunk of a multi-part upload
+<a name="line632"></a>	$len = filesize($tmpname);
+<a name="line633"></a>	$_SESSION['RF'][$this->classparams['var_prefix'].'size'] += $len;
+<a name="line634"></a>	if ($len > 0) {
+<a name="line635"></a>		$src = fopen($tmpname, 'rb');
+<a name="line636"></a>		$dst = fopen($dstname, ($jupart == 1) ? 'wb' : 'ab');
+<a name="line637"></a>		while ($len > 0) {
+<a name="line638"></a>			$rlen = ($len > 8192) ? 8192 : $len;
+<a name="line639"></a>			$buf = fread($src, $rlen);
+<a name="line640"></a>			if (!$buf) {
+<a name="line641"></a>				fclose($src);
+<a name="line642"></a>				fclose($dst);
+<a name="line643"></a>				unlink($dstname);
+<a name="line644"></a>				$this->abort('read IO error');
+<a name="line645"></a>			}
+<a name="line646"></a>			if (!fwrite($dst, $buf, $rlen)) {
+<a name="line647"></a>				fclose($src);
+<a name="line648"></a>				fclose($dst);
+<a name="line649"></a>				unlink($dstname);
+<a name="line650"></a>				$this->abort('write IO error');
+<a name="line651"></a>			}
+<a name="line652"></a>			$len -= $rlen;
+<a name="line653"></a>		}
+<a name="line654"></a>		fclose($src);
+<a name="line655"></a>		fclose($dst);
+<a name="line656"></a>		unlink($tmpname);
+<a name="line657"></a>	}
+<a name="line658"></a>	if ($jufinal) {
+<a name="line659"></a>		// This is the last chunk. Check total lenght and
+<a name="line660"></a>		// rename it to it's final name.
+<a name="line661"></a>		$dlen = filesize($dstname);
+<a name="line662"></a>		if ($dlen != $_SESSION['RF'][$this->classparams['var_prefix'].'size'])
+<a name="line663"></a>		$this->abort('file size mismatch');
+<a name="line664"></a>		if ($this->appletparams['sendMD5Sum'] == 'true' ) {
+<a name="line665"></a>			if ($md5sums[$cnt] != md5_file($dstname))
+<a name="line666"></a>			$this->abort('MD5 checksum mismatch');
+<a name="line667"></a>		}
+<a name="line668"></a>		// remove zero sized files
+<a name="line669"></a>		if (($dlen > 0) || $this->classparams['allow_zerosized']) {
+<a name="line670"></a>			$dstfinal = $this->dstfinal($files_data['name'],$files_data['relativePath']);
+<a name="line671"></a>			if (!rename($dstname, $dstfinal))
+<a name="line672"></a>			$this->abort('rename IO error');
+<a name="line673"></a>			$_umask = umask(0); 	// override the system mask
+<a name="line674"></a>			if (!chmod($dstfinal, $this->classparams['fileperm']))
+<a name="line675"></a>				$this->abort('chmod IO error');
+<a name="line676"></a>			umask($_umask);
+<a name="line677"></a>			$files_data['size']		= filesize($dstfinal);
+<a name="line678"></a>			$files_data['fullName']	= $dstfinal;
+<a name="line679"></a>			$files_data['path']	= fix_dirname($dstfinal);
+<a name="line680"></a>			array_push($this->files, $files_data);
+<a name="line681"></a>		} else {
+<a name="line682"></a>			unlink($dstname);
+<a name="line683"></a>		}
+<a name="line684"></a>		// reset session var
+<a name="line685"></a>		$_SESSION['RF'][$this->classparams['var_prefix'].'size'] = 0;
+<a name="line686"></a>	}
+<a name="line687"></a>} else {
+<a name="line688"></a>	// Got a single file upload. Trivial.
+<a name="line689"></a>	if ($this->appletparams['sendMD5Sum'] == 'true' ) {
+<a name="line690"></a>		if ($md5sums[$cnt] != md5_file($tmpname))
+<a name="line691"></a>			$this->abort('MD5 checksum mismatch');
+<a name="line692"></a>	}
+<a name="line693"></a>	$dstfinal = $this->dstfinal($files_data['name'],$files_data['relativePath']);
+<a name="line694"></a>	if (!rename($tmpname, $dstfinal))
+<a name="line695"></a>	$this->abort('rename IO error');
+<a name="line696"></a>	$_umask = umask(0); 	// override the system mask
+<a name="line697"></a>	if (!chmod($dstfinal, $this->classparams['fileperm']))
+<a name="line698"></a>		$this->abort('chmod IO error');
+<a name="line699"></a>	umask($_umask);
+<a name="line700"></a>	$files_data['size']		= filesize($dstfinal);
+<a name="line701"></a>	$files_data['fullName']	= $dstfinal;
+<a name="line702"></a>	$files_data['path']	= fix_dirname($dstfinal);
+<a name="line703"></a>	array_push($this->files, $files_data);
+<a name="line704"></a>}
+<a name="line705"></a>$cnt++;
+<a name="line706"></a>}
+<a name="line707"></a>
+<a name="line708"></a>echo $this->appletparams['stringUploadSuccess']."\n";
+<a name="line709"></a>$_SESSION['RF'][$this->classparams['var_prefix'].'files'] = $this->files;
+<a name="line710"></a>session_write_close();
+<a name="line711"></a>exit;
+<a name="line712"></a>}
+<a name="line713"></a>
+<a name="line714"></a>/**
+<a name="line715"></a> *
+<a name="line716"></a> *
+<a name="line717"></a> */
+<a name="line718"></a>private function page_start() {
+<a name="line719"></a>	$this->logDebug('page_start', 'Entering function');
+<a name="line720"></a>
+<a name="line721"></a>	// If the applet checks for the serverProtocol, it issues a HEAD request
+<a name="line722"></a>	// -> Simply return an empty doc.
+<a name="line723"></a>	if ($_SERVER['REQUEST_METHOD'] == 'HEAD') {
+<a name="line724"></a>		// Nothing to do
+<a name="line725"></a>
+<a name="line726"></a>	} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+<a name="line727"></a>		// A GET request means: return upload page
+<a name="line728"></a>		$this->logDebug('page_start', 'Entering GET management');
+<a name="line729"></a>
+<a name="line730"></a>		if (session_id() == '') {
+<a name="line731"></a>			session_start();
+<a name="line732"></a>		}
+<a name="line733"></a>		if (isset($_GET['afterupload'])) {
+<a name="line734"></a>			$this->logDebug('page_start', 'afterupload is set');
+<a name="line735"></a>			if (!isset($_SESSION['RF'][$this->classparams['var_prefix'].'files'])) {
+<a name="line736"></a>				$this->abort('Invalid session (in afterupload, GET, check of $_SESSION["RF"]): files array is not set');
+<a name="line737"></a>			}
+<a name="line738"></a>			$this->files = $_SESSION['RF'][$this->classparams['var_prefix'].'files'];
+<a name="line739"></a>			if (!is_array($this->files)) {
+<a name="line740"></a>				$this->abort('Invalid session (in afterupload, GET, check of is_array(files)): files is not an array');
+<a name="line741"></a>			}
+<a name="line742"></a>			// clear session data ready for new upload
+<a name="line743"></a>			$_SESSION['RF'][$this->classparams['var_prefix'].'files'] = array();
+<a name="line744"></a>
+<a name="line745"></a>			// start intercepting the content of the calling page, to display the upload result.
+<a name="line746"></a>			ob_start(array(& $this, 'interceptAfterUpload'));
+<a name="line747"></a>
+<a name="line748"></a>		} else {
+<a name="line749"></a>			$this->logDebug('page_start', 'afterupload is not set');
+<a name="line750"></a>			if ($this->classparams['session_regenerate']) {
+<a name="line751"></a>				session_regenerate_id(true);
+<a name="line752"></a>			}
+<a name="line753"></a>			$this->files = array();
+<a name="line754"></a>			$_SESSION['RF'][$this->classparams['var_prefix'].'size'] = 0;
+<a name="line755"></a>			$_SESSION['RF'][$this->classparams['var_prefix'].'files'] = $this->files;
+<a name="line756"></a>			// start intercepting the content of the calling page, to display the applet tag.
+<a name="line757"></a>			ob_start(array(& $this, 'interceptBeforeUpload'));
+<a name="line758"></a>		}
+<a name="line759"></a>
+<a name="line760"></a>	} else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+<a name="line761"></a>		// If we got a POST request, this is the real work.
+<a name="line762"></a>		if (isset($_GET['errormail'])) {
+<a name="line763"></a>			//Hum, an error occurs on server side. Let's manage the debug log, that we just received.
+<a name="line764"></a>			$this->receive_debug_log();
+<a name="line765"></a>		} else {
+<a name="line766"></a>			$this->receive_uploaded_files();
+<a name="line767"></a>		}
+<a name="line768"></a>	}
+<a name="line769"></a>}
+<a name="line770"></a>}
+<a name="line771"></a>
+<a name="line772"></a>// PHP end tag omitted intentionally!!
+<a name="line773"></a></pre>
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\uploader\jupload.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

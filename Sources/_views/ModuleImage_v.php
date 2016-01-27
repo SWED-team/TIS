@@ -1,6 +1,6 @@
 <?php
 /**
- * ModuleImage_v Trieda View-u pre kontroler ModuleImage.
+ * @deprecated ModuleImage_v Trieda View-u pre kontroler ModuleImage.
  *
  * ModuleImage_v Trieda obsahuje view-y pre zobrazenie:
  *  -editora s možnosou predvyplnenia polí existujúcimi dátami
@@ -9,6 +9,7 @@
  *
  * @version 1.0
  * @author KRASNAN
+ *@package package-name
  */
 class ModuleImage_v
 {

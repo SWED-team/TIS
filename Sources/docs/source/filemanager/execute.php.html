@@ -1,0 +1,487 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 26 Jan 2016 23:51:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>filemanager\execute.php (SWEDTeamTitle)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\execute.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>filemanager\execute.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>$config = include 'config/config.php';
+<a name="line3"></a>//TODO switch to array
+<a name="line4"></a>extract($config, EXTR_OVERWRITE);
+<a name="line5"></a>
+<a name="line6"></a>include 'include/utils.php';
+<a name="line7"></a>
+<a name="line8"></a>if ($_SESSION['RF']["verify"] != "RESPONSIVEfilemanager")
+<a name="line9"></a>{
+<a name="line10"></a>	response('forbiden', 403)->send();
+<a name="line11"></a>	exit;
+<a name="line12"></a>}
+<a name="line13"></a>
+<a name="line14"></a>if (strpos($_POST['path'],'/')===0
+<a name="line15"></a>    || strpos($_POST['path'],'../')!==FALSE
+<a name="line16"></a>    || strpos($_POST['path'],'./')===0)
+<a name="line17"></a>{
+<a name="line18"></a>    response('wrong path')->send();
+<a name="line19"></a>	exit;
+<a name="line20"></a>}
+<a name="line21"></a>
+<a name="line22"></a>if (isset($_SESSION['RF']['language_file']) && file_exists($_SESSION['RF']['language_file']))
+<a name="line23"></a>{
+<a name="line24"></a>	//TODO Very bad practice
+<a name="line25"></a>    require_once $_SESSION['RF']['language_file'];
+<a name="line26"></a>}
+<a name="line27"></a>else
+<a name="line28"></a>{
+<a name="line29"></a>    response('Language file is missing!', 500)->send();
+<a name="line30"></a>	exit;
+<a name="line31"></a>}
+<a name="line32"></a>
+<a name="line33"></a>$base = $current_path;
+<a name="line34"></a>$path = $base.$_POST['path'];
+<a name="line35"></a>$cycle = TRUE;
+<a name="line36"></a>$max_cycles = 50;
+<a name="line37"></a>$i = 0;
+<a name="line38"></a>while($cycle && $i<$max_cycles)
+<a name="line39"></a>{
+<a name="line40"></a>    $i++;
+<a name="line41"></a>    if ($path == $base)  $cycle=FALSE;
+<a name="line42"></a>
+<a name="line43"></a>    if (file_exists($path."config.php"))
+<a name="line44"></a>    {
+<a name="line45"></a>        require_once $path."config.php";
+<a name="line46"></a>        $cycle = FALSE;
+<a name="line47"></a>    }
+<a name="line48"></a>    $path = fix_dirname($path)."/";
+<a name="line49"></a>    $cycle = FALSE;
+<a name="line50"></a>}
+<a name="line51"></a>
+<a name="line52"></a>$path = $current_path.$_POST['path'];
+<a name="line53"></a>$path_thumb = $thumbs_base_path.$_POST['path'];
+<a name="line54"></a>if (isset($_POST['name']))
+<a name="line55"></a>{
+<a name="line56"></a>    $name = fix_filename($_POST['name'],$transliteration,$convert_spaces, $replace_with);
+<a name="line57"></a>    if (strpos($name,'../') !== FALSE)
+<a name="line58"></a>	{
+<a name="line59"></a>		response('wrong name', 400)->send();
+<a name="line60"></a>		exit;
+<a name="line61"></a>	}
+<a name="line62"></a>}
+<a name="line63"></a>
+<a name="line64"></a>$info = pathinfo($path);
+<a name="line65"></a>if (isset($info['extension']) && !(isset($_GET['action']) && $_GET['action']=='delete_folder') && !in_array(strtolower($info['extension']), $ext) && $_GET['action'] != 'create_file')
+<a name="line66"></a>{
+<a name="line67"></a>	response('wrong extension', 400)->send();
+<a name="line68"></a>	exit;
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>if (isset($_GET['action']))
+<a name="line72"></a>{
+<a name="line73"></a>    switch($_GET['action'])
+<a name="line74"></a>    {
+<a name="line75"></a>        case 'delete_file':
+<a name="line76"></a>            if ($delete_files){
+<a name="line77"></a>                unlink($path);
+<a name="line78"></a>                if (file_exists($path_thumb)) unlink($path_thumb);
+<a name="line79"></a>
+<a name="line80"></a>                $info=pathinfo($path);
+<a name="line81"></a>                if ($relative_image_creation){
+<a name="line82"></a>                    foreach($relative_path_from_current_pos as $k=>$path)
+<a name="line83"></a>                    {
+<a name="line84"></a>                        if ($path!="" && $path[strlen($path)-1]!="/") $path.="/";
+<a name="line85"></a>
+<a name="line86"></a>                        if (file_exists($info['dirname']."/".$path.$relative_image_creation_name_to_prepend[$k].$info['filename'].$relative_image_creation_name_to_append[$k].".".$info['extension']))
+<a name="line87"></a>                        {
+<a name="line88"></a>                            unlink($info['dirname']."/".$path.$relative_image_creation_name_to_prepend[$k].$info['filename'].$relative_image_creation_name_to_append[$k].".".$info['extension']);
+<a name="line89"></a>                        }
+<a name="line90"></a>                    }
+<a name="line91"></a>                }
+<a name="line92"></a>
+<a name="line93"></a>                if ($fixed_image_creation)
+<a name="line94"></a>                {
+<a name="line95"></a>                    foreach($fixed_path_from_filemanager as $k=>$path)
+<a name="line96"></a>                    {
+<a name="line97"></a>                        if ($path!="" && $path[strlen($path)-1] != "/") $path.="/";
+<a name="line98"></a>
+<a name="line99"></a>                        $base_dir=$path.substr_replace($info['dirname']."/", '', 0, strlen($current_path));
+<a name="line100"></a>                        if (file_exists($base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension']))
+<a name="line101"></a>                        {
+<a name="line102"></a>                            unlink($base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension']);
+<a name="line103"></a>                        }
+<a name="line104"></a>                    }
+<a name="line105"></a>                }
+<a name="line106"></a>            }
+<a name="line107"></a>            break;
+<a name="line108"></a>        case 'delete_folder':
+<a name="line109"></a>            if ($delete_folders){
+<a name="line110"></a>                if (is_dir($path_thumb))
+<a name="line111"></a>                {
+<a name="line112"></a>                    deleteDir($path_thumb);
+<a name="line113"></a>                }
+<a name="line114"></a>
+<a name="line115"></a>                if (is_dir($path))
+<a name="line116"></a>                {
+<a name="line117"></a>                    deleteDir($path);
+<a name="line118"></a>                    if ($fixed_image_creation)
+<a name="line119"></a>                    {
+<a name="line120"></a>                        foreach($fixed_path_from_filemanager as $k=>$paths){
+<a name="line121"></a>                            if ($paths!="" && $paths[strlen($paths)-1] != "/") $paths.="/";
+<a name="line122"></a>
+<a name="line123"></a>                            $base_dir=$paths.substr_replace($path, '', 0, strlen($current_path));
+<a name="line124"></a>                            if (is_dir($base_dir)) deleteDir($base_dir);
+<a name="line125"></a>                        }
+<a name="line126"></a>                    }
+<a name="line127"></a>                }
+<a name="line128"></a>            }
+<a name="line129"></a>            break;
+<a name="line130"></a>        case 'create_folder':
+<a name="line131"></a>            if ($create_folders)
+<a name="line132"></a>            {
+<a name="line133"></a>
+<a name="line134"></a>                $name = fix_filename($_POST['name'],$transliteration,$convert_spaces, $replace_with);
+<a name="line135"></a>                $path .= $name;
+<a name="line136"></a>                $path_thumb .= $name;
+<a name="line137"></a>                create_folder(fix_path($path,$transliteration,$convert_spaces, $replace_with),fix_path($path_thumb,$transliteration,$convert_spaces, $replace_with));
+<a name="line138"></a>            }
+<a name="line139"></a>            break;
+<a name="line140"></a>        case 'rename_folder':
+<a name="line141"></a>            if ($rename_folders){
+<a name="line142"></a>                $name=fix_filename($name,$transliteration,$convert_spaces, $replace_with);
+<a name="line143"></a>                $name=str_replace('.','',$name);
+<a name="line144"></a>
+<a name="line145"></a>                if (!empty($name)){
+<a name="line146"></a>                    if (!rename_folder($path,$name,$transliteration,$convert_spaces))
+<a name="line147"></a>					{
+<a name="line148"></a>						response(trans('Rename_existing_folder'), 403)->send();
+<a name="line149"></a>						exit;
+<a name="line150"></a>					}
+<a name="line151"></a>
+<a name="line152"></a>                    rename_folder($path_thumb,$name,$transliteration,$convert_spaces);
+<a name="line153"></a>                    if ($fixed_image_creation){
+<a name="line154"></a>                        foreach($fixed_path_from_filemanager as $k=>$paths){
+<a name="line155"></a>                            if ($paths!="" && $paths[strlen($paths)-1] != "/") $paths.="/";
+<a name="line156"></a>
+<a name="line157"></a>                            $base_dir=$paths.substr_replace($path, '', 0, strlen($current_path));
+<a name="line158"></a>                            rename_folder($base_dir,$name,$transliteration,$convert_spaces);
+<a name="line159"></a>                        }
+<a name="line160"></a>                    }
+<a name="line161"></a>                }
+<a name="line162"></a>                else {
+<a name="line163"></a>                    response(trans('Empty_name'), 400)->send();
+<a name="line164"></a>					exit;
+<a name="line165"></a>                }
+<a name="line166"></a>            }
+<a name="line167"></a>            break;
+<a name="line168"></a>        case 'create_file':
+<a name="line169"></a>            if ($create_text_files === FALSE) {
+<a name="line170"></a>                response(sprintf(trans('File_Open_Edit_Not_Allowed'), strtolower(trans('Edit'))), 403)->send();
+<a name="line171"></a>				exit;
+<a name="line172"></a>            }
+<a name="line173"></a>
+<a name="line174"></a>            if (!isset($editable_text_file_exts) || !is_array($editable_text_file_exts)){
+<a name="line175"></a>                $editable_text_file_exts = array();
+<a name="line176"></a>            }
+<a name="line177"></a>
+<a name="line178"></a>            // check if user supplied extension
+<a name="line179"></a>            if (strpos($name, '.') === FALSE){
+<a name="line180"></a>                response(trans('No_Extension').' '.sprintf(trans('Valid_Extensions'), implode(', ', $editable_text_file_exts)), 400)->send();
+<a name="line181"></a>				exit;
+<a name="line182"></a>            }
+<a name="line183"></a>
+<a name="line184"></a>            // correct name
+<a name="line185"></a>            $old_name = $name;
+<a name="line186"></a>            $name=fix_filename($name,$transliteration,$convert_spaces, $replace_with);
+<a name="line187"></a>            if (empty($name))
+<a name="line188"></a>            {
+<a name="line189"></a>                response(trans('Empty_name'), 400)->send();
+<a name="line190"></a>				exit;
+<a name="line191"></a>            }
+<a name="line192"></a>
+<a name="line193"></a>            // check extension
+<a name="line194"></a>            $parts = explode('.', $name);
+<a name="line195"></a>            if (!in_array(end($parts), $editable_text_file_exts)) {
+<a name="line196"></a>                response(trans('Error_extension').' '.sprintf(trans('Valid_Extensions'), implode(', ', $editable_text_file_exts)), 400)->send();
+<a name="line197"></a>				exit;
+<a name="line198"></a>            }
+<a name="line199"></a>
+<a name="line200"></a>            // file already exists
+<a name="line201"></a>            if (file_exists($path.$name)) {
+<a name="line202"></a>                response(trans('Rename_existing_file'), 403)->send();
+<a name="line203"></a>				exit;
+<a name="line204"></a>            }
+<a name="line205"></a>
+<a name="line206"></a>            $content = $_POST['new_content'];
+<a name="line207"></a>            if (@file_put_contents($path.$name, $content) === FALSE) {
+<a name="line208"></a>                response(trans('File_Save_Error'), 500)->send();
+<a name="line209"></a>				exit;
+<a name="line210"></a>            }
+<a name="line211"></a>            else {
+<a name="line212"></a>                if (is_function_callable('chmod') !== FALSE){
+<a name="line213"></a>                    chmod($path.$name, 0644);
+<a name="line214"></a>                }
+<a name="line215"></a>                response(trans('File_Save_OK'))->send();
+<a name="line216"></a>				exit;
+<a name="line217"></a>            }
+<a name="line218"></a>
+<a name="line219"></a>            break;
+<a name="line220"></a>        case 'rename_file':
+<a name="line221"></a>            if ($rename_files){
+<a name="line222"></a>                $name=fix_filename($name,$transliteration,$convert_spaces, $replace_with);
+<a name="line223"></a>                if (!empty($name))
+<a name="line224"></a>                {
+<a name="line225"></a>                    if (!rename_file($path,$name,$transliteration))
+<a name="line226"></a>					{
+<a name="line227"></a>						response(trans('Rename_existing_file'), 403)->send();
+<a name="line228"></a>						exit;
+<a name="line229"></a>					}
+<a name="line230"></a>
+<a name="line231"></a>                    rename_file($path_thumb,$name,$transliteration);
+<a name="line232"></a>
+<a name="line233"></a>                    if ($fixed_image_creation)
+<a name="line234"></a>                    {
+<a name="line235"></a>                        $info=pathinfo($path);
+<a name="line236"></a>
+<a name="line237"></a>                        foreach($fixed_path_from_filemanager as $k=>$paths)
+<a name="line238"></a>                        {
+<a name="line239"></a>                            if ($paths!="" && $paths[strlen($paths)-1] != "/") $paths.="/";
+<a name="line240"></a>
+<a name="line241"></a>                            $base_dir = $paths.substr_replace($info['dirname']."/", '', 0, strlen($current_path));
+<a name="line242"></a>                            if (file_exists($base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension']))
+<a name="line243"></a>                            {
+<a name="line244"></a>                                rename_file($base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension'],$fixed_image_creation_name_to_prepend[$k].$name.$fixed_image_creation_to_append[$k],$transliteration);
+<a name="line245"></a>                            }
+<a name="line246"></a>                        }
+<a name="line247"></a>                    }
+<a name="line248"></a>                }
+<a name="line249"></a>                else {
+<a name="line250"></a>                    response(trans('Empty_name'), 400)->send();
+<a name="line251"></a>					exit;
+<a name="line252"></a>                }
+<a name="line253"></a>            }
+<a name="line254"></a>            break;
+<a name="line255"></a>        case 'duplicate_file':
+<a name="line256"></a>            if ($duplicate_files)
+<a name="line257"></a>            {
+<a name="line258"></a>                $name=fix_filename($name,$transliteration,$convert_spaces, $replace_with);
+<a name="line259"></a>                if (!empty($name))
+<a name="line260"></a>                {
+<a name="line261"></a>                    if (!duplicate_file($path,$name))
+<a name="line262"></a>					{
+<a name="line263"></a>						response(trans('Rename_existing_file'), 403)->send();
+<a name="line264"></a>						exit;
+<a name="line265"></a>					}
+<a name="line266"></a>
+<a name="line267"></a>                    duplicate_file($path_thumb,$name);
+<a name="line268"></a>
+<a name="line269"></a>                    if ($fixed_image_creation)
+<a name="line270"></a>                    {
+<a name="line271"></a>                        $info=pathinfo($path);
+<a name="line272"></a>                        foreach($fixed_path_from_filemanager as $k=>$paths)
+<a name="line273"></a>                        {
+<a name="line274"></a>                            if ($paths!="" && $paths[strlen($paths)-1] != "/") $paths.= "/";
+<a name="line275"></a>
+<a name="line276"></a>                            $base_dir=$paths.substr_replace($info['dirname']."/", '', 0, strlen($current_path));
+<a name="line277"></a>
+<a name="line278"></a>                            if (file_exists($base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension']))
+<a name="line279"></a>                            {
+<a name="line280"></a>                                duplicate_file($base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension'],$fixed_image_creation_name_to_prepend[$k].$name.$fixed_image_creation_to_append[$k]);
+<a name="line281"></a>                            }
+<a name="line282"></a>                        }
+<a name="line283"></a>                    }
+<a name="line284"></a>                }
+<a name="line285"></a>                else
+<a name="line286"></a>                {
+<a name="line287"></a>                    response(trans('Empty_name'), 400)->send();
+<a name="line288"></a>					exit;
+<a name="line289"></a>                }
+<a name="line290"></a>            }
+<a name="line291"></a>            break;
+<a name="line292"></a>        case 'paste_clipboard':
+<a name="line293"></a>            if ( ! isset($_SESSION['RF']['clipboard_action'], $_SESSION['RF']['clipboard']['path'])
+<a name="line294"></a>                || $_SESSION['RF']['clipboard_action'] == ''
+<a name="line295"></a>                || $_SESSION['RF']['clipboard']['path'] == '')
+<a name="line296"></a>            {
+<a name="line297"></a>                response()->send();
+<a name="line298"></a>				exit;
+<a name="line299"></a>            }
+<a name="line300"></a>
+<a name="line301"></a>            $action = $_SESSION['RF']['clipboard_action'];
+<a name="line302"></a>            $data = $_SESSION['RF']['clipboard'];
+<a name="line303"></a>            $data['path_thumb'] = $thumbs_base_path.$data['path'];
+<a name="line304"></a>            $data['path'] = $current_path.$data['path'];
+<a name="line305"></a>            $pinfo = pathinfo($data['path']);
+<a name="line306"></a>
+<a name="line307"></a>            // user wants to paste to the same dir. nothing to do here...
+<a name="line308"></a>            if ($pinfo['dirname'] == rtrim($path, '/')) {
+<a name="line309"></a>                response()->send();
+<a name="line310"></a>				exit;
+<a name="line311"></a>            }
+<a name="line312"></a>
+<a name="line313"></a>            // user wants to paste folder to it's own sub folder.. baaaah.
+<a name="line314"></a>            if (is_dir($data['path']) && strpos($path, $data['path']) !== FALSE){
+<a name="line315"></a>                response()->send();
+<a name="line316"></a>				exit;
+<a name="line317"></a>            }
+<a name="line318"></a>
+<a name="line319"></a>            // something terribly gone wrong
+<a name="line320"></a>            if ($action != 'copy' && $action != 'cut'){
+<a name="line321"></a>                response('no action', 400)->send();
+<a name="line322"></a>				exit;
+<a name="line323"></a>            }
+<a name="line324"></a>
+<a name="line325"></a>            // check for writability
+<a name="line326"></a>            if (is_really_writable($path) === FALSE || is_really_writable($path_thumb) === FALSE){
+<a name="line327"></a>                response(trans('Dir_No_Write').'<br/>'.str_replace('../','',$path).'<br/>'.str_replace('../','',$path_thumb), 403)->send();
+<a name="line328"></a>				exit;
+<a name="line329"></a>            }
+<a name="line330"></a>
+<a name="line331"></a>            // check if server disables copy or rename
+<a name="line332"></a>            if (is_function_callable(($action == 'copy' ? 'copy' : 'rename')) === FALSE){
+<a name="line333"></a>                response(sprintf(trans('Function_Disabled'), ($action == 'copy' ? lcfirst(trans('Copy')) : lcfirst(trans('Cut')))), 403)->send();
+<a name="line334"></a>				exit;
+<a name="line335"></a>            }
+<a name="line336"></a>
+<a name="line337"></a>            if ($action == 'copy')
+<a name="line338"></a>            {
+<a name="line339"></a>                rcopy($data['path'], $path);
+<a name="line340"></a>                rcopy($data['path_thumb'], $path_thumb);
+<a name="line341"></a>            }
+<a name="line342"></a>            elseif ($action == 'cut')
+<a name="line343"></a>            {
+<a name="line344"></a>                rrename($data['path'], $path);
+<a name="line345"></a>                rrename($data['path_thumb'], $path_thumb);
+<a name="line346"></a>
+<a name="line347"></a>                // cleanup
+<a name="line348"></a>                if (is_dir($data['path']) === TRUE){
+<a name="line349"></a>                    rrename_after_cleaner($data['path']);
+<a name="line350"></a>                    rrename_after_cleaner($data['path_thumb']);
+<a name="line351"></a>                }
+<a name="line352"></a>            }
+<a name="line353"></a>
+<a name="line354"></a>            // cleanup
+<a name="line355"></a>            $_SESSION['RF']['clipboard']['path'] = NULL;
+<a name="line356"></a>            $_SESSION['RF']['clipboard_action'] = NULL;
+<a name="line357"></a>
+<a name="line358"></a>            break;
+<a name="line359"></a>        case 'chmod':
+<a name="line360"></a>            $mode = $_POST['new_mode'];
+<a name="line361"></a>            $rec_option = $_POST['is_recursive'];
+<a name="line362"></a>            $valid_options = array('none', 'files', 'folders', 'both');
+<a name="line363"></a>            $chmod_perm = (is_dir($path) ? $chmod_dirs : $chmod_files);
+<a name="line364"></a>
+<a name="line365"></a>            // check perm
+<a name="line366"></a>            if ($chmod_perm === FALSE) {
+<a name="line367"></a>                response(sprintf(trans('File_Permission_Not_Allowed'), (is_dir($path) ? lcfirst(trans('Folders')) : lcfirst(trans('Files')) )), 403)->send();
+<a name="line368"></a>				exit;
+<a name="line369"></a>            }
+<a name="line370"></a>
+<a name="line371"></a>            // check mode
+<a name="line372"></a>            if (!preg_match("/^[0-7]{3}$/", $mode)){
+<a name="line373"></a>                response(trans('File_Permission_Wrong_Mode'), 400)->send();
+<a name="line374"></a>				exit;
+<a name="line375"></a>            }
+<a name="line376"></a>
+<a name="line377"></a>            // check recursive option
+<a name="line378"></a>            if (!in_array($rec_option, $valid_options)){
+<a name="line379"></a>                response("wrong option", 400)->send();
+<a name="line380"></a>				exit;
+<a name="line381"></a>            }
+<a name="line382"></a>
+<a name="line383"></a>            // check if server disabled chmod
+<a name="line384"></a>            if (is_function_callable('chmod') === FALSE){
+<a name="line385"></a>                response(sprintf(trans('Function_Disabled'), 'chmod'), 403)->send();
+<a name="line386"></a>				exit;
+<a name="line387"></a>            }
+<a name="line388"></a>
+<a name="line389"></a>            $mode = "0".$mode;
+<a name="line390"></a>            $mode = octdec($mode);
+<a name="line391"></a>
+<a name="line392"></a>            rchmod($path, $mode, $rec_option);
+<a name="line393"></a>
+<a name="line394"></a>            break;
+<a name="line395"></a>        case 'save_text_file':
+<a name="line396"></a>            $content = $_POST['new_content'];
+<a name="line397"></a>            // $content = htmlspecialchars($content); not needed
+<a name="line398"></a>            // $content = stripslashes($content);
+<a name="line399"></a>
+<a name="line400"></a>            // no file
+<a name="line401"></a>            if (!file_exists($path)) {
+<a name="line402"></a>                response(trans('File_Not_Found'), 404)->send();
+<a name="line403"></a>				exit;
+<a name="line404"></a>            }
+<a name="line405"></a>
+<a name="line406"></a>            // not writable or edit not allowed
+<a name="line407"></a>            if (!is_writable($path) || $edit_text_files === FALSE) {
+<a name="line408"></a>                response(sprintf(trans('File_Open_Edit_Not_Allowed'), strtolower(trans('Edit'))), 403)->send();
+<a name="line409"></a>				exit;
+<a name="line410"></a>            }
+<a name="line411"></a>
+<a name="line412"></a>            if (@file_put_contents($path, $content) === FALSE) {
+<a name="line413"></a>                response(trans('File_Save_Error'), 500)->send();
+<a name="line414"></a>				exit;
+<a name="line415"></a>            }
+<a name="line416"></a>            else {
+<a name="line417"></a>                response(trans('File_Save_OK'))->send();
+<a name="line418"></a>				exit;
+<a name="line419"></a>            }
+<a name="line420"></a>
+<a name="line421"></a>            break;
+<a name="line422"></a>        default:
+<a name="line423"></a>            response('wrong action', 400)->send();
+<a name="line424"></a>			exit;
+<a name="line425"></a>    }
+<a name="line426"></a>}
+<a name="line427"></a></pre>
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\execute.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

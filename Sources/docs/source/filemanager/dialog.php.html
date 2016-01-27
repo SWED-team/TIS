@@ -1,0 +1,1057 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 26 Jan 2016 23:51:12 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>filemanager\dialog.php (SWEDTeamTitle)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\dialog.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>filemanager\dialog.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>$config = include 'config/config.php';
+<a name="line3"></a>//TODO switch to array
+<a name="line4"></a>extract($config, EXTR_OVERWRITE);
+<a name="line5"></a>
+<a name="line6"></a>if (USE_ACCESS_KEYS == TRUE){
+<a name="line7"></a>	if (!isset($_GET['akey'], $access_keys) || empty($access_keys)){
+<a name="line8"></a>		die('Access Denied!');
+<a name="line9"></a>	}
+<a name="line10"></a>
+<a name="line11"></a>	$_GET['akey'] = strip_tags(preg_replace( "/[^a-zA-Z0-9\._-]/", '', $_GET['akey']));
+<a name="line12"></a>
+<a name="line13"></a>	if (!in_array($_GET['akey'], $access_keys)){
+<a name="line14"></a>		die('Access Denied!');
+<a name="line15"></a>	}
+<a name="line16"></a>}
+<a name="line17"></a>
+<a name="line18"></a>$_SESSION['RF']["verify"] = "RESPONSIVEfilemanager";
+<a name="line19"></a>
+<a name="line20"></a>if(isset($_POST['submit'])){
+<a name="line21"></a>
+<a name="line22"></a>	include 'upload.php';
+<a name="line23"></a>
+<a name="line24"></a>}
+<a name="line25"></a>else {
+<a name="line26"></a>include 'include/utils.php';
+<a name="line27"></a>
+<a name="line28"></a>if (isset($_GET['fldr'])
+<a name="line29"></a>    && !empty($_GET['fldr'])
+<a name="line30"></a>    && strpos($_GET['fldr'],'../') === FALSE
+<a name="line31"></a>    && strpos($_GET['fldr'],'./') === FALSE)
+<a name="line32"></a>{
+<a name="line33"></a>    $subdir = urldecode(trim(strip_tags($_GET['fldr']),"/") ."/");
+<a name="line34"></a>    $_SESSION['RF']["filter"]='';
+<a name="line35"></a>}
+<a name="line36"></a>else { $subdir = ''; }
+<a name="line37"></a>
+<a name="line38"></a>if($subdir == "")
+<a name="line39"></a>{
+<a name="line40"></a>   if(!empty($_COOKIE['last_position'])
+<a name="line41"></a>	&& strpos($_COOKIE['last_position'],'.') === FALSE)
+<a name="line42"></a>	$subdir= trim($_COOKIE['last_position']);
+<a name="line43"></a>}
+<a name="line44"></a>//remember last position
+<a name="line45"></a>setcookie('last_position',$subdir,time() + (86400 * 7));
+<a name="line46"></a>
+<a name="line47"></a>if ($subdir == "/") { $subdir = ""; }
+<a name="line48"></a>
+<a name="line49"></a>// If hidden folders are specified
+<a name="line50"></a>if(count($hidden_folders)){
+<a name="line51"></a>	// If hidden folder appears in the path specified in URL parameter "fldr"
+<a name="line52"></a>	$dirs = explode('/', $subdir);
+<a name="line53"></a>	foreach($dirs as $dir){
+<a name="line54"></a>		if($dir !== '' && in_array($dir, $hidden_folders)){
+<a name="line55"></a>			// Ignore the path
+<a name="line56"></a>			$subdir = "";
+<a name="line57"></a>			break;
+<a name="line58"></a>		}
+<a name="line59"></a>	}
+<a name="line60"></a>}
+<a name="line61"></a>
+<a name="line62"></a>/***
+<a name="line63"></a> *SUB-DIR CODE
+<a name="line64"></a> ***/
+<a name="line65"></a>
+<a name="line66"></a>if (!isset($_SESSION['RF']["subfolder"]))
+<a name="line67"></a>{
+<a name="line68"></a>	$_SESSION['RF']["subfolder"] = '';
+<a name="line69"></a>}
+<a name="line70"></a>$rfm_subfolder = '';
+<a name="line71"></a>
+<a name="line72"></a>if (!empty($_SESSION['RF']["subfolder"]) && strpos($_SESSION['RF']["subfolder"],'../') === FALSE
+<a name="line73"></a>   && strpos($_SESSION['RF']["subfolder"],'./') === FALSE && strpos($_SESSION['RF']["subfolder"],"/") !== 0
+<a name="line74"></a>   && strpos($_SESSION['RF']["subfolder"],'.') === FALSE)
+<a name="line75"></a>{
+<a name="line76"></a>	$rfm_subfolder = $_SESSION['RF']['subfolder'];
+<a name="line77"></a>}
+<a name="line78"></a>
+<a name="line79"></a>if ($rfm_subfolder != "" && $rfm_subfolder[strlen($rfm_subfolder)-1] != "/") { $rfm_subfolder .= "/"; }
+<a name="line80"></a>
+<a name="line81"></a>if (!file_exists($current_path.$rfm_subfolder.$subdir))
+<a name="line82"></a>{
+<a name="line83"></a>    $subdir = '';
+<a name="line84"></a>    if (!file_exists($current_path.$rfm_subfolder.$subdir))
+<a name="line85"></a>    {
+<a name="line86"></a>		$rfm_subfolder = "";
+<a name="line87"></a>    }
+<a name="line88"></a>}
+<a name="line89"></a>
+<a name="line90"></a>if (trim($rfm_subfolder) == "")
+<a name="line91"></a>{
+<a name="line92"></a>    $cur_dir 	 = $upload_dir . $subdir;
+<a name="line93"></a>    $cur_path 	 = $current_path . $subdir;
+<a name="line94"></a>    $thumbs_path = $thumbs_base_path;
+<a name="line95"></a>    $parent 	 = $subdir;
+<a name="line96"></a>}
+<a name="line97"></a>else
+<a name="line98"></a>{
+<a name="line99"></a>    $cur_dir 	 = $upload_dir . $rfm_subfolder.$subdir;
+<a name="line100"></a>    $cur_path 	 = $current_path . $rfm_subfolder.$subdir;
+<a name="line101"></a>    $thumbs_path = $thumbs_base_path. $rfm_subfolder;
+<a name="line102"></a>    $parent 	 = $rfm_subfolder.$subdir;
+<a name="line103"></a>}
+<a name="line104"></a>
+<a name="line105"></a>$cycle = TRUE;
+<a name="line106"></a>$max_cycles = 50;
+<a name="line107"></a>$i = 0;
+<a name="line108"></a>while($cycle && $i < $max_cycles){
+<a name="line109"></a>    $i++;
+<a name="line110"></a>    if ($parent=="./") $parent="";
+<a name="line111"></a>
+<a name="line112"></a>    if (file_exists($current_path.$parent."config.php"))
+<a name="line113"></a>    {
+<a name="line114"></a>		require_once $current_path.$parent."config.php";
+<a name="line115"></a>		$cycle = FALSE;
+<a name="line116"></a>    }
+<a name="line117"></a>
+<a name="line118"></a>    if ($parent == "") $cycle = FALSE;
+<a name="line119"></a>    else $parent = fix_dirname($parent)."/";
+<a name="line120"></a>}
+<a name="line121"></a>
+<a name="line122"></a>if (!is_dir($thumbs_path.$subdir))
+<a name="line123"></a>{
+<a name="line124"></a>    create_folder(FALSE, $thumbs_path.$subdir);
+<a name="line125"></a>}
+<a name="line126"></a>
+<a name="line127"></a>if (isset($_GET['popup']))
+<a name="line128"></a>{
+<a name="line129"></a>	$popup = strip_tags($_GET['popup']);
+<a name="line130"></a>}
+<a name="line131"></a>else $popup=0;
+<a name="line132"></a>//Sanitize popup
+<a name="line133"></a>$popup=!!$popup;
+<a name="line134"></a>
+<a name="line135"></a>if (isset($_GET['crossdomain']))
+<a name="line136"></a>{
+<a name="line137"></a>   $crossdomain = strip_tags($_GET['crossdomain']);
+<a name="line138"></a>}
+<a name="line139"></a>else $crossdomain=0;
+<a name="line140"></a>
+<a name="line141"></a>//Sanitize crossdomain
+<a name="line142"></a>$crossdomain=!!$crossdomain;
+<a name="line143"></a>
+<a name="line144"></a>//view type
+<a name="line145"></a>if(!isset($_SESSION['RF']["view_type"]))
+<a name="line146"></a>{
+<a name="line147"></a>	$view = $default_view;
+<a name="line148"></a>	$_SESSION['RF']["view_type"] = $view;
+<a name="line149"></a>}
+<a name="line150"></a>
+<a name="line151"></a>if (isset($_GET['view']))
+<a name="line152"></a>{
+<a name="line153"></a>	$view = fix_get_params($_GET['view']);
+<a name="line154"></a>	$_SESSION['RF']["view_type"] = $view;
+<a name="line155"></a>}
+<a name="line156"></a>
+<a name="line157"></a>$view = $_SESSION['RF']["view_type"];
+<a name="line158"></a>
+<a name="line159"></a>//filter
+<a name="line160"></a>$filter = "";
+<a name="line161"></a>if(isset($_SESSION['RF']["filter"]))
+<a name="line162"></a>{
+<a name="line163"></a>	$filter = $_SESSION['RF']["filter"];
+<a name="line164"></a>}
+<a name="line165"></a>
+<a name="line166"></a>if(isset($_GET["filter"]))
+<a name="line167"></a>{
+<a name="line168"></a>	$filter = fix_get_params($_GET["filter"]);
+<a name="line169"></a>}
+<a name="line170"></a>
+<a name="line171"></a>if (!isset($_SESSION['RF']['sort_by']))
+<a name="line172"></a>{
+<a name="line173"></a>	$_SESSION['RF']['sort_by'] = 'name';
+<a name="line174"></a>}
+<a name="line175"></a>
+<a name="line176"></a>if (isset($_GET["sort_by"]))
+<a name="line177"></a>{
+<a name="line178"></a>	$sort_by = $_SESSION['RF']['sort_by'] = fix_get_params($_GET["sort_by"]);
+<a name="line179"></a>}
+<a name="line180"></a>else $sort_by = $_SESSION['RF']['sort_by'];
+<a name="line181"></a>
+<a name="line182"></a>
+<a name="line183"></a>if (!isset($_SESSION['RF']['descending']))
+<a name="line184"></a>{
+<a name="line185"></a>	$_SESSION['RF']['descending'] = TRUE;
+<a name="line186"></a>}
+<a name="line187"></a>
+<a name="line188"></a>if (isset($_GET["descending"]))
+<a name="line189"></a>{
+<a name="line190"></a>	$descending = $_SESSION['RF']['descending'] = fix_get_params($_GET["descending"])==1;
+<a name="line191"></a>}
+<a name="line192"></a>else{
+<a name="line193"></a>	$descending = $_SESSION['RF']['descending'];	
+<a name="line194"></a>} 
+<a name="line195"></a>
+<a name="line196"></a>$boolarray = Array(false => 'false', true => 'true');
+<a name="line197"></a>
+<a name="line198"></a>$return_relative_url = isset($_GET['relative_url']) && $_GET['relative_url'] == "1" ? true : false;
+<a name="line199"></a>
+<a name="line200"></a>if (!isset($_GET['type'])) $_GET['type'] = 0;
+<a name="line201"></a>
+<a name="line202"></a>if (isset($_GET['editor']))
+<a name="line203"></a>{
+<a name="line204"></a>	$editor = strip_tags($_GET['editor']);
+<a name="line205"></a>}
+<a name="line206"></a>else{
+<a name="line207"></a>	if($_GET['type']==0){
+<a name="line208"></a>		$editor=false;
+<a name="line209"></a>	}else{
+<a name="line210"></a>		$editor='tinymce';
+<a name="line211"></a>	}
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>if (!isset($_GET['field_id'])) $_GET['field_id'] = '';
+<a name="line215"></a>
+<a name="line216"></a>$field_id = isset($_GET['field_id']) ? fix_get_params($_GET['field_id']) : '';
+<a name="line217"></a>$type_param = fix_get_params($_GET['type']);
+<a name="line218"></a>
+<a name="line219"></a>if ($type_param==1) 	 $apply = 'apply_img';
+<a name="line220"></a>elseif($type_param==2) $apply = 'apply_link';
+<a name="line221"></a>elseif($type_param==0 && $_GET['field_id']=='') $apply = 'apply_none';
+<a name="line222"></a>elseif($type_param==3) $apply = 'apply_video';
+<a name="line223"></a>else $apply = 'apply';
+<a name="line224"></a>
+<a name="line225"></a>$get_params = array(
+<a name="line226"></a>    'editor'    => $editor,
+<a name="line227"></a>    'type'      => $type_param,
+<a name="line228"></a>    'lang'      => $lang,
+<a name="line229"></a>    'popup'     => $popup,
+<a name="line230"></a>    'crossdomain' => $crossdomain,
+<a name="line231"></a>    'field_id'  => $field_id,
+<a name="line232"></a>    'relative_url' => $return_relative_url,
+<a name="line233"></a>    'akey' 		=> (isset($_GET['akey']) && $_GET['akey'] != '' ? $_GET['akey'] : 'key')
+<a name="line234"></a>);
+<a name="line235"></a>if(isset($_GET['CKEditorFuncNum'])){
+<a name="line236"></a>    $get_params['CKEditorFuncNum'] = $_GET['CKEditorFuncNum'];
+<a name="line237"></a>    $get_params['CKEditor'] = (isset($_GET['CKEditor'])? $_GET['CKEditor'] : '');
+<a name="line238"></a>}
+<a name="line239"></a>$get_params['fldr'] ='';
+<a name="line240"></a>
+<a name="line241"></a>$get_params = http_build_query($get_params);
+<a name="line242"></a>
+<a name="line243"></a>?>
+<a name="line244"></a><!DOCTYPE html>
+<a name="line245"></a><html xmlns="https://www.w3.org/1999/xhtml">
+<a name="line246"></a>	<head>
+<a name="line247"></a>		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+<a name="line248"></a>		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<a name="line249"></a>		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<a name="line250"></a>		<meta name="robots" content="noindex,nofollow">
+<a name="line251"></a>		<title>Responsive FileManager</title>
+<a name="line252"></a>		<link rel="shortcut icon" href="img/ico/favicon.ico">
+<a name="line253"></a>		<link href="css/style.css" rel="stylesheet" type="text/css" />
+<a name="line254"></a>		<link href="js/jPlayer/skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css">
+<a name="line255"></a>	<!--[if lt IE 8]><style>
+<a name="line256"></a>	.img-container span, .img-container-mini span {
+<a name="line257"></a>	    display: inline-block;
+<a name="line258"></a>	    height: 100%;
+<a name="line259"></a>	}
+<a name="line260"></a>	</style><![endif]-->
+<a name="line261"></a>	<script src="js/plugins.js"></script>
+<a name="line262"></a>	<script src="js/jPlayer/jquery.jplayer/jquery.jplayer.js"></script>
+<a name="line263"></a>	<script src="js/modernizr.custom.js"></script>
+<a name="line264"></a>	<?php
+<a name="line265"></a>	if ($aviary_active){
+<a name="line266"></a>	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) { ?>
+<a name="line267"></a>	    <script src="https://dme0ih8comzn4.cloudfront.net/imaging/v2/editor.js"></script>
+<a name="line268"></a>	<?php }else{ ?>
+<a name="line269"></a>	    <script src="http://feather.aviary.com/imaging/v2/editor.js"></script>
+<a name="line270"></a>	<?php }} ?>
+<a name="line271"></a>
+<a name="line272"></a>	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<a name="line273"></a>	<!--[if lt IE 9]>
+<a name="line274"></a>	  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+<a name="line275"></a>	<![endif]-->
+<a name="line276"></a>
+<a name="line277"></a>	<script>
+<a name="line278"></a>	    var ext_img=new Array('<?php echo implode("','", $ext_img)?>');
+<a name="line279"></a>	    var allowed_ext=new Array('<?php echo implode("','", $ext)?>');
+<a name="line280"></a>	    var image_editor=<?php echo $aviary_active?"true":"false"; ?>;
+<a name="line281"></a>	    //dropzone config
+<a name="line282"></a>	    Dropzone.options.rfmDropzone = {
+<a name="line283"></a>		    dictInvalidFileType: "<?php echo trans('Error_extension');?>",
+<a name="line284"></a>		    dictFileTooBig: "<?php echo trans('Error_Upload'); ?>",
+<a name="line285"></a>		    dictResponseError: "SERVER ERROR",
+<a name="line286"></a>		    paramName: "file", // The name that will be used to transfer the file
+<a name="line287"></a>		    maxFilesize: <?php echo $MaxSizeUpload; ?>, // MB
+<a name="line288"></a>		    url: "upload.php",
+<a name="line289"></a>		    <?php if($apply!="apply_none"){ ?>
+<a name="line290"></a>		    init: function() {
+<a name="line291"></a>			    this.on("success", function(file,res) { 
+<a name="line292"></a>			    	file.previewElement.addEventListener("click", function() {
+<a name="line293"></a>						<?php echo $apply; ?>(res,'<?php echo $field_id; ?>');
+<a name="line294"></a>					});
+<a name="line295"></a>			    });
+<a name="line296"></a>			},
+<a name="line297"></a>			<?php } ?>
+<a name="line298"></a>		    accept: function(file, done) {
+<a name="line299"></a>			    var extension=file.name.split('.').pop();
+<a name="line300"></a>			    extension=extension.toLowerCase();
+<a name="line301"></a>			    if ($.inArray(extension, allowed_ext) > -1) {
+<a name="line302"></a>					done();
+<a name="line303"></a>			    }
+<a name="line304"></a>			    else {
+<a name="line305"></a>			    	done("<?php echo trans('Error_extension');?>");
+<a name="line306"></a>				}
+<a name="line307"></a>		    }
+<a name="line308"></a>	    };
+<a name="line309"></a>	    if (image_editor) {
+<a name="line310"></a>	    var featherEditor = new Aviary.Feather({
+<a name="line311"></a>		<?php
+<a name="line312"></a>	        foreach ($aviary_defaults_config as $aopt_key => $aopt_val) {
+<a name="line313"></a>	        	echo $aopt_key.": ".json_encode($aopt_val).",";
+<a name="line314"></a>			} ?>
+<a name="line315"></a>			onReady: function() {
+<a name="line316"></a>		        hide_animation();
+<a name="line317"></a>		    },
+<a name="line318"></a>	      	onSave: function(imageID, newURL) {
+<a name="line319"></a>				show_animation();
+<a name="line320"></a>				var img = document.getElementById(imageID);
+<a name="line321"></a>				img.src = newURL;
+<a name="line322"></a>				$.ajax({
+<a name="line323"></a>					type: "POST",
+<a name="line324"></a>					url: "ajax_calls.php?action=save_img",
+<a name="line325"></a>					data: { url: newURL, path:$('#sub_folder').val()+$('#fldr_value').val(), name:$('#aviary_img').attr('data-name') }
+<a name="line326"></a>				}).done(function( msg ) {
+<a name="line327"></a>					featherEditor.close();
+<a name="line328"></a>					d = new Date();
+<a name="line329"></a>					$("figure[data-name='"+$('#aviary_img').attr('data-name')+"']").find('img').each(function(){
+<a name="line330"></a>					  $(this).attr('src',$(this).attr('src')+"?"+d.getTime());
+<a name="line331"></a>					});
+<a name="line332"></a>					$("figure[data-name='"+$('#aviary_img').attr('data-name')+"']").find('figcaption a.preview').each(function(){
+<a name="line333"></a>					  $(this).attr('data-url',$(this).data('url')+"?"+d.getTime());
+<a name="line334"></a>				    });
+<a name="line335"></a>					hide_animation();
+<a name="line336"></a>				});
+<a name="line337"></a>				return false;
+<a name="line338"></a>			},
+<a name="line339"></a>			onError: function(errorObj) {
+<a name="line340"></a>					bootbox.alert(errorObj.message);
+<a name="line341"></a>					hide_animation();
+<a name="line342"></a>			}
+<a name="line343"></a>
+<a name="line344"></a>	   });
+<a name="line345"></a>	    }
+<a name="line346"></a>	</script>
+<a name="line347"></a>	<script src="js/include.js"></script>
+<a name="line348"></a></head>
+<a name="line349"></a><body>
+<a name="line350"></a>	<input type="hidden" id="popup" value="<?php echo $popup; ?>" />
+<a name="line351"></a>	<input type="hidden" id="crossdomain" value="<?php echo $crossdomain; ?>" />
+<a name="line352"></a>	<input type="hidden" id="editor" value="<?php echo $editor; ?>" />
+<a name="line353"></a>	<input type="hidden" id="view" value="<?php echo $view; ?>" />
+<a name="line354"></a>  	<input type="hidden" id="subdir" value="<?php echo $subdir; ?>" />
+<a name="line355"></a>  	<input type="hidden" id="field_id" value="<?php echo $field_id; ?>" />
+<a name="line356"></a>  	<input type="hidden" id="type_param" value="<?php echo $type_param; ?>" />
+<a name="line357"></a>  	<input type="hidden" id="cur_dir" value="<?php echo $cur_dir; ?>" />
+<a name="line358"></a>	<input type="hidden" id="cur_dir_thumb" value="<?php echo $thumbs_path.$subdir; ?>" />
+<a name="line359"></a>	<input type="hidden" id="insert_folder_name" value="<?php echo trans('Insert_Folder_Name'); ?>" />
+<a name="line360"></a>	<input type="hidden" id="new_folder" value="<?php echo trans('New_Folder'); ?>" />
+<a name="line361"></a>	<input type="hidden" id="ok" value="<?php echo trans('OK'); ?>" />
+<a name="line362"></a>	<input type="hidden" id="cancel" value="<?php echo trans('Cancel'); ?>" />
+<a name="line363"></a>	<input type="hidden" id="rename" value="<?php echo trans('Rename'); ?>" />
+<a name="line364"></a>	<input type="hidden" id="lang_duplicate" value="<?php echo trans('Duplicate'); ?>" />
+<a name="line365"></a>	<input type="hidden" id="duplicate" value="<?php if($duplicate_files) echo 1; else echo 0; ?>" />
+<a name="line366"></a>	<input type="hidden" id="base_url" value="<?php echo $base_url?>"/>
+<a name="line367"></a>	<input type="hidden" id="base_url_true" value="<?php echo base_url(); ?>"/>
+<a name="line368"></a>	<input type="hidden" id="fldr_value" value="<?php echo $subdir; ?>"/>
+<a name="line369"></a>	<input type="hidden" id="sub_folder" value="<?php echo $rfm_subfolder; ?>"/>
+<a name="line370"></a>	<input type="hidden" id="return_relative_url" value="<?php echo $return_relative_url == true ? 1 : 0;?>"/>
+<a name="line371"></a>	<input type="hidden" id="lazy_loading_file_number_threshold" value="<?php echo $lazy_loading_file_number_threshold?>"/>
+<a name="line372"></a>	<input type="hidden" id="file_number_limit_js" value="<?php echo $file_number_limit_js; ?>" />
+<a name="line373"></a>	<input type="hidden" id="sort_by" value="<?php echo $sort_by; ?>" />
+<a name="line374"></a>	<input type="hidden" id="descending" value="<?php echo $descending?1:0; ?>" />
+<a name="line375"></a>	<input type="hidden" id="current_url" value="<?php echo str_replace(array('&filter='.$filter,'&sort_by='.$sort_by,'&descending='.intval($descending)),array(''),$base_url.$_SERVER['REQUEST_URI']); ?>" />
+<a name="line376"></a>	<input type="hidden" id="lang_show_url" value="<?php echo trans('Show_url'); ?>" />
+<a name="line377"></a>	<input type="hidden" id="copy_cut_files_allowed" value="<?php if($copy_cut_files) echo 1; else echo 0; ?>" />
+<a name="line378"></a>	<input type="hidden" id="copy_cut_dirs_allowed" value="<?php if($copy_cut_dirs) echo 1; else echo 0; ?>" />
+<a name="line379"></a>	<input type="hidden" id="copy_cut_max_size" value="<?php echo $copy_cut_max_size; ?>" />
+<a name="line380"></a>	<input type="hidden" id="copy_cut_max_count" value="<?php echo $copy_cut_max_count; ?>" />
+<a name="line381"></a>	<input type="hidden" id="lang_copy" value="<?php echo trans('Copy'); ?>" />
+<a name="line382"></a>	<input type="hidden" id="lang_cut" value="<?php echo trans('Cut'); ?>" />
+<a name="line383"></a>	<input type="hidden" id="lang_paste" value="<?php echo trans('Paste'); ?>" />
+<a name="line384"></a>	<input type="hidden" id="lang_paste_here" value="<?php echo trans('Paste_Here'); ?>" />
+<a name="line385"></a>	<input type="hidden" id="lang_paste_confirm" value="<?php echo trans('Paste_Confirm'); ?>" />
+<a name="line386"></a>	<input type="hidden" id="lang_files" value="<?php echo trans('Files'); ?>" />
+<a name="line387"></a>	<input type="hidden" id="lang_folders" value="<?php echo trans('Folders'); ?>" />
+<a name="line388"></a>	<input type="hidden" id="lang_files_on_clipboard" value="<?php echo trans('Files_ON_Clipboard'); ?>" />
+<a name="line389"></a>	<input type="hidden" id="clipboard" value="<?php echo ((isset($_SESSION['RF']['clipboard']['path']) && trim($_SESSION['RF']['clipboard']['path']) != null) ? 1 : 0); ?>" />
+<a name="line390"></a>	<input type="hidden" id="lang_clear_clipboard_confirm" value="<?php echo trans('Clear_Clipboard_Confirm'); ?>" />
+<a name="line391"></a>	<input type="hidden" id="lang_file_permission" value="<?php echo trans('File_Permission'); ?>" />
+<a name="line392"></a>	<input type="hidden" id="chmod_files_allowed" value="<?php if($chmod_files) echo 1; else echo 0; ?>" />
+<a name="line393"></a>	<input type="hidden" id="chmod_dirs_allowed" value="<?php if($chmod_dirs) echo 1; else echo 0; ?>" />
+<a name="line394"></a>	<input type="hidden" id="lang_lang_change" value="<?php echo trans('Lang_Change'); ?>" />
+<a name="line395"></a>	<input type="hidden" id="edit_text_files_allowed" value="<?php if($edit_text_files) echo 1; else echo 0; ?>" />
+<a name="line396"></a>	<input type="hidden" id="lang_edit_file" value="<?php echo trans('Edit_File'); ?>" />
+<a name="line397"></a>	<input type="hidden" id="lang_new_file" value="<?php echo trans('New_File'); ?>" />
+<a name="line398"></a>	<input type="hidden" id="lang_filename" value="<?php echo trans('Filename'); ?>" />
+<a name="line399"></a>	<input type="hidden" id="lang_file_info" value="<?php echo fix_strtoupper(trans('File_info')); ?>" />
+<a name="line400"></a>	<input type="hidden" id="lang_edit_image" value="<?php echo trans('Edit_image'); ?>" />
+<a name="line401"></a>	<input type="hidden" id="lang_select" value="<?php echo trans('Select'); ?>" />
+<a name="line402"></a>	<input type="hidden" id="lang_extract" value="<?php echo trans('Extract'); ?>" />
+<a name="line403"></a>	<input type="hidden" id="transliteration" value="<?php echo $transliteration?"true":"false"; ?>" />
+<a name="line404"></a>	<input type="hidden" id="convert_spaces" value="<?php echo $convert_spaces?"true":"false"; ?>" />
+<a name="line405"></a>    <input type="hidden" id="replace_with" value="<?php echo $convert_spaces? $replace_with : ""; ?>" />
+<a name="line406"></a><?php if($upload_files){ ?>
+<a name="line407"></a><!-- uploader div start -->
+<a name="line408"></a><div class="uploader">
+<a name="line409"></a>    <div class="text-center">
+<a name="line410"></a>    	<button class="btn btn-inverse close-uploader"><i class="icon-backward icon-white"></i> <?php echo trans('Return_Files_List')?></button>
+<a name="line411"></a>    </div>
+<a name="line412"></a>	<div class="space10"></div><div class="space10"></div>
+<a name="line413"></a>	<div class="tabbable upload-tabbable"> <!-- Only required for left/right tabs -->
+<a name="line414"></a>		<?php if($java_upload){ ?>
+<a name="line415"></a>	    <ul class="nav nav-tabs">
+<a name="line416"></a>			<li class="active"><a href="#tab1" data-toggle="tab"><?php echo trans('Upload_base'); ?></a></li>
+<a name="line417"></a>			<li><a href="#tab2" id="uploader-btn" data-toggle="tab"><?php echo trans('Upload_java'); ?></a></li>
+<a name="line418"></a>	    </ul>
+<a name="line419"></a>	    <div class="tab-content">
+<a name="line420"></a>			<div class="tab-pane active" id="tab1">
+<a name="line421"></a>		    	<?php } ?>
+<a name="line422"></a>				<form action="dialog.php" method="post" enctype="multipart/form-data" id="rfmDropzone" class="dropzone">
+<a name="line423"></a>				    <input type="hidden" name="path" value="<?php echo $cur_path?>"/>
+<a name="line424"></a>				    <input type="hidden" name="path_thumb" value="<?php echo $thumbs_path.$subdir?>"/>
+<a name="line425"></a>				    <div class="fallback">
+<a name="line426"></a>					<h3><?php echo  trans('Upload_file')?>:</h3><br/>
+<a name="line427"></a>					<input name="file" type="file" />
+<a name="line428"></a>					<input type="hidden" name="fldr" value="<?php echo $subdir; ?>"/>
+<a name="line429"></a>					<input type="hidden" name="view" value="<?php echo $view; ?>"/>
+<a name="line430"></a>					<input type="hidden" name="type" value="<?php echo $type_param; ?>"/>
+<a name="line431"></a>					<input type="hidden" name="field_id" value="<?php echo $field_id; ?>"/>
+<a name="line432"></a>          <input type="hidden" name="relative_url" value="<?php echo $return_relative_url; ?>"/>
+<a name="line433"></a>					<input type="hidden" name="popup" value="<?php echo $popup; ?>"/>
+<a name="line434"></a>					<input type="hidden" name="lang" value="<?php echo $lang; ?>"/>
+<a name="line435"></a>					<input type="hidden" name="filter" value="<?php echo $filter; ?>"/>
+<a name="line436"></a>					<input type="submit" name="submit" value="<?php echo trans('OK')?>" />
+<a name="line437"></a>				    </div>
+<a name="line438"></a>				</form>
+<a name="line439"></a>			</div>
+<a name="line440"></a>		    <div class="upload-help"><?php echo trans('Upload_base_help'); ?></div>
+<a name="line441"></a>			<?php if($java_upload){ ?>
+<a name="line442"></a>			</div>
+<a name="line443"></a>			<div class="tab-pane" id="tab2">
+<a name="line444"></a>		    	<div id="iframe-container"></div>
+<a name="line445"></a>		    	<div class="upload-help"><?php echo trans('Upload_java_help'); ?></div>
+<a name="line446"></a>			<?php } ?>
+<a name="line447"></a>			</div>
+<a name="line448"></a>	    </div>
+<a name="line449"></a>	</div>
+<a name="line450"></a>
+<a name="line451"></a></div>
+<a name="line452"></a><!-- uploader div start -->
+<a name="line453"></a>
+<a name="line454"></a><?php } ?>
+<a name="line455"></a>          <div class="container-fluid">
+<a name="line456"></a>
+<a name="line457"></a><?php
+<a name="line458"></a>
+<a name="line459"></a>$class_ext = '';
+<a name="line460"></a>$src = '';
+<a name="line461"></a>
+<a name="line462"></a>$files = scandir($current_path.$rfm_subfolder.$subdir);
+<a name="line463"></a>$n_files=count($files);
+<a name="line464"></a>
+<a name="line465"></a>//php sorting
+<a name="line466"></a>$sorted=array();
+<a name="line467"></a>$current_folder=array();
+<a name="line468"></a>$prev_folder=array();
+<a name="line469"></a>$current_files_number = 0;
+<a name="line470"></a>$current_folders_number = 0;
+<a name="line471"></a>foreach($files as $k=>$file){
+<a name="line472"></a>    if($file==".") $current_folder=array('file'=>$file);
+<a name="line473"></a>    elseif($file=="..") $prev_folder=array('file'=>$file);
+<a name="line474"></a>    elseif(is_dir($current_path.$rfm_subfolder.$subdir.$file)){
+<a name="line475"></a>		$date=filemtime($current_path.$rfm_subfolder.$subdir. $file);
+<a name="line476"></a>		if($show_folder_size){
+<a name="line477"></a>			list($size,$nfiles,$nfolders) = folder_info($current_path.$rfm_subfolder.$subdir. $file);
+<a name="line478"></a>			$current_folders_number++;
+<a name="line479"></a>		} else {
+<a name="line480"></a>			$size=0;
+<a name="line481"></a>		}
+<a name="line482"></a>		$file_ext=trans('Type_dir');
+<a name="line483"></a>		$sorted[$k]=array(
+<a name="line484"></a>			'file'=>$file,
+<a name="line485"></a>			'file_lcase'=>strtolower($file),
+<a name="line486"></a>			'date'=>$date,
+<a name="line487"></a>			'size'=>$size,
+<a name="line488"></a>			'nfiles'=>$nfiles,
+<a name="line489"></a>			'nfolders'=>$nfolders,
+<a name="line490"></a>			'extension'=>$file_ext,
+<a name="line491"></a>			'extension_lcase'=>strtolower($file_ext));
+<a name="line492"></a>    }else{
+<a name="line493"></a>    	$current_files_number++;
+<a name="line494"></a>		$file_path=$current_path.$rfm_subfolder.$subdir.$file;
+<a name="line495"></a>		$date=filemtime($file_path);
+<a name="line496"></a>		$size=filesize($file_path);
+<a name="line497"></a>		$file_ext = substr(strrchr($file,'.'),1);
+<a name="line498"></a>		$sorted[$k]=array('file'=>$file,'file_lcase'=>strtolower($file),'date'=>$date,'size'=>$size,'extension'=>$file_ext,'extension_lcase'=>strtolower($file_ext));
+<a name="line499"></a>    }
+<a name="line500"></a>}
+<a name="line501"></a>
+<a name="line502"></a>// Should lazy loading be enabled
+<a name="line503"></a>$lazy_loading_enabled= ($lazy_loading_file_number_threshold == 0 || $lazy_loading_file_number_threshold != -1 && $n_files > $lazy_loading_file_number_threshold) ? true : false;
+<a name="line504"></a>
+<a name="line505"></a>function filenameSort($x, $y) {
+<a name="line506"></a>    return $x['file_lcase'] <  $y['file_lcase'];
+<a name="line507"></a>}
+<a name="line508"></a>function dateSort($x, $y) {
+<a name="line509"></a>    return $x['date'] <  $y['date'];
+<a name="line510"></a>}
+<a name="line511"></a>function sizeSort($x, $y) {
+<a name="line512"></a>    return $x['size'] <  $y['size'];
+<a name="line513"></a>}
+<a name="line514"></a>function extensionSort($x, $y) {
+<a name="line515"></a>    return $x['extension_lcase'] <  $y['extension_lcase'];
+<a name="line516"></a>}
+<a name="line517"></a>
+<a name="line518"></a>switch($sort_by){
+<a name="line519"></a>	case 'date':
+<a name="line520"></a>		usort($sorted, 'dateSort');
+<a name="line521"></a>		break;
+<a name="line522"></a>	case 'size':
+<a name="line523"></a>		usort($sorted, 'sizeSort');
+<a name="line524"></a>		break;
+<a name="line525"></a>	case 'extension':
+<a name="line526"></a>		usort($sorted, 'extensionSort');
+<a name="line527"></a>		break;
+<a name="line528"></a>	default:
+<a name="line529"></a>		usort($sorted, 'filenameSort');
+<a name="line530"></a>		break;
+<a name="line531"></a>}
+<a name="line532"></a>
+<a name="line533"></a>if(!$descending){
+<a name="line534"></a>    $sorted=array_reverse($sorted);
+<a name="line535"></a>}
+<a name="line536"></a>
+<a name="line537"></a>$files=array_merge(array($prev_folder),array($current_folder),$sorted);
+<a name="line538"></a>?>
+<a name="line539"></a><!-- header div start -->
+<a name="line540"></a><div class="navbar navbar-fixed-top">
+<a name="line541"></a>    <div class="navbar-inner">
+<a name="line542"></a>        <div class="container-fluid">
+<a name="line543"></a>	    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<a name="line544"></a>		<span class="icon-bar"></span>
+<a name="line545"></a>		<span class="icon-bar"></span>
+<a name="line546"></a>		<span class="icon-bar"></span>
+<a name="line547"></a>	    </button>
+<a name="line548"></a>	    <div class="brand"><?php echo trans('Toolbar'); ?></div>
+<a name="line549"></a>	    <div class="nav-collapse collapse">
+<a name="line550"></a>		<div class="filters">
+<a name="line551"></a>		    <div class="row-fluid">
+<a name="line552"></a>			<div class="span4 half">
+<a name="line553"></a>			    <?php if($upload_files){ ?>
+<a name="line554"></a>						    <button class="tip btn upload-btn" title="<?php echo  trans('Upload_file'); ?>"><i class="rficon-upload"></i></button>
+<a name="line555"></a>			    <?php } ?>
+<a name="line556"></a>			    <?php if($create_text_files){ ?>
+<a name="line557"></a>						    <button class="tip btn create-file-btn" title="<?php echo  trans('New_File'); ?>"><i class="icon-plus"></i><i class="icon-file"></i></button>
+<a name="line558"></a>			    <?php } ?>
+<a name="line559"></a>			    <?php if($create_folders){ ?>
+<a name="line560"></a>						    <button class="tip btn new-folder" title="<?php echo  trans('New_Folder')?>"><i class="icon-plus"></i><i class="icon-folder-open"></i></button>
+<a name="line561"></a>			    <?php } ?>
+<a name="line562"></a>			    <?php if($copy_cut_files || $copy_cut_dirs){ ?>
+<a name="line563"></a>				    <button class="tip btn paste-here-btn" title="<?php echo trans('Paste_Here'); ?>"><i class="rficon-clipboard-apply"></i></button>
+<a name="line564"></a>				    <button class="tip btn clear-clipboard-btn" title="<?php echo trans('Clear_Clipboard'); ?>"><i class="rficon-clipboard-clear"></i></button>
+<a name="line565"></a>				<?php } ?>
+<a name="line566"></a>			</div>
+<a name="line567"></a>			<div class="span2 half view-controller">
+<a name="line568"></a>			    <button class="btn tip<?php if($view==0) echo " btn-inverse"; ?>" id="view0" data-value="0" title="<?php echo trans('View_boxes'); ?>"><i class="icon-th <?php if($view==0) echo "icon-white"; ?>"></i></button>
+<a name="line569"></a>			    <button class="btn tip<?php if($view==1) echo " btn-inverse"; ?>" id="view1" data-value="1" title="<?php echo trans('View_list'); ?>"><i class="icon-align-justify <?php if($view==1) echo "icon-white"; ?>"></i></button>
+<a name="line570"></a>			    <button class="btn tip<?php if($view==2) echo " btn-inverse"; ?>" id="view2" data-value="2" title="<?php echo trans('View_columns_list'); ?>"><i class="icon-fire <?php if($view==2) echo "icon-white"; ?>"></i></button>
+<a name="line571"></a>			</div>
+<a name="line572"></a>			<div class="span6 entire types">
+<a name="line573"></a>				<span><?php echo trans('Filters'); ?>:</span>
+<a name="line574"></a>			    <?php if($_GET['type']!=1 && $_GET['type']!=3){ ?>
+<a name="line575"></a>			    <input id="select-type-1" name="radio-sort" type="radio" data-item="ff-item-type-1" checked="checked"  class="hide"  />
+<a name="line576"></a>			    <label id="ff-item-type-1" title="<?php echo trans('Files'); ?>" for="select-type-1" class="tip btn ff-label-type-1"><i class="icon-file"></i></label>
+<a name="line577"></a>			    <input id="select-type-2" name="radio-sort" type="radio" data-item="ff-item-type-2" class="hide"  />
+<a name="line578"></a>			    <label id="ff-item-type-2" title="<?php echo trans('Images'); ?>" for="select-type-2" class="tip btn ff-label-type-2"><i class="icon-picture"></i></label>
+<a name="line579"></a>			    <input id="select-type-3" name="radio-sort" type="radio" data-item="ff-item-type-3" class="hide"  />
+<a name="line580"></a>			    <label id="ff-item-type-3" title="<?php echo trans('Archives'); ?>" for="select-type-3" class="tip btn ff-label-type-3"><i class="icon-inbox"></i></label>
+<a name="line581"></a>			    <input id="select-type-4" name="radio-sort" type="radio" data-item="ff-item-type-4" class="hide"  />
+<a name="line582"></a>			    <label id="ff-item-type-4" title="<?php echo trans('Videos'); ?>" for="select-type-4" class="tip btn ff-label-type-4"><i class="icon-film"></i></label>
+<a name="line583"></a>			    <input id="select-type-5" name="radio-sort" type="radio" data-item="ff-item-type-5" class="hide"  />
+<a name="line584"></a>			    <label id="ff-item-type-5" title="<?php echo trans('Music'); ?>" for="select-type-5" class="tip btn ff-label-type-5"><i class="icon-music"></i></label>
+<a name="line585"></a>			    <?php } ?>
+<a name="line586"></a>			    <input accesskey="f" type="text" class="filter-input <?php echo (($_GET['type']!=1 && $_GET['type']!=3) ? '' : 'filter-input-notype'); ?>" id="filter-input" name="filter" placeholder="<?php echo fix_strtolower(trans('Text_filter')); ?>..." value="<?php echo $filter; ?>"/><?php if($n_files>$file_number_limit_js){ ?><label id="filter" class="btn"><i class="icon-play"></i></label><?php } ?>
+<a name="line587"></a>
+<a name="line588"></a>			    <input id="select-type-all" name="radio-sort" type="radio" data-item="ff-item-type-all" class="hide"  />
+<a name="line589"></a>			     <label id="ff-item-type-all" title="<?php echo trans('All'); ?>" <?php if($_GET['type']==1 || $_GET['type']==3){ ?>style="visibility: hidden;" <?php } ?> data-item="ff-item-type-all" for="select-type-all" style="margin-rigth:0px;" class="tip btn btn-inverse ff-label-type-all"><i class="icon-remove icon-white"></i></label>
+<a name="line590"></a>
+<a name="line591"></a>			</div>
+<a name="line592"></a>		    </div>
+<a name="line593"></a>		</div>
+<a name="line594"></a>	    </div>
+<a name="line595"></a>	</div>
+<a name="line596"></a>    </div>
+<a name="line597"></a></div>
+<a name="line598"></a>
+<a name="line599"></a><!-- header div end -->
+<a name="line600"></a>
+<a name="line601"></a>    <!-- breadcrumb div start -->
+<a name="line602"></a>
+<a name="line603"></a>    <div class="row-fluid">
+<a name="line604"></a>	<?php
+<a name="line605"></a>	$link="dialog.php?".$get_params;
+<a name="line606"></a>	?>
+<a name="line607"></a>	<ul class="breadcrumb">
+<a name="line608"></a>	<li class="pull-left"><a href="<?php echo $link?>/"><i class="icon-home"></i></a></li>
+<a name="line609"></a>	<li><span class="divider">/</span></li>
+<a name="line610"></a>	<?php
+<a name="line611"></a>	$bc=explode("/",$subdir);
+<a name="line612"></a>	$tmp_path='';
+<a name="line613"></a>	if(!empty($bc))
+<a name="line614"></a>	foreach($bc as $k=>$b){
+<a name="line615"></a>		$tmp_path.=$b."/";
+<a name="line616"></a>		if($k==count($bc)-2){
+<a name="line617"></a>	?> <li class="active"><?php echo $b?></li><?php
+<a name="line618"></a>		}elseif($b!=""){ ?>
+<a name="line619"></a>		<li><a href="<?php echo $link.$tmp_path?>"><?php echo $b?></a></li><li><span class="divider"><?php echo "/"; ?></span></li>
+<a name="line620"></a>	<?php }
+<a name="line621"></a>	}
+<a name="line622"></a>	?>
+<a name="line623"></a>
+<a name="line624"></a>	<li class="pull-right"><a class="btn-small" href="javascript:void('')" id="info"><i class="icon-question-sign"></i></a></li>
+<a name="line625"></a>	<li class="pull-right"><a class="btn-small" href="javascript:void('')" id="change_lang_btn"><i class="icon-globe"></i></a></li>
+<a name="line626"></a>	<li class="pull-right"><a id="refresh" class="btn-small" href="dialog.php?<?php echo $get_params.$subdir."&".uniqid() ?>"><i class="icon-refresh"></i></a></li>
+<a name="line627"></a>
+<a name="line628"></a>	<li class="pull-right">
+<a name="line629"></a>	    <div class="btn-group">
+<a name="line630"></a>		<a class="btn dropdown-toggle sorting-btn" data-toggle="dropdown" href="#">
+<a name="line631"></a>		  <i class="icon-signal"></i>
+<a name="line632"></a>		  <span class="caret"></span>
+<a name="line633"></a>		</a>
+<a name="line634"></a>		<ul class="dropdown-menu pull-left sorting">
+<a name="line635"></a>		    <li class="text-center"><strong><?php echo trans('Sorting') ?></strong></li>
+<a name="line636"></a>		<li><a class="sorter sort-name <?php if($sort_by=="name"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="name"><?php echo trans('Filename'); ?></a></li>
+<a name="line637"></a>		<li><a class="sorter sort-date <?php if($sort_by=="date"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="date"><?php echo trans('Date'); ?></a></li>
+<a name="line638"></a>		<li><a class="sorter sort-size <?php if($sort_by=="size"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="size"><?php echo trans('Size'); ?></a></li>
+<a name="line639"></a>		<li><a class="sorter sort-extension <?php if($sort_by=="extension"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="extension"><?php echo trans('Type'); ?></a></li>
+<a name="line640"></a>		</ul>
+<a name="line641"></a>	      </div>
+<a name="line642"></a>	</li>
+<a name="line643"></a>	<li><small class="hidden-phone">(<span id="files_number"><?php echo $current_files_number."</span> ".trans('Files')." - <span id='folders_number'>".$current_folders_number."</span> ".trans('Folders'); ?>)</small></li>
+<a name="line644"></a>	</ul>
+<a name="line645"></a>    </div>
+<a name="line646"></a>    <!-- breadcrumb div end -->
+<a name="line647"></a>    <div class="row-fluid ff-container">
+<a name="line648"></a>	<div class="span12">
+<a name="line649"></a>	    <?php if(@opendir($current_path.$rfm_subfolder.$subdir)===FALSE){ ?>
+<a name="line650"></a>	    <br/>
+<a name="line651"></a>	    <div class="alert alert-error">There is an error! The upload folder there isn't. Check your config.php file. </div>
+<a name="line652"></a>	    <?php }else{ ?>
+<a name="line653"></a>	    <h4 id="help"><?php echo trans('Swipe_help'); ?></h4>
+<a name="line654"></a>	    <?php if(isset($folder_message)){ ?>
+<a name="line655"></a>		<div class="alert alert-block"><?php echo $folder_message; ?></div>
+<a name="line656"></a>	    <?php } ?>
+<a name="line657"></a>	    <?php if($show_sorting_bar){ ?>
+<a name="line658"></a>	    <!-- sorter -->
+<a name="line659"></a>	    <div class="sorter-container <?php echo "list-view".$view; ?>">
+<a name="line660"></a>		<div class="file-name"><a class="sorter sort-name <?php if($sort_by=="name"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="name"><?php echo trans('Filename'); ?></a></div>
+<a name="line661"></a>		<div class="file-date"><a class="sorter sort-date <?php if($sort_by=="date"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="date"><?php echo trans('Date'); ?></a></div>
+<a name="line662"></a>		<div class="file-size"><a class="sorter sort-size <?php if($sort_by=="size"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="size"><?php echo trans('Size'); ?></a></div>
+<a name="line663"></a>		<div class='img-dimension'><?php echo trans('Dimension'); ?></div>
+<a name="line664"></a>		<div class='file-extension'><a class="sorter sort-extension <?php if($sort_by=="extension"){ echo ($descending)?"descending":"ascending"; } ?>" href="javascript:void('')" data-sort="extension"><?php echo trans('Type'); ?></a></div>
+<a name="line665"></a>		<div class='file-operations'><?php echo trans('Operations'); ?></div>
+<a name="line666"></a>	    </div>
+<a name="line667"></a>	    <?php } ?>
+<a name="line668"></a>
+<a name="line669"></a>	    <input type="hidden" id="file_number" value="<?php echo $n_files; ?>" />
+<a name="line670"></a>	    <!--ul class="thumbnails ff-items"-->
+<a name="line671"></a>	    <ul class="grid cs-style-2 <?php echo "list-view".$view; ?>" id="main-item-container">
+<a name="line672"></a>		<?php
+<a name="line673"></a>		$jplayer_ext=array("mp4","flv","webmv","webma","webm","m4a","m4v","ogv","oga","mp3","midi","mid","ogg","wav");
+<a name="line674"></a>		foreach ($files as $file_array) {
+<a name="line675"></a>		  $file=$file_array['file'];
+<a name="line676"></a>			if($file == '.' || (isset($file_array['extension']) && $file_array['extension']!=trans('Type_dir')) || ($file == '..' && $subdir == '') || in_array($file, $hidden_folders) || ($filter!='' && $n_files>$file_number_limit_js && $file!=".." && stripos($file,$filter)===false))
+<a name="line677"></a>			  continue;
+<a name="line678"></a>			$new_name=fix_filename($file,$transliteration);
+<a name="line679"></a>			if($file!='..' && $file!=$new_name){
+<a name="line680"></a>			    //rename
+<a name="line681"></a>			    rename_folder($current_path.$subdir.$file,$new_name,$transliteration);
+<a name="line682"></a>			    $file=$new_name;
+<a name="line683"></a>			}
+<a name="line684"></a>			//add in thumbs folder if not exist
+<a name="line685"></a>			if (!file_exists($thumbs_path.$subdir.$file)) create_folder(false,$thumbs_path.$subdir.$file);
+<a name="line686"></a>			$class_ext = 3;
+<a name="line687"></a>			if($file=='..' && trim($subdir) != '' ){
+<a name="line688"></a>		    $src = explode("/",$subdir);
+<a name="line689"></a>		    unset($src[count($src)-2]);
+<a name="line690"></a>		    $src=implode("/",$src);
+<a name="line691"></a>		    if($src=='') $src="/";
+<a name="line692"></a>				}
+<a name="line693"></a>				elseif ($file!='..') {
+<a name="line694"></a>				    $src = $subdir . $file."/";
+<a name="line695"></a>				}
+<a name="line696"></a>
+<a name="line697"></a>			?>
+<a name="line698"></a>			    <li data-name="<?php echo $file ?>" class="<?php if($file=='..') echo 'back'; else echo 'dir'; ?>" <?php if(($filter!='' && stripos($file,$filter)===false)) echo ' style="display:none;"'; ?>><?php
+<a name="line699"></a>			    $file_prevent_rename = false;
+<a name="line700"></a>			    $file_prevent_delete = false;
+<a name="line701"></a>			    if (isset($filePermissions[$file])) {
+<a name="line702"></a>				$file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
+<a name="line703"></a>				$file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
+<a name="line704"></a>			    }
+<a name="line705"></a>			    ?><figure data-name="<?php echo $file ?>" class="<?php if($file=="..") echo "back-"; ?>directory" data-type="<?php if($file!=".."){ echo "dir"; } ?>">
+<a name="line706"></a>			    <?php if($file==".."){ ?>
+<a name="line707"></a>			    	<input type="hidden" class="path" value="<?php echo str_replace('.','',dirname($rfm_subfolder.$subdir)); ?>"/>
+<a name="line708"></a>			    	<input type="hidden" class="path_thumb" value="<?php echo dirname($thumbs_path.$subdir)."/"; ?>"/>
+<a name="line709"></a>			    <?php } ?>
+<a name="line710"></a>				  <a class="folder-link" href="dialog.php?<?php echo $get_params.rawurlencode($src)."&".uniqid() ?>">
+<a name="line711"></a>					  <div class="img-precontainer">
+<a name="line712"></a>							<div class="img-container directory"><span></span>
+<a name="line713"></a>							<img class="directory-img"  src="img/<?php echo $icon_theme; ?>/folder<?php if($file==".."){ echo "_back"; }?>.png" />
+<a name="line714"></a>							</div>
+<a name="line715"></a>					  </div>
+<a name="line716"></a>				    <div class="img-precontainer-mini directory">
+<a name="line717"></a>							<div class="img-container-mini">
+<a name="line718"></a>						    <span></span>
+<a name="line719"></a>						    <img class="directory-img"  src="img/<?php echo $icon_theme; ?>/folder<?php if($file==".."){ echo "_back"; }?>.png" />
+<a name="line720"></a>							</div>
+<a name="line721"></a>				    </div>
+<a name="line722"></a>			<?php if($file==".."){ ?>
+<a name="line723"></a>				    <div class="box no-effect">
+<a name="line724"></a>					<h4><?php echo trans('Back') ?></h4>
+<a name="line725"></a>				    </div>
+<a name="line726"></a>				    </a>
+<a name="line727"></a>
+<a name="line728"></a>			<?php }else{ ?>
+<a name="line729"></a>				    </a>
+<a name="line730"></a>				    <div class="box">
+<a name="line731"></a>					<h4 class="<?php if($ellipsis_title_after_first_row){ echo "ellipsis"; } ?>"><a class="folder-link" data-file="<?php echo $file ?>" href="dialog.php?<?php echo $get_params.rawurlencode($src)."&".uniqid() ?>"><?php echo $file; ?></a></h4>
+<a name="line732"></a>				    </div>
+<a name="line733"></a>				    <input type="hidden" class="name" value="<?php echo $file_array['file_lcase'];  ?>"/>
+<a name="line734"></a>				    <input type="hidden" class="date" value="<?php echo $file_array['date']; ?>"/>
+<a name="line735"></a>				    <input type="hidden" class="size" value="<?php echo $file_array['size'];  ?>"/>
+<a name="line736"></a>				    <input type="hidden" class="extension" value="<?php echo trans('Type_dir'); ?>"/>
+<a name="line737"></a>				    <div class="file-date"><?php echo date(trans('Date_type'),$file_array['date'])?></div>
+<a name="line738"></a>				    <?php if($show_folder_size){ ?>
+<a name="line739"></a>				    	<div class="file-size"><?php echo makeSize($file_array['size'])?></div>
+<a name="line740"></a>					    <input type="hidden" class="nfiles" value="<?php echo $file_array['nfiles'];  ?>"/>
+<a name="line741"></a>					    <input type="hidden" class="nfolders" value="<?php echo $file_array['nfolders'];  ?>"/>
+<a name="line742"></a>				    <?php } ?>
+<a name="line743"></a>				    <div class='file-extension'><?php echo trans('Type_dir'); ?></div>
+<a name="line744"></a>				    <figcaption>
+<a name="line745"></a>					    <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if($rename_folders && !$file_prevent_rename) echo "rename-folder"; ?>" title="<?php echo trans('Rename')?>" data-path="<?php echo $rfm_subfolder.$subdir.$file; ?>"">
+<a name="line746"></a>					    <i class="icon-pencil <?php if(!$rename_folders || $file_prevent_rename) echo 'icon-white'; ?>"></i></a>
+<a name="line747"></a>					    <a href="javascript:void('')" class="tip-left erase-button <?php if($delete_folders && !$file_prevent_delete) echo "delete-folder"; ?>" title="<?php echo trans('Erase')?>" data-confirm="<?php echo trans('Confirm_Folder_del'); ?>" data-path="<?php echo $rfm_subfolder.$subdir.$file; ?>" >
+<a name="line748"></a>					    <i class="icon-trash <?php if(!$delete_folders || $file_prevent_delete) echo 'icon-white'; ?>"></i>
+<a name="line749"></a>					    </a>
+<a name="line750"></a>				    </figcaption>
+<a name="line751"></a>			<?php } ?>
+<a name="line752"></a>			    </figure>
+<a name="line753"></a>			</li>
+<a name="line754"></a>			<?php
+<a name="line755"></a>		    }
+<a name="line756"></a>
+<a name="line757"></a>            $files_prevent_duplicate = array();
+<a name="line758"></a>		    foreach ($files as $nu=>$file_array) {
+<a name="line759"></a>			$file=$file_array['file'];
+<a name="line760"></a>
+<a name="line761"></a>			    if($file == '.' || $file == '..' || is_dir($current_path.$rfm_subfolder.$subdir.$file) || in_array($file, $hidden_files) || !in_array(fix_strtolower($file_array['extension']), $ext) || ($filter!='' && $n_files>$file_number_limit_js && stripos($file,$filter)===false))
+<a name="line762"></a>				    continue;
+<a name="line763"></a>
+<a name="line764"></a>			    $file_path=$current_path.$rfm_subfolder.$subdir.$file;
+<a name="line765"></a>			    //check if file have illegal caracter
+<a name="line766"></a>
+<a name="line767"></a>			    $filename=substr($file, 0, '-' . (strlen($file_array['extension']) + 1));
+<a name="line768"></a>
+<a name="line769"></a>			    if($file!=fix_filename($file,$transliteration)){
+<a name="line770"></a>				$file1=fix_filename($file,$transliteration);
+<a name="line771"></a>				$file_path1=($current_path.$rfm_subfolder.$subdir.$file1);
+<a name="line772"></a>				if(file_exists($file_path1)){
+<a name="line773"></a>				    $i = 1;
+<a name="line774"></a>				    $info=pathinfo($file1);
+<a name="line775"></a>				    while(file_exists($current_path.$rfm_subfolder.$subdir.$info['filename'].".[".$i."].".$info['extension'])) {
+<a name="line776"></a>					    $i++;
+<a name="line777"></a>				    }
+<a name="line778"></a>				    $file1=$info['filename'].".[".$i."].".$info['extension'];
+<a name="line779"></a>				    $file_path1=($current_path.$rfm_subfolder.$subdir.$file1);
+<a name="line780"></a>				}
+<a name="line781"></a>
+<a name="line782"></a>				$filename=substr($file1, 0, '-' . (strlen($file_array['extension']) + 1));
+<a name="line783"></a>				rename_file($file_path,fix_filename($filename,$transliteration),$transliteration);
+<a name="line784"></a>				$file=$file1;
+<a name="line785"></a>				$file_array['extension']=fix_filename($file_array['extension'],$transliteration);
+<a name="line786"></a>				$file_path=$file_path1;
+<a name="line787"></a>			    }
+<a name="line788"></a>
+<a name="line789"></a>			    $is_img=false;
+<a name="line790"></a>			    $is_video=false;
+<a name="line791"></a>			    $is_audio=false;
+<a name="line792"></a>			    $show_original=false;
+<a name="line793"></a>			    $show_original_mini=false;
+<a name="line794"></a>			    $mini_src="";
+<a name="line795"></a>			    $src_thumb="";
+<a name="line796"></a>			    $extension_lower=fix_strtolower($file_array['extension']);
+<a name="line797"></a>			    if(in_array($extension_lower, $ext_img)){
+<a name="line798"></a>				$src = $base_url . $cur_dir . rawurlencode($file);
+<a name="line799"></a>				$mini_src = $src_thumb = $thumbs_path.$subdir. $file;
+<a name="line800"></a>				//add in thumbs folder if not exist
+<a name="line801"></a>				if(!file_exists($src_thumb)){
+<a name="line802"></a>			    try {
+<a name="line803"></a>			    	if(!create_img($file_path, $src_thumb, 122, 91)){
+<a name="line804"></a>							$src_thumb=$mini_src="";
+<a name="line805"></a>						}else{
+<a name="line806"></a>							new_thumbnails_creation($current_path.$rfm_subfolder.$subdir,$file_path,$file,$current_path,'','','','','','','',$fixed_image_creation,$fixed_path_from_filemanager,$fixed_image_creation_name_to_prepend,$fixed_image_creation_to_append,$fixed_image_creation_width,$fixed_image_creation_height,$fixed_image_creation_option);
+<a name="line807"></a>						}
+<a name="line808"></a>			    } catch (Exception $e) {
+<a name="line809"></a>						$src_thumb=$mini_src="";
+<a name="line810"></a>			    }
+<a name="line811"></a>				}
+<a name="line812"></a>				$is_img=true;
+<a name="line813"></a>				//check if is smaller than thumb
+<a name="line814"></a>				list($img_width, $img_height, $img_type, $attr)=@getimagesize($file_path);
+<a name="line815"></a>				if($img_width<122 && $img_height<91){
+<a name="line816"></a>					$src_thumb=$current_path.$rfm_subfolder.$subdir.$file;
+<a name="line817"></a>					$show_original=true;
+<a name="line818"></a>				}
+<a name="line819"></a>
+<a name="line820"></a>				if($img_width<45 && $img_height<38){
+<a name="line821"></a>				    $mini_src=$current_path.$rfm_subfolder.$subdir.$file;
+<a name="line822"></a>				    $show_original_mini=true;
+<a name="line823"></a>				}
+<a name="line824"></a>			    }
+<a name="line825"></a>			    $is_icon_thumb=false;
+<a name="line826"></a>			    $is_icon_thumb_mini=false;
+<a name="line827"></a>			    $no_thumb=false;
+<a name="line828"></a>			    if($src_thumb==""){
+<a name="line829"></a>				$no_thumb=true;
+<a name="line830"></a>				if(file_exists('img/'.$icon_theme.'/'.$extension_lower.".jpg")){
+<a name="line831"></a>					$src_thumb ='img/'.$icon_theme.'/'.$extension_lower.".jpg";
+<a name="line832"></a>				}else{
+<a name="line833"></a>					$src_thumb = "img/".$icon_theme."/default.jpg";
+<a name="line834"></a>				}
+<a name="line835"></a>				$is_icon_thumb=true;
+<a name="line836"></a>			    }
+<a name="line837"></a>			    if($mini_src==""){
+<a name="line838"></a>				$is_icon_thumb_mini=false;
+<a name="line839"></a>			    }
+<a name="line840"></a>
+<a name="line841"></a>			    $class_ext=0;
+<a name="line842"></a>			    if (in_array($extension_lower, $ext_video)) {
+<a name="line843"></a>				    $class_ext = 4;
+<a name="line844"></a>				    $is_video=true;
+<a name="line845"></a>			    }elseif (in_array($extension_lower, $ext_img)) {
+<a name="line846"></a>				    $class_ext = 2;
+<a name="line847"></a>			    }elseif (in_array($extension_lower, $ext_music)) {
+<a name="line848"></a>				    $class_ext = 5;
+<a name="line849"></a>				    $is_audio=true;
+<a name="line850"></a>			    }elseif (in_array($extension_lower, $ext_misc)) {
+<a name="line851"></a>				    $class_ext = 3;
+<a name="line852"></a>			    }else{
+<a name="line853"></a>				    $class_ext = 1;
+<a name="line854"></a>			    }
+<a name="line855"></a>			    if((!($_GET['type']==1 && !$is_img) && !(($_GET['type']==3 && !$is_video) && ($_GET['type']==3 && !$is_audio))) && $class_ext>0){
+<a name="line856"></a>?>
+<a name="line857"></a>		    <li class="ff-item-type-<?php echo $class_ext; ?> file"  data-name="<?php echo $file; ?>" <?php if(($filter!='' && stripos($file,$filter)===false)) echo ' style="display:none;"'; ?>><?php
+<a name="line858"></a>		    $file_prevent_rename = false;
+<a name="line859"></a>		    $file_prevent_delete = false;
+<a name="line860"></a>		    if (isset($filePermissions[$file])) {
+<a name="line861"></a>			if (isset($filePermissions[$file]['prevent_duplicate']) && $filePermissions[$file]['prevent_duplicate']) {
+<a name="line862"></a>			    $files_prevent_duplicate[] = $file;
+<a name="line863"></a>			}
+<a name="line864"></a>			$file_prevent_rename = isset($filePermissions[$file]['prevent_rename']) && $filePermissions[$file]['prevent_rename'];
+<a name="line865"></a>			$file_prevent_delete = isset($filePermissions[$file]['prevent_delete']) && $filePermissions[$file]['prevent_delete'];
+<a name="line866"></a>		    }
+<a name="line867"></a>            ?>		<figure data-name="<?php echo $file ?>" data-type="<?php if($is_img){ echo "img"; }else{ echo "file"; } ?>">
+<a name="line868"></a>				<a href="javascript:void('')" class="link" data-file="<?php echo $file; ?>" data-function="<?php echo $apply; ?>">
+<a name="line869"></a>				<div class="img-precontainer">
+<a name="line870"></a>				    <?php if($is_icon_thumb){ ?><div class="filetype"><?php echo $extension_lower ?></div><?php } ?>
+<a name="line871"></a>				    <div class="img-container">
+<a name="line872"></a>					    <span></span>
+<a name="line873"></a>					    <img class="<?php echo $show_original ? "original" : "" ?><?php echo $is_icon_thumb ? " icon" : "" ?><?php echo $lazy_loading_enabled ? " lazy-loaded" : ""?>" <?php echo $lazy_loading_enabled ? "data-original" : "src"?>="<?php echo $src_thumb; ?>">
+<a name="line874"></a>				    </div>
+<a name="line875"></a>				</div>
+<a name="line876"></a>				<div class="img-precontainer-mini <?php if($is_img) echo 'original-thumb' ?>">
+<a name="line877"></a>				    <div class="filetype <?php echo $extension_lower ?> <?php if(in_array($extension_lower, $editable_text_file_exts)) echo 'edit-text-file-allowed' ?> <?php if(!$is_icon_thumb){ echo "hide"; }?>"><?php echo $extension_lower ?></div>
+<a name="line878"></a>				    <div class="img-container-mini">
+<a name="line879"></a>					<span></span>
+<a name="line880"></a>					<?php if($mini_src!=""){ ?>
+<a name="line881"></a>					<img class="<?php echo $show_original_mini ? "original" : "" ?><?php echo $is_icon_thumb_mini ? " icon" : "" ?><?php echo $lazy_loading_enabled ? " lazy-loaded" : ""?>" <?php echo $lazy_loading_enabled ? "data-original" : "src"?>="<?php echo $mini_src; ?>">
+<a name="line882"></a>					<?php } ?>
+<a name="line883"></a>				    </div>
+<a name="line884"></a>				</div>
+<a name="line885"></a>				<?php if($is_icon_thumb){ ?>
+<a name="line886"></a>				<div class="cover"></div>
+<a name="line887"></a>				<?php } ?>
+<a name="line888"></a>				</a>
+<a name="line889"></a>				<div class="box">
+<a name="line890"></a>				<h4 class="<?php if($ellipsis_title_after_first_row){ echo "ellipsis"; } ?>"><a href="javascript:void('')" class="link" data-file="<?php echo $file; ?>" data-function="<?php echo $apply; ?>">
+<a name="line891"></a>				<?php echo $filename; ?></a> </h4>
+<a name="line892"></a>				</div>
+<a name="line893"></a>				<input type="hidden" class="date" value="<?php echo $file_array['date']; ?>"/>
+<a name="line894"></a>				<input type="hidden" class="size" value="<?php echo $file_array['size'] ?>"/>
+<a name="line895"></a>				<input type="hidden" class="extension" value="<?php echo $extension_lower; ?>"/>
+<a name="line896"></a>				<input type="hidden" class="name" value="<?php echo $file_array['file_lcase']; ?>"/>
+<a name="line897"></a>				<div class="file-date"><?php echo date(trans('Date_type'),$file_array['date'])?></div>
+<a name="line898"></a>				<div class="file-size"><?php echo makeSize($file_array['size'])?></div>
+<a name="line899"></a>				<div class='img-dimension'><?php if($is_img){ echo $img_width."x".$img_height; } ?></div>
+<a name="line900"></a>				<div class='file-extension'><?php echo $extension_lower; ?></div>
+<a name="line901"></a>				<figcaption>
+<a name="line902"></a>				    <form action="force_download.php" method="post" class="download-form" id="form<?php echo $nu; ?>">
+<a name="line903"></a>					<input type="hidden" name="path" value="<?php echo $rfm_subfolder.$subdir?>"/>
+<a name="line904"></a>					<input type="hidden" class="name_download" name="name" value="<?php echo $file?>"/>
+<a name="line905"></a>
+<a name="line906"></a>				    <a title="<?php echo trans('Download')?>" class="tip-right" href="javascript:void('')" onclick="$('#form<?php echo $nu; ?>').submit();"><i class="icon-download"></i></a>
+<a name="line907"></a>				    <?php if($is_img && $src_thumb!="" && $extension_lower!="tiff" && $extension_lower!="tif"){ ?>
+<a name="line908"></a>				    <a class="tip-right preview" title="<?php echo trans('Preview')?>" data-url="<?php echo $src;?>" data-toggle="lightbox" href="#previewLightbox"><i class=" icon-eye-open"></i></a>
+<a name="line909"></a>				    <?php }elseif(($is_video || $is_audio) && in_array($extension_lower,$jplayer_ext)){ ?>
+<a name="line910"></a>				    <a class="tip-right modalAV <?php if($is_audio){ echo "audio"; }else{ echo "video"; } ?>"
+<a name="line911"></a>					title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=media_preview&title=<?php echo $filename; ?>&file=<?php echo $rfm_subfolder.$subdir.$file; ?>"
+<a name="line912"></a>					href="javascript:void('');" ><i class=" icon-eye-open"></i></a>
+<a name="line913"></a>						<?php }elseif($preview_text_files && in_array($extension_lower,$previewable_text_file_exts)){ ?>
+<a name="line914"></a>					    <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=get_file&sub_action=preview&preview_mode=text&title=<?php echo $filename; ?>&file=<?php echo $rfm_subfolder.$subdir.$file; ?>"
+<a name="line915"></a>						href="javascript:void('');" ><i class=" icon-eye-open"></i></a>
+<a name="line916"></a>						<?php }elseif($googledoc_enabled && in_array($extension_lower,$googledoc_file_exts)){ ?>
+<a name="line917"></a>					    <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=get_file&sub_action=preview&preview_mode=google&title=<?php echo $filename; ?>&file=<?php echo $rfm_subfolder.$subdir.$file; ?>"
+<a name="line918"></a>						href="docs.google.com;" ><i class=" icon-eye-open"></i></a>
+<a name="line919"></a>
+<a name="line920"></a>						<?php }elseif($viewerjs_enabled && in_array($extension_lower,$viewerjs_file_exts)){ ?>
+<a name="line921"></a>					    <a class="tip-right file-preview-btn" title="<?php echo trans('Preview')?>" data-url="ajax_calls.php?action=get_file&sub_action=preview&preview_mode=viewerjs&title=<?php echo $filename; ?>&file=<?php echo $rfm_subfolder.$subdir.$file; ?>"
+<a name="line922"></a>						href="docs.google.com;" ><i class=" icon-eye-open"></i></a>
+<a name="line923"></a>
+<a name="line924"></a>				    <?php }else{ ?>
+<a name="line925"></a>				    <a class="preview disabled"><i class="icon-eye-open icon-white"></i></a>
+<a name="line926"></a>				    <?php } ?>
+<a name="line927"></a>				    <a href="javascript:void('')" class="tip-left edit-button rename-file-paths <?php if($rename_files && !$file_prevent_rename) echo "rename-file"; ?>" title="<?php echo trans('Rename')?>" data-path="<?php echo $rfm_subfolder.$subdir .$file; ?>">
+<a name="line928"></a> 				    <i class="icon-pencil <?php if(!$rename_files || $file_prevent_rename) echo 'icon-white'; ?>"></i></a>
+<a name="line929"></a>
+<a name="line930"></a>				    <a href="javascript:void('')" class="tip-left erase-button <?php if($delete_files && !$file_prevent_delete) echo "delete-file"; ?>" title="<?php echo trans('Erase')?>" data-confirm="<?php echo trans('Confirm_del'); ?>" data-path="<?php echo $rfm_subfolder.$subdir.$file; ?>">
+<a name="line931"></a> 				    <i class="icon-trash <?php if(!$delete_files || $file_prevent_delete) echo 'icon-white'; ?>"></i>
+<a name="line932"></a>				    </a>
+<a name="line933"></a>				    </form>
+<a name="line934"></a>				</figcaption>
+<a name="line935"></a>			</figure>
+<a name="line936"></a>		</li>
+<a name="line937"></a>			<?php
+<a name="line938"></a>			}
+<a name="line939"></a>		    }
+<a name="line940"></a>
+<a name="line941"></a>	?></div>
+<a name="line942"></a>	    </ul>
+<a name="line943"></a>	    <?php } ?>
+<a name="line944"></a>	</div>
+<a name="line945"></a>    </div>
+<a name="line946"></a></div>
+<a name="line947"></a><script>
+<a name="line948"></a>    var files_prevent_duplicate = new Array();
+<a name="line949"></a>    <?php
+<a name="line950"></a>    foreach ($files_prevent_duplicate as $key => $value): ?>
+<a name="line951"></a>        files_prevent_duplicate[<?php echo $key;?>] = '<?php echo $value; ?>';
+<a name="line952"></a>    <?php endforeach; ?>
+<a name="line953"></a></script>
+<a name="line954"></a>
+<a name="line955"></a>    <!-- lightbox div start -->
+<a name="line956"></a>    <div id="previewLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
+<a name="line957"></a>	    <div class='lightbox-content'>
+<a name="line958"></a>		    <img id="full-img" src="">
+<a name="line959"></a>	    </div>
+<a name="line960"></a>    </div>
+<a name="line961"></a>    <!-- lightbox div end -->
+<a name="line962"></a>
+<a name="line963"></a>    <!-- loading div start -->
+<a name="line964"></a>    <div id="loading_container" style="display:none;">
+<a name="line965"></a>	    <div id="loading" style="background-color:#000; position:fixed; width:100%; height:100%; top:0px; left:0px;z-index:100000"></div>
+<a name="line966"></a>	    <img id="loading_animation" src="img/storing_animation.gif" alt="loading" style="z-index:10001; margin-left:-32px; margin-top:-32px; position:fixed; left:50%; top:50%"/>
+<a name="line967"></a>    </div>
+<a name="line968"></a>    <!-- loading div end -->
+<a name="line969"></a>
+<a name="line970"></a>    <!-- player div start -->
+<a name="line971"></a>    <div class="modal hide fade" id="previewAV">
+<a name="line972"></a>      <div class="modal-header">
+<a name="line973"></a>        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<a name="line974"></a>        <h3><?php echo trans('Preview'); ?></h3>
+<a name="line975"></a>      </div>
+<a name="line976"></a>      <div class="modal-body">
+<a name="line977"></a>      	<div class="row-fluid body-preview">
+<a name="line978"></a>				</div>
+<a name="line979"></a>      </div>
+<a name="line980"></a>
+<a name="line981"></a>    </div>
+<a name="line982"></a>    <!-- player div end -->
+<a name="line983"></a>    <img id='aviary_img' src='' class="hide"/>
+<a name="line984"></a>
+<a name="line985"></a>    <?php if ($lazy_loading_enabled) { ?>
+<a name="line986"></a>        <script>
+<a name="line987"></a>        	$(function(){
+<a name="line988"></a>        		$(".lazy-loaded").lazyload({
+<a name="line989"></a>				        event: 'scrollstop'
+<a name="line990"></a>				    });
+<a name="line991"></a>        	});
+<a name="line992"></a>        </script>
+<a name="line993"></a>    <?php } ?>
+<a name="line994"></a></body>
+<a name="line995"></a></html>
+<a name="line996"></a><?php }
+<a name="line997"></a></pre>
+<div class="header">
+<h1>RObo cosi header</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../todo-list.html">Todo</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../source\filemanager\dialog.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

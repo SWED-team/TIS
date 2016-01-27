@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 27 Jan 2016 00:15:07 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>User_v (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>Swed TEAM\User_v</h2>
+
+</header><p class="signature">public  class <strong>User_v</strong> extends <a href="../swed team/user.html">User</a>
+
+</p>
+
+<div class="comment"><p>Classa používateľa</p></div>
+
+<h3>Fields inherited from Swed TEAM\User</h3>
+<table>
+<tr><td><a href="../swed team/user.html#userData">userData</a></td></tr></table>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#showAddPage()">showAddPage</a>()</p></td>
+</tr>
+<tr>
+<td class="type">static  [string]</td>
+<td class="description"><p class="name"><a href="#showEditForm()">showEditForm</a>([array] userData)</p><p class="description">view na zorazenie formulára na editovanie údajov používateľa</p></td>
+</tr>
+<tr>
+<td class="type">static  [string]</td>
+<td class="description"><p class="name"><a href="#showListPages()">showListPages</a>(mixed list)</p><p class="description">view na zobrazenie zoznamu modulov pre daného používateľa</p></td>
+</tr>
+<tr>
+<td class="type">static  [string]</td>
+<td class="description"><p class="name"><a href="#showListUsers()">showListUsers</a>(mixed list)</p><p class="description">zobrazenie bočného panelu na správu používateľského konta</p></td>
+</tr>
+<tr>
+<td class="type">static  [string]</td>
+<td class="description"><p class="name"><a href="#showLogPop()">showLogPop</a>()</p><p class="description">view pre zobrazenie pop-up okna pre login</p></td>
+</tr>
+<tr>
+<td class="type">static  [string]</td>
+<td class="description"><p class="name"><a href="#showRegForm()">showRegForm</a>()</p><p class="description">view na zorazenie formulára na registráciu používateľa</p></td>
+</tr>
+<tr>
+<td class="type">static  [string]</td>
+<td class="description"><p class="name"><a href="#showUserSection()">showUserSection</a>(mixed userData)</p><p class="description">zobrazenie kompletnej sekcie pre správu používateľského konta aj so skriptami</p></td>
+</tr>
+</table>
+
+<h3>Methods inherited from Swed TEAM\User</h3>
+<table>
+<tr><td><a href="../swed team/user.html#__construct()">__construct</a>, <a href="../swed team/user.html#addPageForm()">addPageForm</a>, <a href="../swed team/user.html#checkIfLogin()">checkIfLogin</a>, <a href="../swed team/user.html#checkIfLogoff()">checkIfLogoff</a>, <a href="../swed team/user.html#checkValidEdit()">checkValidEdit</a>, <a href="../swed team/user.html#checkValidReg()">checkValidReg</a>, <a href="../swed team/user.html#delete()">delete</a>, <a href="../swed team/user.html#fillUserDataById()">fillUserDataById</a>, <a href="../swed team/user.html#fillUserDatabySession()">fillUserDatabySession</a>, <a href="../swed team/user.html#getUserID()">getUserID</a>, <a href="../swed team/user.html#isAdmin()">isAdmin</a>, <a href="../swed team/user.html#isLoggedIn()">isLoggedIn</a>, <a href="../swed team/user.html#listPagesUser()">listPagesUser</a>, <a href="../swed team/user.html#listUsers()">listUsers</a>, <a href="../swed team/user.html#login()">login</a>, <a href="../swed team/user.html#printLogPop()">printLogPop</a>, <a href="../swed team/user.html#printUserSection()">printUserSection</a>, <a href="../swed team/user.html#printUserSectionReg()">printUserSectionReg</a>, <a href="../swed team/user.html#processRegistration()">processRegistration</a>, <a href="../swed team/user.html#search()">search</a>, <a href="../swed team/user.html#showApproveList()">showApproveList</a>, <a href="../swed team/user.html#showUsersList()">showUsersList</a></td></tr></table>
+
+<h3>Details</h3>
+<code class="signature" id="showAddPage">public static  void <strong>showAddPage</strong>()</code>
+<div class="details">
+</div>
+
+<code class="signature" id="showEditForm">public static  [string] <strong>showEditForm</strong>([array] userData)</code>
+<div class="details">
+<p>view na zorazenie formulára na editovanie údajov používateľa</p><table>
+<tr><th>Parameters</th>
+<td>userData - [údaje]</td>
+</tr><tr><th>Returns</th>
+<td>[html kod formuláru]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="showListPages">public static  [string] <strong>showListPages</strong>(mixed list)</code>
+<div class="details">
+<p>view na zobrazenie zoznamu modulov pre daného používateľa</p><table>
+<tr><th>Returns</th>
+<td>[html kod zoznamu]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="showListUsers">public static  [string] <strong>showListUsers</strong>(mixed list)</code>
+<div class="details">
+<p>zobrazenie bočného panelu na správu používateľského konta</p><table>
+<tr><th>Returns</th>
+<td>[html kod panelu]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="showLogPop">public static  [string] <strong>showLogPop</strong>()</code>
+<div class="details">
+<p>view pre zobrazenie pop-up okna pre login</p><table>
+<tr><th>Returns</th>
+<td>[html kod okna]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="showRegForm">public static  [string] <strong>showRegForm</strong>()</code>
+<div class="details">
+<p>view na zorazenie formulára na registráciu používateľa</p><table>
+<tr><th>Returns</th>
+<td>[html kod formuláru]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="showUserSection">public static  [string] <strong>showUserSection</strong>(mixed userData)</code>
+<div class="details">
+<p>zobrazenie kompletnej sekcie pre správu používateľského konta aj so skriptami</p><table>
+<tr><th>Returns</th>
+<td>[html a js kod sekcie]</td>
+</tr></table>
+</div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>
