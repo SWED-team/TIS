@@ -1,19 +1,9 @@
 <?php
 
-    session_start();
-
+session_start();
 include ("User.php");
 include('../_models/User_m.php');
-//$user= new User();
-  include('../_models/Db.php');
-
-
-  /*echo "kravaaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-  echo $_POST['json']['function'];
-  echo sizeof($_POST['json']['arg']);*/
-
-  //$ob=  unserialize($_SESSION["user"]);
-
+include('../_models/Db.php');
 
     $aResult = array();
     error_reporting(0);
@@ -109,6 +99,14 @@ include('../_models/User_m.php');
 			  User_m::changeAdminToDb($_POST['json']['arg']['par1'],$_POST['json']['arg']['par2']);
 
 			  break;
+		  case 'search':
+
+		  	  echo $_user->search($_POST['json']['arg']['par2']);
+		  	  break;
+		  case 'logoff':
+
+		  	  unset($_SESSION["userId"]);
+		  	  break;
 		  case 'changeTitle':
 
 			  $user=new User();

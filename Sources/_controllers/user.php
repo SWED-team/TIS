@@ -34,16 +34,24 @@ if(!isset($_SESSION))
 		$this->checkIfLogin();
 		$this->checkIfLogoff();
 		$show_page=true;
-		if(isset($_POST["submitProf"]))
+		if(isset($_GET["profile"]))
 		{
-
 			$this->fillUserDataBySession();
-
 			$this->printUserSection();
+			$show_page=true;
+
+		}
+		else if(isset($_GET["registration"])){
+			$this->printUserSectionReg();
+			$show_page=false;
+		}else if(isset($_GET["logoff"])){
+
+			unset($_SESSION["userId"]);
+			header('Location: '.$_SERVER['google.sk']);
 			$show_page=false;
 		}
-		else if(isset($_POST["submitReg"])){
-			$this->printUserSectionReg();
+		else if(isset($_GET["search"])){
+			$this->search($_GET["search"]);
 			$show_page=false;
 		}
 		else if(isset($_POST["submitSearch"])){
@@ -52,8 +60,6 @@ if(!isset($_SESSION))
 			$show_page=false;
 		}
 		return $show_page;
-
-
 	}
 	public function isLoggedIn()
 	{
@@ -74,6 +80,17 @@ if(!isset($_SESSION))
 			return true;
 		return false;
 	}
+
+	public function hasEditRights($page_id)
+	{
+		$_page = new Page($page_id);
+		if($_page->pageData["created_by"]==$this->userData["id"])return true;
+		if(User_m::hasRights($page_id,$this->userData["id"]))return true;
+		return false;
+
+
+	}
+
 
 	public function printLogPop()
 	{
@@ -177,7 +194,8 @@ if(!isset($_SESSION))
 	 public function printUserSection()
 	 {
 
-	 	return User_v::showUserSection($this->userData);
+	 	return User_v::showUserSection($this->userData,$_GET["profile"]);
+
 
 	 }
 
@@ -235,7 +253,6 @@ if(!isset($_SESSION))
 
 		public static function checkValidReg($param)
 		{
-
 			$errors = array();
 			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
 			{$errors["email"]="Email address is not valid";}
@@ -316,6 +333,7 @@ if(!isset($_SESSION))
 		}
 
 
+
 		public function search($term)
 		{
 
@@ -330,15 +348,18 @@ if(!isset($_SESSION))
 			$res='<div id="infoSectionUser2" style="width:80%;margin-left:10%;">
 
 			<span>Pages</span>
-			'.User_v::showListPages($listP).'
-
-			<span>Modules</span>
-			'.User_v::showListPages($listP).'
+			';
+			foreach ($listP as $key => $value) {
+				$p = new Page($value["id"]);
+				$p->preview(false,1);}
+			$res=$res.'
+			
 
 			</div>';
 
 			return $res;
 		}
+
 
 		public function addPageForm($id)
 		{

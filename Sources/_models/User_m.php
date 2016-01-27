@@ -1,17 +1,17 @@
 <?php
-if(file_exists('../_models/Db.php'))
-  require_once('../_models/Db.php');
-if(file_exists('_models/Db.php'))
-  require_once('_models/Db.php');
 
 	class User_m extends User{
 
 public function __construct(){
 	
+if(file_exists('../_models/Db.php'))
+  require_once('../_models/Db.php');
+if(file_exists('_models/Db.php'))
+  require_once('_models/Db.php');
 
 
 }
-			/**
+		/**
 			 * funkcia vykoná editáciu používateľa v DB
 			 * @param  [type] $param [zmenené údaje]
 			 *
@@ -43,6 +43,19 @@ public function __construct(){
 				      WHERE u.email = ? and u.password = ?",
 				      array($mail, hash( 'sha256', $pass)))->fetch();
 				    return $result;
+
+			}
+			public static function hasRights($pageID,$userID)
+			{
+
+					 $result = Db::query("
+				      SELECT *
+				      FROM edit_rights u
+				      WHERE u.page_id= ? and u.user_id= ?",
+				      array($pageID,$userID))->fetch();
+					 if(sizeof($result)>0)return true;
+					 return false;
+				    
 
 			}
 			public static function getUserDataById($id)

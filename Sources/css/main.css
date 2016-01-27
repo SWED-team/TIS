@@ -90,6 +90,9 @@ header {
     font-size: 110%;
 }
 
+.navbar-brand{
+    text-transform: uppercase;
+}
 .navbar .navbar-collapse {
     text-align: center;
 }

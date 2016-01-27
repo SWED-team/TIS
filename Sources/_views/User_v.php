@@ -134,16 +134,42 @@ class User_v extends User{
 	 * @param  [array] $userData [údaje]
 	 * @return [string] [html kod formuláru]
 	 */
-	public static function showEditForm($userData)
+	public static function showEditForm($userData,$disabled)
 	{
 		?>
 		<div  class="form-group">
 			<form method="post">
+				<?php if($disabled){ 
 
+						?>
+							<div class="form-group col-md-6">
+			  		<label for="login">Email:</label>
+			        <input id="loginEmail" disabled type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?>>
+			    </div>
+	         	<div class="form-group col-md-6">
+			  		<label for="usr">First Name:</label>
+			        <input id="loginFirstName" disabled type="text" class="form-control col-ms-1" name="firstName" value=<?php echo '"'.$userData["first_name"].'"'?>>
+			    </div>
+	         	<div class="form-group col-md-6">
+			  		<label for="usr"  >Last Name:</label>
+			        <input id="loginLastName" disabled type="text" class="form-control col-ms-1" name="LastName" value=<?php echo '"'.$userData["last_name"].'"'?>>
+			    </div>
+	        	
+	          	<div class="form-group col-md-6">
+			  		<label for="usr">Bio:</label>
+			        <textarea disabled rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value=<?php echo '"'.$userData["bio"].'"'?>><?php echo $userData["bio"]?></textarea>
+ 				</div>
+
+
+
+
+						<?php
+				 } 
+				 else {?> 
 				<input id="idcko" type="text" class="form-control col-ms-1 hidden" name="loginID" value=<?php echo '"'.$userData["id"].'"'?>>
 	      	 	<div class="form-group col-md-6">
 			  		<label for="login">Email:</label>
-			        <input id="loginEmail" type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?> disabled>
+			        <input id="loginEmail" type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?> >
 			    </div>
 	         	<div class="form-group col-md-6">
 			  		<label for="usr">First Name:</label>
@@ -165,9 +191,12 @@ class User_v extends User{
 			  		<label for="usr">Bio:</label>
 			        <textarea rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value=<?php echo '"'.$userData["bio"].'"'?>><?php echo $userData["bio"]?></textarea>
 			    </div>
-      			<div class="modal-footer" style="margin-top:50px;">
-         		<div id="editButton" name="submitRegUser" class="btn btn-success" >Update</div>
+				<div class="modal-footer" style="margin-top:50px;">
+         		<div id="editButton" name="submitRegUser" class="btn btn-success" >Update</div> 
 
+			    <?php } ?>
+
+      			
       		</form>
       	</div>
       	<div id="check_div"></div>
@@ -314,37 +343,79 @@ class User_v extends User{
 	 * zobrazenie kompletnej sekcie pre správu používateľského konta aj so skriptami
 	 *@return [string] [html a js  kod sekcie]
 	 */
-	public static function showUserSection($userData)
+	public static function showUserSection($userData,$profileID)
 	{
 		?>
-		<section class="container-fluid">
+		
+
+		<div class=" col-xs-12 ">
 			<div class="row">
+			<?php
+		if($userData["id"]==$profileID)
+		{
+		?>
+
+		
 				<div class="moduel-container col-sm-3">
 					<div id="navigationBarUser" class="col-md-12" >
 			            <button type="button" class="btn btn-info col-md-12" id="btnEdit"><i class="glyphicon glyphicon-edit"></i>&nbsp &nbsp Edit profile</button>
 			            <button type="button" class="btn btn-info col-md-12" id="btnListM" ><i class="glyphicon glyphicon-list"></i>&nbsp List pages</button>
 						<button type="button" class="btn btn-info col-md-12" id="btnAddPage" ><i class="glyphicon glyphicon-list"></i>&nbsp Add page</button>
 
-        				<?php if($userData["admin"]==1){?>
+        				<?php if($userData["admin"]==1){ ?>
 
 			         	<button type="button" class="btn btn-info col-md-12" id="btnListU" ><i class="glyphicon glyphicon-list"></i>&nbsp List users</button>
 			         	<button type="button" class="btn btn-info col-md-12" id="btnListM" ><i class="glyphicon glyphicon-list"></i>&nbsp List approves</button>
 			        	
-			        	<?php
-			        }
+			       
+
+			   
+			     	<?php }
+			        
 			        ?>
+			             </div>
+						    </div>
+						    
+							<div class="col-sm-9">
+								<div id="infoSectionUser2"> <?php User_v::showEditForm($userData,false);
+								 ?> </div>
+									 		</div>  <?php
+		}  
+		else 
+		{
+					 		?>
+							 	<div class="col-lg-14">
+							 		<div class="row">
+									<div id="infoSectionUser2" style="min-height:200px;"><?php
+									 	User_v::showEditForm($userData,true);
+									 	?> 
+									 		</div>
+									 		</div>
+									 		<div class="row">
+									 		
 
-			        </div>
-			    </div>
-				<div class="moduel-container col-sm-9">
-					<div id="infoSectionUser2"></div>'
-				</div>
+									 		<?php 
+
+									 		$pole=User_m::getPagesFromDb($userData["id"],"created");
+									 		foreach ($pole as $key => $value) {
+									 				$pom = new Page($value["id"]);
+									 				$pom->preview(false,1);
+
+									 			
+
+									  } ?>
+							</div>
+							<?php 
+			} 
+			?>
 			</div>
-		</section>
+							</div>
 
-		<?php
+			<?php
+			
 
-	}
+		}
+		
 
+		}
 
-}

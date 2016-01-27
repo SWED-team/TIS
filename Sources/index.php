@@ -18,8 +18,8 @@
   $page_admin = true;
   $page->pageContent($page_admin);
   //$page->pageListWhere("column", "value", "orderBy");
-  $page->pageListAdminWhere(1,1,"title");
-  $page->pageListUserWhere(1,1,"title");
+  //$page->pageListAdminWhere(1,1,"title");
+  //$page->pageListUserWhere(1,1,"title");
 
 
   if($_user->_init_check())

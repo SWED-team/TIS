@@ -31,6 +31,8 @@ class Page_v{
     <script type="text/javascript" src="js/Page.js"></script>
     <script type="text/javascript" src="js/bootstrap-combobox.js"></script>
     <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
+
 
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -53,14 +55,15 @@ class Page_v{
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <?php 
+                if(isset($home) && sizeof($home) > 0)
+                    echo '<a class="navbar-brand " href="./">'.$home["title"].'</a>';
+                ?>
             </div>
             <div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <?php 
-                        if(isset($home) && sizeof($home) > 0)
-                            echo '<li><a href="./">'.$home["title"].'</a></li>';
-                        ?>
+
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
                           <ul class="dropdown-menu">
@@ -79,22 +82,26 @@ class Page_v{
                         <li class="widthLi first">
                             <div class="input-group" id="searchBar">
 
-                                <div id="searchBarHide">
-                                    <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
-                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            <div id="searchBarHide"><form method="post">
+                              <input type="text" id="search_term"class="form-control" placeholder="Search"  name="search_term">
+                                <div id="nav_search"  name="submitSearch" class="btn btn-info" data-dismiss="modal">search</div></form>
 
                                 </div>
                                 <div id="userBarHide">
                                     <form method="POST">
+
+
+
                                         <?php
- if(isset($_SESSION["userId"])){
-                              echo '<input type="submit" value="Logoff" name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >';
-                              echo '<input type="submit" value="Profile" name="submitProf" class="btn btn-info" data-dismiss="modal">';
+                            if(isset($_SESSION["userId"])){
+                              echo '<div id="nav_logoff"  name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >LogOff</div>';
+                              echo '<div id="nav_profile"  onclick="onClickProfile('.$_SESSION["userId"].')"; name="submitProf" class="btn btn-info" data-dismiss="modal">Profile</div>';
                               echo '</form>';
                           }
                           else {
                               echo '<button type="button" class="btn btn-success" data-dismiss="modal"><div data-toggle="modal" data-target="#LoginPop"  >login</div></button>';
-                              echo '<input type="submit" name="submitReg" value="Registration"class="btn btn-info" data-dismiss="modal"data-toggle="modal" ></button>';
+                              echo '<div id="nav_reg" name="submitReg" class="btn btn-info" data-dismiss="modal"data-toggle="modal" >registration</div>';
+
                           }
                                         ?>
                                 </div>
@@ -117,7 +124,36 @@ class Page_v{
                         </li>
 
 
+                            <script type="text/javascript">
 
+                              //  $("#nav_profile").on("click",function(){
+
+                                    function onClickProfile(user){
+
+                                    window.location = "index.php?profile="+user;
+
+                                }
+
+                                 $("#nav_reg").on("click",function(){
+
+                                    window.location = "?registration";
+
+                                });
+                                  $("#nav_search").on("click",function(){
+
+                                    window.location = "?search="+$("#search_term").val();
+                                    
+
+                                });
+
+                                   $("#nav_logoff").on("click",function(){
+
+                                    ajaxUniversal("logoff",0,0);
+                                    window.location = "index.php?page_id=1";
+                                    
+
+                                });
+                            </script>
 
 
                     </ul>
