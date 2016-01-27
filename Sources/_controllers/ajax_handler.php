@@ -1,9 +1,9 @@
 <?php
 
 session_start();
-include ("User.php");
-include('../_models/User_m.php');
-include('../_models/Db.php');
+include_once ("User.php");
+include_once('../_models/User_m.php');
+include_once('../_models/Db.php');
 
     $aResult = array();
     error_reporting(0);

@@ -1,7 +1,10 @@
 <?php
 if(!isset($_SESSION))
     session_start();
-
+if(file_exists('../_models/Db.php'))
+  require_once('../_models/Db.php');
+if(file_exists('_models/Db.php'))
+  require_once('_models/Db.php');
 
     	 /**
     	  * Classa používateľa
