@@ -150,7 +150,7 @@ abstract class Module{
         }
         // ----------- Pridanie noveho modulu na stranku --------------- END
         // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly
-        if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($this->containerData["page_id"]))){
+        if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($this->containerData))){
             $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this module.");
             return false;
         }
@@ -270,4 +270,8 @@ abstract class Module{
     echo '<div class="alert alert-'.$type.'" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>'.$title.' </strong> '.$message.'</div>';
   }
 }
+
+
+
+
 ?>
