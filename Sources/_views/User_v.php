@@ -1,6 +1,6 @@
 <?php
 
-class User_v extends User{
+class User_v{
 
 
 	/**
@@ -21,11 +21,11 @@ class User_v extends User{
 		      			<div class="modal-body">
 		       				<input id="PoploginEmail" type="text" class="form-control col-ms-1" name="login" placeholder="Enter email">
 		       				<br>
-		       				<input id="PoploginPass" type="text" class="form-control" name="pass" placeholder="Enter password">
+		       				<input id="PoploginPass" type="password" class="form-control" name="pass" placeholder="Enter password">
 		      			</div>
 		      			<div class="modal-footer">
-		       				<div id="loginButton" class="btn btn-success" >Login</div>
-		       				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		      				<a href="?registration"type="button" id="regButton" class="btn btn-primary" >Sign In</a>
+		       				<button type="submit" id="loginButton" class="btn btn-success" >Login</button>
 		      		</form>
 				</div>
 				<div id="check_divPop"></div>
@@ -35,99 +35,117 @@ class User_v extends User{
 		<?php
 	}
 
+
+	public static function adminAdministrationTabs($active, $user_id){ ?>
+		<ul class="nav nav-tabs nav-justified">
+		  <li <?php if($active=="profile")echo "class='active'"?> role="presentation"><a href="?profile&amp;user=<?php echo $user_id?>">Profile</a></li>
+		  <li <?php if($active=="pages")echo "class='active'"?> role="presentation"><a href="?pages&amp;user=<?php echo $user_id?>">Pages</a></li>
+		  <li <?php if($active=="pages_administration")echo "class='active'"?> role="presentation"><a href="?pages_administration">Pages Administration</a></li>
+		  <li <?php if($active=="users_administration")echo "class='active'"?> role="presentation"><a href="?users_administration">Users</a></li>
+		  <li <?php if($active=="category_administration")echo "class='active'"?> role="presentation"><a href="?category_administration">Categories</a></li>
+		</ul>
+	<?php }
+
+	public static function userAdministrationTabs($active, $user_id){ ?>
+		<ul class="nav nav-tabs">
+		  <li <?php if($active=="profile")echo "class='active'"?> role="presentation"><a href="?profile&amp;user=<?php echo $user_id?>">Profile</a></li>
+		  <li <?php if($active=="pages")echo "class='active'"?> role="presentation"><a href="?pages&amp;user=<?php echo $user_id?>">Pages</a></li>
+		</ul>
+		<?php 
+	}
+	public static function profile( $user, $pages_count=0, $last_edited_pages=array(), $editable=false){ ?>
+		<div class="user-profile row adminContent">
+			<div class="text-center">
+				<i class="fa fa-users"></i><h2><?php echo $user['first_name']." ".$user["last_name"];?></h2>
+				<i class="fa fa-at"></i><h5><?php echo $user['email'];?></h5>
+				<i class="fa fa-calendar-o"></i><h6 class="text-muted"><?php echo $user['reg_date'];?></h6>
+				<i class="fa fa-comments"></i><p><?php echo $user['bio'];?></p>
+			</div>
+
+		</div>
+	<?php
+	}
+
+
+
+
 	/**
 	 * zobrazenie bočného panelu na správu používateľského konta
 	 * @return [string] [html kod panelu]
 	 */
 
-	public static function showListUsers($list)
-	{
-
-		$res=
-	'<div id="listP">'.'
-					<div id="listPControl" class="col-lg-8">
-
-						<div class="btn btn-default" id="listPOrderFirstName">Order by FIrst name</div>
-						<div class="btn btn-default" id="listPOrderRegDate">Order by Reg date</div>
-						<div class="btn btn-default" id="listPOrderEmail">Order by email</div>
+	public static function showListUsers($list){ ?>
+		<div id="listP" class="">
 
 
-					</div>
-					<div id="ListPList" class="col-lg-12">';
+			<div id="user-list" class="col-lg-12 adminContent page-list">
+				
 
-		foreach ($list as $key => $value) {
-			$deactive=true;
-			$admin=false;
-			if($value["deactivated"]==0){$deactive=false;}
-			if($value["admin"]==1){$admin=true;}
-			$res=$res.'
+			<?php
+			  $cnt=0;
+			foreach ($list as $key => $value) {
+				$cnt++;
+				$deactive=true;
+				$admin=false;
+				if($value["deactivated"]==0){$deactive=false;}
+				if($value["admin"]==1){$admin=true;}
+				?>
 
-						<div id="listRow" class="row">
-						<div  class="col-lg-4 col-md-6 col-sm-6 "><input disabled class="form-control" type="text" value='.$value["first_name"].'></input></div>
-						<div  class="col-lg-3 col-md-6 col-sm-6"><input disabled class="form-control" type="text" value='.$value["email"].'></input></div>
-						<div  class="col-lg-2 col-md-4 col-sm-4 col-xs-12"><button onclick="list_user_pages('.$value["id"].');"class="btn btn-success">Go To pages</button></div>
-						';
-						if($deactive){
-							$res=$res.'<div  class="col-lg-2 col-md-4 col-sm-4 col-xs-6"><input onchange="user_deactive(this,'.$value["id"].');" checked type="checkbox"class="btn btn-warning">Deactivated</div>';
-						}
-						else
-						{$res=$res.'<div  class="col-lg-2 col-md-4 col-sm-4 col-xs-6"><input  id="krava" onchange="user_deactive(this,'.$value["id"].');" type="checkbox"class="btn btn-warning">Deactive</div>';}
-
-						if($admin){
-							$res=$res.'	<div  class="col-lg-1 col-md-4 col-sm-4 col-xs-6"><input onchange="user_admin(this,'.$value["id"].');" checked type="checkbox"class="btn btn-warning">Admin</div>';
-						}
-						else
-						{$res=$res.'<div  class="col-lg-1 col-md-4 col-sm-4 col-xs-6"><input onchange="user_admin(this,'.$value["id"].');"  type="checkbox"class="btn btn-warning">Admin</div>';}
-						$res=$res.'
-						</div>
-						';
-		}
-		$res=$res.'
-
-					</div>
-			 </div>
+				<div class="row bordered "><?php
+         	echo "<div class='col-sm-4  page-list-info'><small class='text-muted'>#".$cnt ." </small> ". $value["first_name"]." ".$value["last_name"] ." (". $value["email"] .") </div>";					
+					if($deactive){
+           		echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					}
+					else{
+           		echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini"  type="checkbox"></div>';
+					}
+					if($admin){
+           		echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					}
+					else{
+           		echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					}
+					echo '<div  class="col-sm-2 col-xs-3 "><a href="?pages&amp;user='.$value["id"].'" class="btn  col-xs-12 btn-xs btn-default">Pages</a></div>';
+					echo '<div  class="col-sm-2 col-xs-3 "><a href="?profile&amp;user='.$value["id"].'" class="btn col-xs-12  btn-xs btn-default">Profile</a></div>';
+				?>
+				</div>
+				<?php
+			} ?>
+			</div>
+		</div>
 	<script>
-
-	function user_deactive(current,id)
-		{
+	function user_deactive(current,id){
 				check=0;
 
 				if($(current).is(":checked")){check=1;}
 				ajaxUniversal("Deactivate",check, id);
 				ajaxUniversal("SwithUserMenu3",3, "first_name");
-			}
+		}
 
-	function user_admin(current,id)
-		{
+		function user_admin(current,id){
 				check=0;
 
 				if($(current).is(":checked")){check=1;}
 				ajaxUniversal("Admin",check, id);
 				ajaxUniversal("SwithUserMenu3",3, "first_name");
-			}
-	function list_user_pages(id)
-	{
+		}
 
-		 ajaxUniversal("listAdminUserPages",id, "created");
-	}
+		function list_user_pages(id){
+			 ajaxUniversal("listAdminUserPages",id, "created");
+		}
 
 		$("#listPOrderFirstName").on("click", function () {
-
 			 ajaxUniversal("SwithUserMenu3",3, "first_name");
 		});
 		$("#listPOrderRegDate").on("click", function () {
 			 ajaxUniversal("SwithUserMenu3",3, "reg_date");
 		});
 		$("#listPOrderEmail").on("click", function () {
-
 			 ajaxUniversal("SwithUserMenu3",3, "email");
 		});
 
-	</script>';
-
-
-		return $res;
-
+	</script>
+	<?php
 	}
 	/**
 	 * view na zorazenie formulára na editovanie údajov používateľa

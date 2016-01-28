@@ -80,15 +80,18 @@ header {
 }
 
 
-
+.nav-tabs{
+    margin-left: 0;
+}
 
 .navbar .navbar-nav {
-    display: inline-block;
-    float: none;
-    vertical-align: top;
     text-transform: uppercase;
     font-size: 110%;
 }
+.navbar .navbar-nav .btn{
+    text-transform: capitalize;
+}
+
 
 .navbar-brand{
     text-transform: uppercase;
@@ -140,6 +143,11 @@ header {
     filter: blur(10px);
 
 }
+.adminContent{
+    padding: 15px;
+    background-color: rgba(255,255,255,0.9);
+    padding-top: 40px;
+}
 .page-info{
     margin-top: -25px;
     margin-bottom: 40px;
@@ -148,11 +156,9 @@ header {
 .page-info >div{
     margin-bottom: 40px;
 }
-.page-list{
-    background-color: rgba(255,255,255,0.9);
-    padding: 15px 15px;
-}
-.page-list .row{
+
+.page-list .row,
+.user-list .row{
     margin-bottom: 5px;
 }
 .page-list-info{

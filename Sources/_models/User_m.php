@@ -51,11 +51,11 @@ class User_m{
 				      FROM edit_rights u
 				      WHERE u.page_id= ? and u.user_id= ?",
 				      array($pageID,$userID))->fetch();
-					 if(sizeof($result)>0)return true;
-					 return false;
+					 return !$result==null;
 				    
 
 			}
+
 			public static function getUserDataById($id)
 			{
 

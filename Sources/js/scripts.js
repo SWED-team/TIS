@@ -121,13 +121,13 @@ function showModal(modalId, size, header, body) {
 		// body...
 	});
 
-		$("#loginButton").on("click",function  () {
+	$("#loginButton").on("click",function  () {
 
 		$("#check_div").html("");
 			ajaxLogin();
-
-	
-	
+	});
+	$("#logOffButton").on("click",function  () {
+		ajaxLogin();
 	});
 
 
@@ -163,7 +163,7 @@ function showModal(modalId, size, header, body) {
 ///funckia vypise vsetky errory pri reg/editacii usera
 	function printRegErrors(errors)
 		{
-	    alert("fsfdxxx");
+	    //alert("fsfdxxx");
 
 		$("#check_div").html("");
 			 $.each(errors ,function(key,value)
@@ -211,7 +211,22 @@ function showModal(modalId, size, header, body) {
 
 	}
     
+	function logOfUser(){
+		$.ajax({
+			type:"POST",
+	    url: '_controllers/ajax_handler.php',
+	    data: {'json':{'function': "Logoff","arg": {"":""}}},
+	    success: function(data){
+	    	if(data==""){
+	    		location.reload();
+	    	}
+	    },
+	    error: function(data){
+	  			alert(data);
+		  }
 
+		});
+	}
 
 	function ajaxLogin()
 	{
@@ -237,7 +252,7 @@ function showModal(modalId, size, header, body) {
 		   if(data !==""){
 
 		     $("#check_divPop").html("");
-		     window.location = "index.php?page_id=1";
+		     location.reload();
 				}
 		   else {
 		       $("#check_divPop").html("");
@@ -263,7 +278,7 @@ function showModal(modalId, size, header, body) {
 	function ajaxRegEdit(id)
 	{
 		
-alert("Vddolam ajax toto je id : " +id);
+//alert("Vddolam ajax toto je id : " +id);
 		var fnc;
 		if(id==0)fnc="RegUser";
 		else fnc="EditUser"
@@ -293,14 +308,12 @@ alert("Vddolam ajax toto je id : " +id);
 	       
 
 	       success: function(data){
-		  alert("xxxx");
 		   if(data=="ok" || data ==""){
 		  // 	alert("je to ok");
 
 		   $("#check_div").append("<div id='sub_error' class='btn btn-success'><i ></i><span>Edit successfull</span> </div>");
 				}
 			else {
-				alert("RAw data"+ data);
 				data2 =jQuery.parseJSON(data);
 			//	alert("DATATYP:"+typeof data2 +data );
 					printRegErrors(data2);

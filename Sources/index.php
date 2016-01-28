@@ -11,24 +11,18 @@
   
   $page = new Page();
   $_user=new User();
+  $_user->fillUserDatabySession();
 
-  $page->header("TIS");
+  $page->header("TIS", $_user);
+  $page->pageContent($_user);
 
-
-  $page_admin = true;
-  $page->pageContent($page_admin);
   //$page->pageListWhere("column", "value", "orderBy");
   //$page->pageListAdminWhere(1,1,"title");
   //$page->pageListUserWhere(1,1,"title");
 
 
-  if($_user->_init_check())
-   {
+  $_user->_init_check();
 
-    error_reporting(1);
-
-  //$page->pageContent(true); // argument nastavuje ci sa stranka zobrazi v rezime administracie alebo zobrazenia
-  }
 
 
 

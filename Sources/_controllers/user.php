@@ -34,36 +34,132 @@ if(file_exists('_models/Db.php'))
 
 	public function _init_check()
 	{
-		$this->checkIfLogin();
-		$this->checkIfLogoff();
-		$show_page=true;
+		//ak je v adrese profile zobrazi sa profil pouzivatela
 		if(isset($_GET["profile"]))
 		{
-			$this->fillUserDataBySession();
-			$this->printUserSection();
-			$show_page=true;
-
+			return $this->profile();
 		}
+		
+		if(isset($_GET["pages"])){
+			return $this->pages();
+		}
+		
 		else if(isset($_GET["registration"])){
-			$this->printUserSectionReg();
-			$show_page=false;
-		}else if(isset($_GET["logoff"])){
+			if(!$this->isLoggedIn()){
+				return $this->printUserSectionReg();
+			}
+			return false;
+		}
+		else if(isset($_GET["pages_administration"])){
+			return $this->pagesAdministration();
+		}
+		else if(isset($_GET["users_administration"])){
+			return $this->usersAdministration();
+		}
+		else if(isset($_GET["q"])){
+			$this->search($_GET["q"]);
+		}
+		else if(isset($_GET["category_administration"])){
+			return $this->categoryAdministration();
+		}
 
-			unset($_SESSION["userId"]);
-			header('Location: '.$_SERVER['google.sk']);
-			$show_page=false;
-		}
-		else if(isset($_GET["search"])){
-			$this->search($_GET["search"]);
-			$show_page=false;
-		}
-		else if(isset($_POST["submitSearch"])){
-			echo "krava";
-			echo  $this->search($_POST["search_term"]);
-			$show_page=false;
-		}
-		return $show_page;
+		//return $show_page;*/
 	}
+
+	public function profile(){
+		if(isset($_GET["user"])){
+			if($this->isLoggedIn() && $_GET["user"]==$this->getUserID()){
+				if($this->isAdmin()){
+					User_v::adminAdministrationTabs("profile",$this->getUserID());
+				}
+				else{
+					User_v::userAdministrationTabs("profile",$this->getUserID());
+				}
+				User_v::profile($this->userData);
+				return true;
+			}
+			$u=new User();
+			if($u->fillUserDataById($_GET["user"])!=0){
+				User_v::userAdministrationTabs("profile",$_GET["user"]);
+				User_v::profile($u->userData);
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	public function pages(){
+		if(isset($_GET["user"])){
+			if($this->isLoggedIn() && $_GET["user"]==$this->getUserID()){
+				if($this->isAdmin()){
+					User_v::adminAdministrationTabs("pages",$this->getUserID());
+					$page = new Page();
+					$page->pageListAdminWhere('created_by', $this->getUserID(), "title");
+				}
+				else{
+					User_v::userAdministrationTabs("pages",$this->getUserID());
+					$page = new Page();
+					$page->pageListUserWhere('created_by', $this->getUserID(), "title");
+				}
+				return true;
+			}
+			$u=new User();
+			if($u->fillUserDataById($_GET["user"])!=0){
+					User_v::userAdministrationTabs("pages",$_GET["user"]);
+					$page = new Page();
+					$page->previewAllWhere("created_by",$u->getUserID(),"edited",1,$this->isAdmin());
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	public function pagesAdministration(){
+		if($this->isLoggedIn() && $this->isAdmin()){
+			User_v::adminAdministrationTabs("pages_administration",$this->getUserID());
+			$page = new Page();
+			$page->pageListAdminWhere(1, 1, "title");
+			return true;
+		}
+		return false;
+	}
+	public function usersAdministration($order="id")
+	{
+		if($this->isLoggedIn() && $this->isAdmin()){
+			User_v::adminAdministrationTabs("users_administration",$this->getUserID());
+			$list = User_m::getAllUsers($order);
+			return User_v::showListUsers($list);
+			return true;
+		}
+		return false;
+	}
+
+	public function categoryAdministration(){
+		if($this->isLoggedIn() && $this->isAdmin()){
+			User_v::adminAdministrationTabs("category_administration",$this->getUserID());
+			$p = new Page();
+			$p->categoryList();
+		}
+	}
+
+	public function search($term)
+	{
+			$listP =User_m::getPagesSearch($term);
+			$res='<div id="infoSectionUser2" style="width:80%;margin-left:10%;">
+			<span>Pages</span>
+			';
+			foreach ($listP as $key => $value) {
+				$p = new Page($value["id"]);
+				$p->preview(false,1);}
+			$res=$res.'
+			</div>';
+			return $res;
+	}
+
+
+	
+
 	public function isLoggedIn()
 	{
 		if(isset($this->userData["id"]) && $this->userData["id"]>0)
@@ -84,14 +180,13 @@ if(file_exists('_models/Db.php'))
 		return false;
 	}
 
-	public function hasEditRights($page_id)
+	public function hasEditRights($page)
 	{
-		$_page = new Page($page_id);
-		if($_page->pageData["created_by"]==$this->userData["id"])return true;
-		if(User_m::hasRights($page_id,$this->userData["id"]))return true;
+		if($this->isLoggedIn()){
+			if($page['created_by']==$this->userData["id"])return true;
+			if(User_m::hasRights($page["id"],$this->userData["id"]))return true;
+		}
 		return false;
-
-
 	}
 
 
@@ -113,7 +208,7 @@ if(file_exists('_models/Db.php'))
 	if(isset($_POST["submitLogoff"])){
 
 				unset($_SESSION["userId"]);
-				header("Refresh:0; url=index.php");
+				header("Refresh:0; url=");
 
 				}
 
@@ -166,16 +261,17 @@ if(file_exists('_models/Db.php'))
 	  */
 	 public function fillUserDataById($id)
 	 {
-	 	$this->userData=User_m::getUserDataById($id);
-
+	 		$this->userData=User_m::getUserDataById($id);
+	 		return $this->getUserID();
 	 }
 	 public function fillUserDatabySession()
 	 {
 	 	if(isset($_SESSION["userId"])){
-	 	$this->userData=User_m::getUserDataById($_SESSION["userId"]);
+	 		$this->userData=User_m::getUserDataById($_SESSION["userId"]);
+	 		return $this->getUserID();
 	 	}
 	 	else {
-	 		//echo "neni prihlaseny user";
+	 		return 0;
 	 	}
 	 }
 
@@ -326,42 +422,6 @@ if(file_exists('_models/Db.php'))
 
 		}
 
-		public function listUsers($order)
-		{
-
-			$list = User_m::getAllUsers($order);
-
-			return User_v::showListUsers($list);
-
-		}
-
-
-
-		public function search($term)
-		{
-
-			$listP =User_m::getPagesSearch($term);
-		//	$listM =User_m::getModulesSearch($term);
-			//$listU =User_m::getUsersSearch($term);
-
-
-
-
-
-			$res='<div id="infoSectionUser2" style="width:80%;margin-left:10%;">
-
-			<span>Pages</span>
-			';
-			foreach ($listP as $key => $value) {
-				$p = new Page($value["id"]);
-				$p->preview(false,1);}
-			$res=$res.'
-			
-
-			</div>';
-
-			return $res;
-		}
 
 
 		public function addPageForm($id)

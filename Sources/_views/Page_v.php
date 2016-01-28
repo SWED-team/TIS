@@ -19,10 +19,13 @@ class Page_v{
     <link rel="stylesheet" href="css/format.css">
     <link rel="stylesheet" href="css/user.css">
     <link href="css/bootstrap-combobox.css" rel="stylesheet">
+    <link href="css/bootstrap-toggle.min.css" rel="stylesheet">
 
 
     <script src="js/jquery-2.1.3.min.js" type="text/javascript"></script>
     <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap-toggle.min.js"></script>
+
     <script type="text/javascript" src="js/fancybox/source/jquery.fancybox.pack.js"></script>
     <script type="text/javascript" src="js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
@@ -38,7 +41,7 @@ class Page_v{
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
     <?php
     }
-    public static function pageHeader( $category, $home, $navbarPages){
+    public static function pageHeader( $category, $home, $navbarPages, $user){
     ?>
     <header>
         <div id="header-image">
@@ -57,13 +60,12 @@ class Page_v{
                 </button>
                 <?php 
                 if(isset($home) && sizeof($home) > 0)
-                    echo '<a class="navbar-brand " href="./">'.$home["title"].'</a>';
+                    echo '<a class="navbar-brand text-primary" href="./">'.$home["title"].'</a>';
                 ?>
             </div>
             <div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav">
-
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
                         <li class="dropdown">
                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
                           <ul class="dropdown-menu">
@@ -79,7 +81,8 @@ class Page_v{
                                 echo '<li><a href="?page='.$n["id"].'">'.$n["title"].'</a></li>';
                             }
                         ?>
-                        <li class="widthLi first">
+
+<!--                        <li class="widthLi first">
                             <div class="input-group" id="searchBar">
 
                             <div id="searchBarHide"><form method="post">
@@ -92,7 +95,7 @@ class Page_v{
 
 
 
-                                        <?php
+                                        <?php/*
                             if(isset($_SESSION["userId"])){
                               echo '<div id="nav_logoff"  name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >LogOff</div>';
                               echo '<div id="nav_profile"  onclick="onClickProfile('.$_SESSION["userId"].')"; name="submitProf" class="btn btn-info" data-dismiss="modal">Profile</div>';
@@ -103,13 +106,12 @@ class Page_v{
                               echo '<div id="nav_reg" name="submitReg" class="btn btn-info" data-dismiss="modal"data-toggle="modal" >registration</div>';
 
                           }
-                                        ?>
+                                      */  ?>
                                 </div>
 
 
                             </div>
                         </li>
-
 
                         <li class="widthLi">
 
@@ -154,10 +156,28 @@ class Page_v{
 
                                 });
                             </script>
-
+-->
 
                     </ul>
 
+                    <ul class="nav navbar-nav navbar-right">
+                        <?php if($user->isLoggedIn()){ ?>
+                            <a class="btn btn-primary navbar-btn"  href="?profile&amp;user=<?php echo $user->getUserID(); ?>">Administration</a>
+                            <a class="btn btn-danger navbar-btn" onclick="logOfUser()">Log Of</a>
+                        <?php } else { ?>
+                            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#LoginPop" >Log in</button>                    
+                        <?php }?>
+                    </ul>
+                <div class="navbar-right">
+                    <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
                 </div>
 
             </div>
@@ -306,7 +326,7 @@ class Page_v{
     }
 
     public static function pageListAdmin($pageData){?>
-        <div class="page-list col-xs-12 ">
+        <div class="page-list col-xs-12 adminContent">
             <div class="row">
                 <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
             </div>
@@ -332,6 +352,7 @@ class Page_v{
             foreach ($pageData as $key => $page) {
                 $cnt++;
                 ?>
+            <div id="pagelist_result"></div>
             <div class="row bordered">
                 <div class="col-xs-3 page-list-info">
                         <?php 
@@ -341,25 +362,25 @@ class Page_v{
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["status"]==0)
-                        echo '<a class=" col-xs-12 btn-xs btn btn-danger" title="Publicate this page" onclick="setStatusPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Hidden" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<a class=" col-xs-12 btn-xs btn btn-success" title="Hide this pge" onclick="setStatusPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Hidden" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["is_home"]==0)
-                        echo '<a class="btn col-xs-12 btn-xs btn-danger" title="Set page as HomePage" onclick="setHomePage('.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setHomePage(this,'.$page["id"].')" data-on="Home On" data-off="Home Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<a class="btn col-xs-12 btn-xs btn-success disabled" title="This page is currently HomePage"><i class="fa fa-check"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 disabled"><input class="homeDisabled"  checked data-on="Home On" data-off="Home Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["in_navbar"]==0)
-                        echo '<a class=" col-xs-12 btn btn-xs btn-danger" title="Add page to navigation" onclick="setNavbarPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setNavbarPage(this,'.$page["id"].')" data-on="Nav On" data-off="Nav Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<a class=" col-xs-12 btn btn-xs btn-success" title="Remove page from navigation" onclick="setNavbarPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setNavbarPage(this,'.$page["id"].')" data-on="Nav On" data-off="Nav Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
                 <div class="col-xs-3 pull-right">
@@ -375,9 +396,13 @@ class Page_v{
         </div>
 
 
+
     <?php }
     public static function pageListUser($pageData){?>
-        <div class="page-list col-xs-12 ">
+        <div class="page-list col-xs-12 adminContent">
+            <div class="row">
+                <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
+            </div>
             <div class="row">
                 <div class="col-xs-5">
                     <h4>Page Info</h4>
@@ -401,11 +426,11 @@ class Page_v{
                         ?>
                 </div>
                 <div class="col-xs-2 text-center">
-                    <?php 
+                     <?php 
                     if($page["status"]==0)
-                        echo '<a class=" col-xs-12 btn-xs btn btn-danger" title="Publicate this page" onclick="setStatusPage(1,'.$page["id"].')"><i class=" fa fa-times"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Visible" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<a class=" col-xs-12 btn-xs btn btn-success" title="Hide this pge" onclick="setStatusPage(0,'.$page["id"].')"><i class="fa  fa-check"></i></a>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Visible" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
                 <div class="col-xs-5 pull-right">
@@ -422,6 +447,10 @@ class Page_v{
 
 
     <?php }
+
+    public static function categoryList($category){
+
+    }
 
     public static function preview($editable=false, $page, $category, $file, $cols){ ?>
         <div class="module-container col-sm-<?php echo $cols * 3 ;?>">
@@ -495,7 +524,7 @@ class Page_v{
     }
 
 
-    public static function editor($url, $content, $category, $file, $users=array(), $editors=array(), $isOwner=false, $owner=null){ ?>
+    public static function editor($url, $content, $category, $users=array(), $isOwner=true, $file=array(), $editors=array(), $owner=null){ ?>
         <form class="form-horizontal page_form" role="form" enctype="multipart/form-data" method="post" action="<?php echo $url;?>">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="me-title">Title:</label>
@@ -519,7 +548,7 @@ class Page_v{
                       <option></option>
                       <?php
                         foreach ($category as $key => $c) {
-                            echo '<option ' .(($c["id"] == $content["category_id"]) ? "selected" : "" ). ' value="'.$c["id"].'">'.$c["title"]. '</option>';
+                            echo '<option ' .((isset($content["category_id"]) && $c["id"] == $content["category_id"]) ? "selected" : "" ). ' value="'.$c["id"].'">'.$c["title"]. '</option>';
                         }
                       ?>
                     </select>

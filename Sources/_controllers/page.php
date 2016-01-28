@@ -65,9 +65,10 @@ Class Page{
         $this->pageData = array();
 
         $this->isOwner=true;
-
+        $this->file = array();
         $this->setById($id);
         $this->modules=array();
+
 
     }
     public function setById($id=0){
@@ -82,7 +83,8 @@ Class Page{
                 $this->edited_by = new User();
                 $this->edited_by->fillUserDataById($this->pageData['edited_by']);
                 
-                $this->isOwner = $this->pageData["created_by"]==$this->loggedUser->userData["id"] || $this->loggedUser->isAdmin();
+                if($this->loggedUser->isLoggedIn())
+                    $this->isOwner = $this->pageData["created_by"]==$this->loggedUser->userData["id"] || $this->loggedUser->isAdmin();
                 
                 $this->editors = Page_m::getEditors($this->pageData["id"]);
                 $this->editorsInfo = Page_m::getEditorsInfo($this->pageData["id"]);
@@ -145,9 +147,9 @@ Class Page{
     /*
     Funkcia zobrazí view pre header stránky
     */
-    public function header($title){
+    public function header($title, $user){
         Page_v::pageHead($title);
-        Page_v::pageHeader(Page_m::getCategories(), Page_m::getHomePage(), Page_m::getNavbarPages());
+        Page_v::pageHeader(Page_m::getCategories(), Page_m::getHomePage(), Page_m::getNavbarPages(), $user);
     }
     /*
     funkcia zobrazí view pre footer stránky
@@ -175,10 +177,12 @@ Class Page{
     /*
         Funkcia zobrazí obsah s modulmy
     */
-    public function pageContent($editable=false){
+    public function pageContent($logedUser=null){
 
 
         if(sizeof($_GET)==0){
+            $editable = $logedUser->isAdmin();
+            
             if($this->setById(Page_m::getHomePage()["id"])!=null){
                 if($editable) 
                     $this->addModuleButton();
@@ -200,6 +204,8 @@ Class Page{
 
         if( isset($_GET["page"])){
             if($_GET["page"] > 0 && $this->setById($_GET["page"])!= null){
+                $editable = $logedUser->isAdmin() || $logedUser->hasEditRights($this->pageData);
+               // print_r($logedUser->hasEditRights($this->pageData["id"]));
                 //print_r($this->edited_by->userData);
                 $breadcrumbs = array(
                     $this->category["title"]=>"?category=".$this->category["id"],
@@ -225,6 +231,7 @@ Class Page{
 
 
         else if( isset($_GET["category"]) && $_GET["category"] > 0 ){
+            $editable = $logedUser->isAdmin();
             $category = Page_m::getCategory($_GET["category"]);
             if($category != null){
                 $breadcrumbs = array(
@@ -256,6 +263,9 @@ Class Page{
         Page_v::pageListUser($pages);
 
     }
+    public function categoryList(){
+        Page_v::categoryList(Page_m::getCategories());
+    }
 
     public function setHomePage(){
         Page_m::setHomePage($this->pageData["id"]);
@@ -272,9 +282,23 @@ Class Page{
         Page_m::setStatusPage($this->pageData["id"], $value);
     }
 
+    public function previewAllWhere($column=1,$value=1,$order_by="id",$cols=1,$editable=false){
+        $pages = Page_m::getPagesJoinedWhere($column,$value, $order_by);
+        foreach ($pages as $key => $page) {
+            $category = array(
+                "title"=>$page["category_title"],
+                "id"=>$page["category_id"]
+                );
 
+            $file = array(
+                "thumb-medium" => $page["file_thumb-medium"]
+                );
 
-    public function preview($editable,$cols){
+            Page_v::preview($editable, $page, $category, $file, $cols);
+        }
+    }
+
+    public function preview($editable=false,$cols=1){
         Page_v::preview($editable, $this->pageData, Page_m::getCategory($this->pageData["category_id"]), $this->file,$cols);
         return $this;
     }
@@ -288,7 +312,14 @@ Class Page{
 
 
         $users = Page_m::getUsersExcept($this->loggedUser->userData["id"]);
-        Page_v::editor($url, $this->pageData, Page_m::getCategories(), $this->file, $users, $this->editorsInfo, $this->isOwner, $this->created_by->userData);
+        $categories = Page_m::getCategories();
+        if($operation=="insert"){
+            Page_v::editor($url, $this->pageData, $categories, $users,true);
+        }
+        else{
+            Page_v::editor($url, $this->pageData, $categories, $users, $this->isOwner, $this->file,  $this->editorsInfo,  $this->created_by->userData);
+        }
+
     }
     public function printAlert($type="primary", $title, $message){
         echo '<div class="alert alert-'.$type.'" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>'.$title.' </strong> '.$message.'</div>';
@@ -305,11 +336,6 @@ Class Page{
             $this->printAlert("danger", "Permission Error:", "You must be logged in");
             return false;
         }
-        // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly
-        if(!$this->loggedUser->isAdmin()){
-            $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this page.");
-            return false;
-        }
 
         // ----------- Pridanie novej stranky --------------- START
 
@@ -324,6 +350,11 @@ Class Page{
 
         }
         // ----------- Pridanie novej stranky --------------- END
+
+        if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($this->pageData))){
+            $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this module.");
+            return false;
+        }
 
         // ----------- Editacia existujucej stranky ----------------- START
         if(isset($_GET['edit'])){

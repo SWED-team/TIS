@@ -78,6 +78,19 @@ Class Page_m{
       array($id))->fetch(PDO::FETCH_ASSOC);
     return $result;
   }
+  public static function getPagesJoinedWhere($col=1,$value=1, $order_by="id"){
+    $result = Db::query(
+      "SELECT p.*, c.id AS category_id, c.title AS category_title, f.`thumb-medium` AS `file_thumb-medium`
+      FROM page p
+      INNER JOIN file f
+      ON f.page_id = p.id
+      INNER JOIN page_category c
+      ON c.id = p.category_id
+      WHERE p.$col = ?
+      ORDER BY p.$order_by", 
+      array($value))->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  }
   /**
    * [getModuleFiles description]
    * @param  [type] $parent_id  [description]
@@ -137,14 +150,17 @@ Class Page_m{
       array($page_id))->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
+
+
+  //---------- dat mozno prec ----------------------------
   public static function getPagesWhere($col, $value, $orderBy){
       $result = Db::query(
       " SELECT *
         FROM `page`
-        WHERE ? = ?
+        WHERE $col = ?
         ORDER BY ?
       ",
-      array($col, $value, $orderBy))->fetchAll(PDO::FETCH_ASSOC);
+      array($value, $orderBy))->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
 

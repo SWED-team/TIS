@@ -14,14 +14,14 @@ include_once('../_models/Db.php');
     if( !isset($aResult['error']) ) {
 
 		
-        switch($_POST['json']['function']) {
-           case 'Login':
+    switch($_POST['json']['function']) {
+      case 'Login':
 
 				 $user= new User();
 				 echo ($user->login($_POST['json']['arg']['loginEmail'],$_POST['json']['arg']['loginPass']));
 				 break;
 
-           case 'RegUser':
+      case 'RegUser':
 
 				if(sizeof(User::checkValidReg($_POST['json']['arg']))<1)
 				{User_m::AddUserToDb($_POST['json']['arg']); echo "ok";}
@@ -29,8 +29,7 @@ include_once('../_models/Db.php');
 				{echo json_encode(User::checkValidReg($_POST['json']['arg']));}
 				break;
 
-
-           case 'EditUser':
+      case 'EditUser':
 
 				if(sizeof(User::checkValidEdit($_POST['json']['arg']))<1)
 				{User_m::EditUserToDb($_POST['json']['arg']); echo "ok";}
@@ -103,8 +102,7 @@ include_once('../_models/Db.php');
 
 		  	  echo $_user->search($_POST['json']['arg']['par2']);
 		  	  break;
-		  case 'logoff':
-
+		  case 'Logoff':
 		  	  unset($_SESSION["userId"]);
 		  	  break;
 		  case 'changeTitle':
