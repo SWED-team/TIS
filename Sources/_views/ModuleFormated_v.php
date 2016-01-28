@@ -15,13 +15,24 @@ class ModuleFormated_v{
 
         <script>
 
-            CKEDITOR.replace( 'editor1' ,{
+            CKEDITOR.replace( 'editor1' ,
+            {
+                toolbar: 'Full',
                 filebrowserBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&relative_url=0&fldr=./files/',
                 filebrowserImageBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&relative_url=0&fldr=/files/&akey=189dqwSdq1q32SdFeec6S4486aASdcxQ432s1S3121S1445DED8713ADWEX84321159ASsaasd'
             });
 
-
-    
+$.fn.modal.Constructor.prototype.enforceFocus = function() {
+  modal_this = this
+  $(document).on('focusin.modal', function (e) {
+    if (modal_this.$element[0] !== e.target && !modal_this.$element.has(e.target).length 
+    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_select') 
+    && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_text')) {
+      modal_this.$element.focus()
+    }
+  })
+};
+        
         </script>
         <?php
     }
