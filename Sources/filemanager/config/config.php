@@ -1,7 +1,16 @@
 <?php
- if(!isset($_SESSION))session_start();
+if(!isset($_SESSION))session_start();
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Rome');
+
+ if(file_exists('../_controllers/user.php'))
+    require_once('../_controllers/user.php');
+ $loggedUser = new User();
+ $loggedUser->fillUserDatabySession();
+
+ if(!$loggedUser->getUserID()!=0){ //o
+ 	 echo "<h1>Access denied !</h1>";
+ }else {
 
 /*
 |--------------------------------------------------------------------------
@@ -361,3 +370,4 @@ return array_merge(
 		),
 	)
 );
+}

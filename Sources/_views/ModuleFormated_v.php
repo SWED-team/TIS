@@ -16,9 +16,8 @@ class ModuleFormated_v{
         <script>
 
             CKEDITOR.replace( 'editor1' ,{
-                filebrowserBrowseUrl : './filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
-                filebrowserUploadUrl : './filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
-                filebrowserImageBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&fldr='
+                filebrowserBrowseUrl : './filemanager/dialog.php?type=2&editor=ckeditor&akey=189dqwSdq1q32SdFeec6S4486aASdcxQ432s1S3121S1445DED8713ADWEX84321159ASsaasd',
+                filebrowserImageBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&akey=189dqwSdq1q32SdFeec6S4486aASdcxQ432s1S3121S1445DED8713ADWEX84321159ASsaasd'
             });
 
 
