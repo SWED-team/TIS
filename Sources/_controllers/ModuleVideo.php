@@ -5,6 +5,10 @@ if(file_exists('Module.php'))
     require_once('Module.php');
 if(file_exists('_controllers/Module.php'))
     require_once('_controllers/Module.php');
+if(file_exists('_controllers/user.php'))
+    require_once('_controllers/user.php');
+if(file_exists('user.php'))
+    require_once('user.php');
 
 
 /*******************************  ModuleEmbeded  *******************************/
@@ -24,11 +28,6 @@ class ModuleVideo extends Module{
             require_once('../_models/Module_m.php');
             require_once('../_views/ModuleVideo_v.php');
         }
-        if(file_exists('_controllers/user.php'))
-            require_once('_controllers/user.php');
-        if(file_exists('user.php'))
-            require_once('user.php');
-
 
         $this->created_by = new User();
         $this->edited_by = new User();
@@ -207,55 +206,60 @@ class ModuleVideo extends Module{
     }
 }
 
-
-
 // --------- spracovanie poziadavky posielanej ajaxom ---------
 
-// ak posielame poziadavku na vypisanie editora pre dany modul
-if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
-    if(isset($_POST["id"]) && $_POST["id"]>0){
-        $m = new ModuleVideo($_POST["id"]);
-        $m->editor("edit");
-    }
-    else{
-        $m = new ModuleVideo();
-        $m->editor("insert");
-    }
-}
+// overenie ci sa vola ajax funkcia
+if (isset($_GET["show_editor"]) || isset($_GET["insert"]) || isset($_GET["edit"]) || isset($_GET["delete"])) {
+    
+    $loggedUser = new User();
+    $loggedUser->fillUserDatabySession();
 
-// ak spracuvame formular ktory ma vlozit modul
-if( isset($_GET["insert"]) && $_GET["insert"]){
-    $m = new ModuleVideo();
-    if($m->getFormData()){
-        $m->insert();
-    }
-}
-
-
-// ak spracuvame formular ktory ma editovat modul
-if( isset($_GET["edit"]) && $_GET["edit"] ){
-    if(isset($_GET["id"]) && $_GET["id"]>0){
-        $m = new ModuleVideo($_GET["id"]);
-        if ($m->getFormData()){
-            $m->update();
+    if ($loggedUser->isLoggedIn() ) {
+        // ak posielame poziadavku na vypisanie editora pre dany modul
+        if( isset($_GET["show_editor"]) && $_GET["show_editor"] ){
+            if(isset($_POST["id"]) && $_POST["id"]>0){
+                $m = new ModuleVideo($_POST["id"]);
+                $m->editor("edit");
+            }
+            else{
+                $m = new ModuleVideo();
+                $m->editor("insert");
+            }
         }
-    }
-}
-
-// ak posielame poziadavku na vymazanie modulu s danum id
-if ( isset($_GET["delete"]) && $_GET["delete"]){
-    if( isset($_POST["id"]) && $_POST["id"] > 0 ){
-        $m = new ModuleVideo($_POST["id"]);
-        if($m->delete()){
-            echo '<strong>Module was deleted.</strong>';
+        // ak spracuvame formular ktory ma vlozit modul
+        if( isset($_GET["insert"]) && $_GET["insert"]){
+            $m = new ModuleVideo();
+            if($m->getFormData()){
+                $m->insert();
+            }
         }
-        else{
-            echo '<strong>Delete Error:</strong> Delete was unsuccessfull.';
+        // ak spracuvame formular ktory ma editovat modul
+        if( isset($_GET["edit"]) && $_GET["edit"] ){
+            if(isset($_GET["id"]) && $_GET["id"]>0){
+                $m = new ModuleVideo($_GET["id"]);
+                if ($m->getFormData()){
+                    $m->update();
+                }
+            }
         }
-    }
-    else{
-        echo '<strong>Delete Error:</strong> Unknown module.';
-    }
+        // ak posielame poziadavku na vymazanie modulu s danum id
+        if ( isset($_GET["delete"]) && $_GET["delete"]){
+            if( isset($_POST["id"]) && $_POST["id"] > 0 ){
+                $m = new ModuleVideo($_POST["id"]);
+                if($m->delete()){
+                    echo '<strong>Module was deleted.</strong>';
+                }
+                else{
+                    echo '<strong>Delete Error:</strong> Delete was unsuccessfull.';
+                }
+            }
+            else{
+                echo '<strong>Delete Error:</strong> Unknown module.';
+            }
+        }
+    }else {
+        echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Permission denied:</strong> You dont have permissions to add/edit/del modules on this page.</div>';
+    }    
 }
 // ------------------------------------------------------------
 

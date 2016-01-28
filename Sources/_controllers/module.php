@@ -127,11 +127,7 @@ abstract class Module{
             $this->printAlert("danger", "Permission Error:", "You must be logged in");
             return false;
         }
-        // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly
-        if(!$this->loggedUser->isAdmin()){
-            $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this module.");
-            return false;
-        }
+
 
         // ----------- Overenie uzivatelskych práv ----------------END
         
@@ -153,9 +149,13 @@ abstract class Module{
 
         }
         // ----------- Pridanie noveho modulu na stranku --------------- END
-
+        // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly
+        if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($this->containerData["page_id"]))){
+            $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this module.");
+            return false;
+        }
         // ----------- Editacia existujuceho modulu na stranke -------- START
-        if(isset($_GET['edit'])){
+        if(isset($_GET['edit'] )){
 
             // overenie ci je zadane id modulu ktory sa ma editovat 
             //TODO: Vytvorit funkciu na overenie ci dane id modulu evidujeme v nasej databaze
