@@ -53,5 +53,7 @@ class Db {
   }
 }
 
-Db::connect("127.0.0.1", "root", "", "tis");
+include('db_config.php');
+//file should contain one line:
+//Db::connect("127.0.0.1", "user", "pass", "db");
 ?>

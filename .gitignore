@@ -10,3 +10,5 @@ Sources/files/hamster.jpg
 .phpintel/21e75230403a216c92eca17dff9cd369
 .phpintel/index
 *.png
+Sources/_models/db_config.php
+Sources/files/videos/*

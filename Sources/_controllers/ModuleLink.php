@@ -2,10 +2,10 @@
 
 if(!isset($_SESSION))
     session_start();
-if(file_exists('Module.php'))
-    require_once('Module.php');
-if(file_exists('_controllers/Module.php'))
-    require_once('_controllers/Module.php');
+if(file_exists('module.php'))
+    require_once('module.php');
+if(file_exists('_controllers/module.php'))
+    require_once('_controllers/module.php');
 if(file_exists('../_controllers/user.php'))
     require_once('../_controllers/user.php');
 

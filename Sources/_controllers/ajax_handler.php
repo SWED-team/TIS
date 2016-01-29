@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-include_once ("User.php");
+include_once ("user.php");
 include_once('../_models/User_m.php');
 include_once('../_models/Db.php');
 

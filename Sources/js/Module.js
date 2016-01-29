@@ -67,7 +67,7 @@ function deleteModule(moduleClass, id) {
                 });
             }
         });
-    }
+   }
 }
 
 //funkcia na select/deselect vsetkych checkboxov v parente
@@ -120,7 +120,7 @@ function getPathType(path){
         'url': "_controllers/File.php",
         'data': { 'get_path_type': path },
         'success': function (data) {
-            data = jQuery.parseJSON(data);
+		data = jQuery.parseJSON(data);
             if(data.success){
                 pathType = data.data;
             }
@@ -228,7 +228,7 @@ function responsive_filemanager_callback(field_id) {
 //spracovania callback funkcie filemanagera
 function handleFile(field_id, editable, multiple, extensions){
     var url = jQuery("#" + field_id).val();
-    var pathType = getPathType("files/"+url);
+	var pathType = getPathType("files/"+url);
     if(pathType == 'file'){
         setPreview(url, editable, multiple);
     }

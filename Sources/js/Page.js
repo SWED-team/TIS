@@ -1,7 +1,7 @@
 // volanie ajaxu na vypisanie editovacieho formulara
 function updatePage(id) {
     $.ajax({
-        url: "_controllers/Page.php?show_editor=true",
+        url: "_controllers/page.php?show_editor=true",
         data: { "id": id },
         type: "post",
         success: function (result) {
@@ -17,7 +17,7 @@ function updatePage(id) {
 function deletePage(id) {
     if (confirm("Do you really want to remove this page?")) {
         $.ajax({
-            url: "_controllers/Page.php?delete=true",
+            url: "_controllers/page.php?delete=true",
             data: { "id": id },
             type: "post",
             success: function (result) {
@@ -40,7 +40,7 @@ function deletePage(id) {
 }
 function addPage(){
     $.ajax({
-        url: "_controllers/Page.php?show_editor=true",
+        url: "_controllers/page.php?show_editor=true",
         data: { },
         type: "post",
         success: function (result) {
@@ -55,7 +55,7 @@ function setHomePage(value,id){
     if ($(value).is(":checked")){
         
         $.ajax({
-            url: "_controllers/Page.php",
+            url: "_controllers/page.php",
             data: {"id" : id, "set_home" : true},
             type: "post",
             success: function (result) {
@@ -75,7 +75,7 @@ function setHomePage(value,id){
 function setNavbarPage(value,id){
     val = $(value).is(":checked")*1;
     $.ajax({
-        url: "_controllers/Page.php",
+        url: "_controllers/page.php",
         data: {"id" : id, "set_navbar" : val},
         type: "post",
         success: function (result) {
@@ -92,7 +92,7 @@ function setNavbarPage(value,id){
 function setStatusPage(value, id){
     val = $(value).is(":checked")*1;
     $.ajax({
-        url: "_controllers/Page.php",
+        url: "_controllers/page.php",
         data: {"id" : id, "set_status" : val},
         type: "post",
         success: function (result) {

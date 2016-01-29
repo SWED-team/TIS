@@ -4,9 +4,9 @@
   mb_internal_encoding("UTF-8");
 
   require('_models/Db.php');
-  require('_controllers/Module.php');
-  require('_controllers/Page.php');
-  include('_controllers/User.php');
+  require('_controllers/module.php');
+  require('_controllers/page.php');
+  include('_controllers/user.php');
   //$_SESSION["pages_list"]=array();
   
   $page = new Page();

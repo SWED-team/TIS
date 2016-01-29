@@ -17,7 +17,7 @@ class File
    * @return String       typ cesty (dir/file/unknown)
    */
   public static function getPathType($path){
-    if(is_dir($path) || is_dir("../".$path)){
+if(is_dir($path) || is_dir("../".$path)){
       return "dir";
     }
     else if(file_exists($path) || file_exists("../".$path)){

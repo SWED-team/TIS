@@ -423,7 +423,7 @@ Class Page{
      * @param  string $operation operácia ktorá sa má vykonať po odoslaní formulára v editore
      */
     public function editor($operation=""){
-        $url = '_controllers/Page.php?'.$operation.'=true';
+        $url = '_controllers/page.php?'.$operation.'=true';
         if(isset($this->pageData["id"]) && $this->pageData["id"]!=0) {
             $url = $url.'&id='.$this->pageData["id"];
         }
