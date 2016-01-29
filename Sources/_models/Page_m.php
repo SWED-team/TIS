@@ -3,6 +3,15 @@ if(file_exists('../_models/Db.php'))
   require_once('../_models/Db.php');
 if(file_exists('_models/Db.php'))
   require_once('_models/Db.php');
+/**
+ * Page_m je model triedy Page
+ * ktorá obsahuje funkcie na získavanie, ukladanie a mazanie dát triedy Page_m
+ *
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package Models
+ */
 
 Class Page_m{
 

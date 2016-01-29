@@ -11,11 +11,19 @@ if(file_exists('../_controllers/user.php'))
 
 
 /******************************* ModuleLink *******************************/
-
+/**
+ * ModuleLink Kontroler
+ *
+ * Trieda na pracu s viewom a modelom modulu : ModuleLink
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleController
+ */
 class ModuleLink extends Module{
 
     /**
-     * Konštruktor triedy kontrolera modulu ModuleEmbeded
+     * Konštruktor triedy kontrolera modulu ModuleLink
      * @param integer $id ID modulu(ak je ID = 0 tak sa vytvorí prázdny objekt)
      */
     public function __construct($id=0){

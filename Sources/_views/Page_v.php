@@ -1,4 +1,14 @@
 <?php
+/**
+ * Page_v Trieda View-u pre kontroler User.
+ *
+ * Page_v trieda obsahuje view-y pre zobrazenie:
+ * stránky
+ *
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleViews
+ */
 class Page_v{
     public static function pageHead( $title ){
 ?>

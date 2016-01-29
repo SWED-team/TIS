@@ -94,6 +94,7 @@ class ModuleAttachement_v
      * @param  array   $file      Pole informáci o obrázku modulu
      */
     public static function module($container=array(), $content=array(), $editable=false, $file=array()){ ?>
+        
         <div class="module-container col-sm-<?php echo $container['cols'] * 3 ;?>">
             
             <?php if($editable){ Module_v::moduleAdministrationPanel('ModuleAttachement', $container, $content); } ?>

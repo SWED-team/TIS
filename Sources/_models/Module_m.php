@@ -4,11 +4,20 @@ if(file_exists('../_models/Db.php'))
 if(file_exists('_models/Db.php'))
   require_once('_models/Db.php');
 
+/**
+ * Module_m je model triedy Module
+ * ktorá obsahuje funkcie na získavanie, ukladanie a mazanie dát triedy Module_m
+ *
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package Models
+ */
 class Module_m{
 /**
  * Získanie základných informácií o module z DB
- * @param  int $id    Id modulu
- * @return array      pole informácii o module
+ * @param  int    $id          Id modulu
+ * @return array  $result      pole informácii o module
  */
   public static function getModuleContainer($id){
     $result = Db::query("
@@ -32,12 +41,11 @@ class Module_m{
       array($id))->fetch(PDO::FETCH_ASSOC);
     return $result;
   }
-  /**
-   * [getModuleFiles description]
-   * @param  [type] $parent_id  [description]
-   * @param  [type] $childTable [description]
-   * @return [type]             [description]
-   */
+/**
+ * [getModuleFiles description]
+ * @param  int $module_id     Parametrom je id modulu ktorého
+ * @return array $result      Pole informáci o súboroch zvoleného modulu
+ */
   public static function getModuleFiles($module_id){
       $result = Db::query("
       SELECT *
@@ -145,7 +153,13 @@ class Module_m{
     }
     else return null;
   }
-  public static function getPageModules($page_id){ // vrati ID a TYPE pre vsetky moduly pre page so zadanym id
+
+  /**
+   * vrati ID a TYPE pre vsetky moduly pre page so zadanym id
+   * @param  int    $page_id   id stránky ktorej moduly chceme
+   * @return array  $result    pole modulov danej stránky
+   */
+  public static function getPageModules($page_id){
     $result = Db::query(
       "SELECT m.id, m.type
       FROM module m

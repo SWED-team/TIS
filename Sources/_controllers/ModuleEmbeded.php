@@ -11,6 +11,15 @@ if(file_exists('user.php'))
     require_once('user.php');
 
 /*******************************  ModuleEmbeded  *******************************/
+/**
+ * ModuleEmbeded Kontroler
+ *
+ * Trieda na pracu s viewom a modelom modulu : ModuleEmbeded
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleController
+*/
 class ModuleEmbeded extends Module{
     /**
      * Konštruktor triedy kontrolera modulu ModuleEmbeded

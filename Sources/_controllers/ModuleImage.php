@@ -11,10 +11,19 @@ if(file_exists('user.php'))
     require_once('user.php');
 
 /*******************************  ModuleImage  *******************************/
+/**
+ * ModuleImage Kontroler
+ *
+ * Trieda na pracu s viewom a modelom modulu : ModuleImage
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleController
+ */
 class ModuleImage extends Module{
     /**
-     * Konötruktor triedy kontrolera modulu ModuleImage
-     * @param integer $id ID modulu(ak je ID = 0 tak sa vytvorÌ pr·zdny objekt)
+     * Kon≈°truktor triedy kontrolera modulu ModuleImage
+     * @param integer $id ID modulu(ak je ID = 0 tak sa vytvor√≠ pr√°zdny objekt)
      */
     public function __construct($id=0){
         $this->module_type = "module_image";
@@ -43,7 +52,7 @@ class ModuleImage extends Module{
         $this->setById($id);
     }
     /**
-     * Funkcia naËÌta inform·cie z DB pre model so zadan˝m ID
+     * Funkcia na√®√≠ta inform√°cie z DB pre model so zadan√Ωm ID
      * @param integer $id ID modulu
      */
     public function setById($id=0){
@@ -58,14 +67,14 @@ class ModuleImage extends Module{
 
 
     /**
-     * Funkcia vypÌöe pohæad na modul
+     * Funkcia vyp√≠≈°e poh¬æad na modul
      */
     public function module($editable){
         ModuleImage_v::module($this->containerData, $this->contentData, $editable,$this->file);
     }
     /**
-     * Funkcia vypÌöe pohæad na editoru modulu
-     * @param  string $operation oper·cia ktor· sa m· vykonaù po odoslanÌ formul·ra (insert/edit)
+     * Funkcia vyp√≠≈°e poh¬æad na editoru modulu
+     * @param  string $operation oper√°cia ktor√° sa m√° vykona¬ù po odoslan√≠ formul√°ra (insert/edit)
      */
     public function editor($operation){
         
@@ -87,8 +96,8 @@ class ModuleImage extends Module{
         ModuleImage_v::editor( $this->containerData, $this->contentData, $url,$this->file, $this->getOrderOptions($m_id));
     }
     /**
-     * Funkcia uloûÌ validnÈ premennÈ odoslanÈ z formul·ra a uloûÌ ich do vn˙tornej ötrukt˙ry objektu
-     * @return boolean true ak s˙ d·ta posielanÈ z formul·ra validnÈ / inak false
+     * Funkcia ulo≈æ√≠ validn√© premenn√© odoslan√© z formul√°ra a ulo≈æ√≠ ich do vn√∫tornej ≈°trukt√∫ry objektu
+     * @return boolean true ak s√∫ d√°ta posielan√© z formul√°ra validn√© / inak false
      */
     public function getFormData(){
         // Overenie zakladnych informaci o Userovi,Page a Module
@@ -144,8 +153,8 @@ class ModuleImage extends Module{
     }
 
     /**
-     * funkcia vloûÌ modul do DB
-     * @return boolean true ak vloûÌ ˙speöne false ak nastane chyba
+     * funkcia vlo≈æ√≠ modul do DB
+     * @return boolean true ak vlo≈æ√≠ √∫spe≈°ne false ak nastane chyba
      */
     public function insert(){
 
@@ -168,8 +177,8 @@ class ModuleImage extends Module{
     }
 
     /**
-     * Funkcia aktualizuje ˙daje o module v DB
-     * @return boolean true ak edituje ˙speöne inak false
+     * Funkcia aktualizuje √∫daje o module v DB
+     * @return boolean true ak edituje √∫spe≈°ne inak false
      */
     public function update(){
         if(isset($this->containerData['id'])&& isset($this->contentData['module_id']) && $this->containerData['id'] > 0 && $this->contentData['module_id'] > 0){
@@ -185,8 +194,8 @@ class ModuleImage extends Module{
     }
 
     /**
-     * Funkcia vymaûe modul z DB
-     * @return boolean true ak vymaûe false ak nastane chyba
+     * Funkcia vyma≈æe modul z DB
+     * @return boolean true ak vyma≈æe false ak nastane chyba
      */
     public function delete(){
         if(isset($this->containerData['id'])&& isset($this->contentData['module_id']) && $this->containerData['id'] > 0 && $this->contentData['module_id'] > 0){
@@ -197,7 +206,7 @@ class ModuleImage extends Module{
     }
 
     /**
-     * Funkcia vr·ti typ modulu s ikonou pre editor modulov
+     * Funkcia vr√°ti typ modulu s ikonou pre editor modulov
      * @return string ikona + typ modulu
      */
     public static function getModuleTypeName(){

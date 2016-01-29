@@ -1,11 +1,20 @@
 <?php
-
+/**
+ * User_v Trieda View-u pre kontroler User.
+ *
+ * User_v trieda obsahuje view-y pre zobrazenie:
+ * uživatelských rozhraní ako prihlásenie a editácia jeho údajov
+ *
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleViews
+ */
 class User_v{
 
 
 	/**
 	 * view pre zobrazenie pop-up okna pre login
-	 * @return [string] [html kod okna]
+	 * @return string html kod okna
 	 */
 	public static function loginForm()
 	{

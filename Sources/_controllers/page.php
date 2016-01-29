@@ -6,7 +6,15 @@ if(file_exists('user.php'))
 
 if(!isset($_SESSION))
     session_start();
-
+/**
+ * Page Kontroler
+ *
+ * Trieda na pracu s viewom a modelom modulu : Page
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleController
+*/
 Class Page{
 
     /**

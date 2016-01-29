@@ -1,4 +1,9 @@
 <?php
+if(file_exists('../_views/Module_v.php'))
+    require_once('../_views/Module_v.php');
+if(file_exists('_views/Module_v.php'))
+    require_once('_views/Module_v.php');
+
 /**
  * Abstraktná trieda pre moduly,
  * ktorá definuje základnú povinnú funkčnosť pre všetky typy modulov.
@@ -6,14 +11,8 @@
  * 
  * @version 1.0
  * @author KRASNAN
- * @package ModuleControllers
+ * @package ModuleController
  */
-if(file_exists('../_views/Module_v.php'))
-    require_once('../_views/Module_v.php');
-if(file_exists('_views/Module_v.php'))
-    require_once('_views/Module_v.php');
-
-
 abstract class Module{
   /**
    * pole informácií o zakládných vlastnostiach modulu
@@ -222,11 +221,11 @@ abstract class Module{
    * @return [type]       [description]
    */
   
-  /**
-   * Funkcia vygeneruje zoznam moznosti pre select  
-   * @param  string $m_id [description]
-   * @return [type]       [description]
-   */
+/**
+* Funkcia vygeneruje zoznam moznosti pre select  
+ * @param  string $m_id           id modulu ktorý budem presúvať 
+ * @return string $order_options  vráti string moznosti ako preusporiadať modul na stránke
+ */
   public function getOrderOptions($m_id=""){
         //nacitanie order moznosti
         $order_options="";
@@ -245,13 +244,13 @@ abstract class Module{
         return $order_options;
   }  
   /**
-   * Funkcia vygeneruje a vráti novú order hodnotu modulu na stránke
-   * @param  [type] $page_id   [description]
-   * @param  [type] $order     [description]
-   * @param  [type] $module_id [description]
-   * @return [type]            [description]
+   * [getNewOrderValue description]
+   * @param  integer $page_id   Id page na ktorej je daný modul
+   * @param  integer $order     Poradie modulu na stránke
+   * @param  integer $module_id id modulu
+   * @return integer $actual    Vráti novú hodnotu poradia
    */
-  public function getNewOrderValue($page_id, $order, $module_id){
+  public function getNewOrderValue($page_id=0, $order=0, $module_id=0){
     //$order = $this->containerData["order"];
     //$page_id = $this->containerData["page_id"];
     

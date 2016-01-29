@@ -3,7 +3,15 @@ if(file_exists('../_models/Db.php'))
   require_once('../_models/Db.php');
 if(file_exists('_models/Db.php'))
   require_once('_models/Db.php');
-
+/**
+ * Category_m je model triedy Category
+ * ktorá obsahuje funkcie na získavanie, ukladanie a mazanie dát triedy Category
+ *
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package Models
+ */
 class Category_m{
 	public static function getCategoriesWhereOrder($col=1,$value=1, $order_by="title"){
       $result = Db::query(

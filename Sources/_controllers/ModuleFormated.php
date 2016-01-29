@@ -12,10 +12,13 @@ if(file_exists('user.php'))
 
 /*******************************  ModuleFormated  *******************************/
 /**
-* @author name-text
-* @deprecated deprecated-text
-* @package package-name
-* @abstract is a new tag defining a class or method as abstract.
+ * ModuleFormated Kontroler
+ *
+ * Trieda na pracu s viewom a modelom modulu : ModuleFormat
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleController
 */
 class ModuleFormated extends Module{
     /**
@@ -75,10 +78,7 @@ class ModuleFormated extends Module{
 
     /**
      * Funkcia vypíše poh¾ad na modul
-     * @param TypVstupnejPremenej1   $premena1    "Opis premenej1"
-     * @param TypVstupnejPremenej2   $premena2   "Opis premenej2"
-     * @return return-type description
-    *  @see package.class#member
+     * 
      */
     public function module($editable){
         ModuleFormated_v::module($this->containerData, $this->contentData, $editable);

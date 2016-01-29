@@ -3,7 +3,15 @@ if(file_exists('../_models/Db.php'))
   require_once('../_models/Db.php');
 if(file_exists('_models/Db.php'))
   require_once('_models/Db.php');
-
+/**
+ * User_m je model triedy User
+ * ktorá obsahuje funkcie na získavanie, ukladanie a mazanie dát triedy User
+ *
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package Models
+ */
 class User_m{
 
 	public function __construct(){

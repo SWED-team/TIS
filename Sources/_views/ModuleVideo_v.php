@@ -3,8 +3,8 @@
  * ModuleVideo_v Trieda View-u pre kontroler ModuleVideo.
  *
  * ModuleVideo_v Trieda obsahuje view-y pre zobrazenie:
- *  -editora s možnosou predvyplnenia polí existujúcimi dátami
- *  -samotného modulu s možnosou zobrazenia administratorských funkcii.
+ *  editora s možnosou predvyplnenia polí existujúcimi dátami,
+ *  samotného modulu s možnosou zobrazenia administratorských funkcii.
  * Trieda taktiež obsahuje javascript pravidlá pre prácu s modulom
  *
  * @version 1.0

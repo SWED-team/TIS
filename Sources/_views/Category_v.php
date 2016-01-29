@@ -1,6 +1,23 @@
 <?php
+/**
+ * Category_v Trieda View-u pre kontroler Category.
+ *
+ * Category_v Trieda obsahuje view-y pre zobrazenie:
+ *  editora s možnosou predvyplnenia polí existujúcimi dátami,
+ *  samotného modulu s možnosou zobrazenia administratorských funkcii.
+ * Trieda taktiež obsahuje javascript pravidlá pre prácu s modulom
+ *
+ *
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleViews
+ **/
 class Category_v{
-
+/**
+ * View pre editáciu kategorii
+ * @param  array  $content       Pole informácií o obsahu modulu
+ * @param  string $url           Adresa na ktoru poslat ajax na spracovanie formuláru
+ */
     public static function editor($url="", $content=null){ ?>
        <form class="form-horizontal category_form" role="form" enctype="multipart/form-data" method="post" action="<?php echo $url;?>">
             <div class="form-group">
@@ -24,6 +41,10 @@ class Category_v{
     </form> 
         <?php
     }
+    /**
+     * Zobrazenie editacie kategórií stránok
+     * @param  array  $category Pole kategórií
+     */
     public static function previewEditable($category=array()){ ?>
         <div class="data-list col-xs-12 adminContent">
             <div class="row">

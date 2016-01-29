@@ -1,9 +1,13 @@
 <?php
 
 /**
-* Trieda na prácu so súbormi
-*
-* overovanie existujúcich súborov, ziskanie suborov z priecinka, etc.....
+ * File Kontroler
+ *
+ * Trieda na pracu s viewom a modelom modulu : File
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleController
 */
 class File
 {
@@ -42,9 +46,6 @@ class File
     return $result;
   }
 }
-
-
-
 
 if(isset($_POST["get_path_type"])){
   echo json_encode(array(

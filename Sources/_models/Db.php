@@ -1,4 +1,10 @@
 <?php
+/**
+  *
+ * @version 1.0
+ * @author KRASNAN
+ * @package Models
+ */
 class Db {
     private static $connect;
     private static $settings = array(
