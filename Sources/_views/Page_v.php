@@ -30,12 +30,11 @@ class Page_v{
     <script type="text/javascript" src="js/fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
     <script type="text/javascript" src="js/fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
-    <script type="text/javascript" src="js/Module.js"></script>
-    <script type="text/javascript" src="js/Page.js"></script>
     <script type="text/javascript" src="js/bootstrap-combobox.js"></script>
     <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="js/scripts.js"></script>
-
+    <script type="text/javascript" src="js/Module.js"></script>
+    <script type="text/javascript" src="js/Page.js"></script>
 
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -81,83 +80,6 @@ class Page_v{
                                 echo '<li><a href="?page='.$n["id"].'">'.$n["title"].'</a></li>';
                             }
                         ?>
-
-<!--                        <li class="widthLi first">
-                            <div class="input-group" id="searchBar">
-
-                            <div id="searchBarHide"><form method="post">
-                              <input type="text" id="search_term"class="form-control" placeholder="Search"  name="search_term">
-                                <div id="nav_search"  name="submitSearch" class="btn btn-info" data-dismiss="modal">search</div></form>
-
-                                </div>
-                                <div id="userBarHide">
-                                    <form method="POST">
-
-
-
-                                        <?php/*
-                            if(isset($_SESSION["userId"])){
-                              echo '<div id="nav_logoff"  name="submitLogoff"class="btn btn-danger" data-dismiss="modal"data-toggle="modal" >LogOff</div>';
-                              echo '<div id="nav_profile"  onclick="onClickProfile('.$_SESSION["userId"].')"; name="submitProf" class="btn btn-info" data-dismiss="modal">Profile</div>';
-                              echo '</form>';
-                          }
-                          else {
-                              echo '<button type="button" class="btn btn-success" data-dismiss="modal"><div data-toggle="modal" data-target="#LoginPop"  >login</div></button>';
-                              echo '<div id="nav_reg" name="submitReg" class="btn btn-info" data-dismiss="modal"data-toggle="modal" >registration</div>';
-
-                          }
-                                      */  ?>
-                                </div>
-
-
-                            </div>
-                        </li>
-
-                        <li class="widthLi">
-
-                            <div id="userBarIcon">
-                                <span class="glyphicon glyphicon-user" data-dismiss="modal"></span>
-                            </div>
-
-                            <div id="searchBarIcon">
-                                <span class="glyphicon glyphicon-search" data-dismiss="modal"></span>
-                            </div>
-
-                        </li>
-
-
-                            <script type="text/javascript">
-
-                              //  $("#nav_profile").on("click",function(){
-
-                                    function onClickProfile(user){
-
-                                    window.location = "index.php?profile="+user;
-
-                                }
-
-                                 $("#nav_reg").on("click",function(){
-
-                                    window.location = "?registration";
-
-                                });
-                                  $("#nav_search").on("click",function(){
-
-                                    window.location = "?search="+$("#search_term").val();
-                                    
-
-                                });
-
-                                   $("#nav_logoff").on("click",function(){
-
-                                    ajaxUniversal("logoff",0,0);
-                                    window.location = "index.php?page_id=1";
-                                    
-
-                                });
-                            </script>
--->
-
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
@@ -321,12 +243,11 @@ class Page_v{
         </div>
         <?php
     }
-    public static function categoryEditor(){
-
-    }
 
     public static function pageListAdmin($pageData){?>
-        <div class="page-list col-xs-12 adminContent">
+        <div class="data-list col-xs-12 adminContent">
+                        <div id="pagelist_result"></div>
+
             <div class="row">
                 <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
             </div>
@@ -352,7 +273,6 @@ class Page_v{
             foreach ($pageData as $key => $page) {
                 $cnt++;
                 ?>
-            <div id="pagelist_result"></div>
             <div class="row bordered">
                 <div class="col-xs-3 page-list-info">
                         <?php 
@@ -448,9 +368,6 @@ class Page_v{
 
     <?php }
 
-    public static function categoryList($category){
-
-    }
 
     public static function preview($editable=false, $page, $category, $file, $cols){ ?>
         <div class="module-container col-sm-<?php echo $cols * 3 ;?>">
@@ -522,6 +439,7 @@ class Page_v{
         </div>
         <?php
     }
+
 
 
     public static function editor($url, $content, $category, $users=array(), $isOwner=true, $file=array(), $editors=array(), $owner=null){ ?>
@@ -624,7 +542,7 @@ class Page_v{
 
         <hr>
         <div class="form_result"></div>
-        <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; selectAllCheckboxesFrom('.editors-actual') ; return submitForm(this, '.page_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+        <a  onclick="selectAllCheckboxesFrom('.files-actual') ; selectAllCheckboxesFrom('.editors-actual') ; return submitForm(this, '.page_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</a>
         <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
         <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
     </form>

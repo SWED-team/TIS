@@ -38,7 +38,7 @@ class User_m{
 					 $result = Db::query("
 				      SELECT *
 				      FROM user u
-				      WHERE u.email = ? and u.password = ?",
+				      WHERE u.email = ? and u.password = ? and u.deactivated = 0",
 				      array($mail, hash( 'sha256', $pass)))->fetch();
 				    return $result;
 

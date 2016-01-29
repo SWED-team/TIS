@@ -1,11 +1,8 @@
 ﻿
 // volanie ajaxu na ulozenie formularu
 function submitForm(element ,formSelector) {
-            event.preventDefault();
-        
+            //event.preventDefault();
             var edi = $('#editor1');
-            alert(edi.val());
-            alert(typeof edi.val() === "undefined");
             if(!(typeof edi.val() === "undefined")){
                 CKEDITOR.instances.editor1.updateElement();
             }

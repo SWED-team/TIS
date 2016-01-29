@@ -138,8 +138,8 @@ if(file_exists('_models/Db.php'))
 	public function categoryAdministration(){
 		if($this->isLoggedIn() && $this->isAdmin()){
 			User_v::adminAdministrationTabs("category_administration",$this->getUserID());
-			$p = new Page();
-			$p->categoryList();
+			$c = new Category();
+			$c->previewList();
 		}
 	}
 
@@ -190,10 +190,9 @@ if(file_exists('_models/Db.php'))
 	}
 
 
-	public function printLogPop()
+	public function loginForm()
 	{
-
-		User_v::showLogPop();
+		User_v::loginForm();
 	}
 
 	/**
@@ -201,7 +200,7 @@ if(file_exists('_models/Db.php'))
 	 * zruší SESSION premennú obsahujúcu ID užívateľa
 	 *
 	 */
-	public function checkIfLogoff(){
+	/*public function checkIfLogoff(){
 
 
 
@@ -218,7 +217,7 @@ if(file_exists('_models/Db.php'))
 	 * nastaví SESSION premennú obsahujúcu ID užívateľa
 	 *
 	 */
-	public function checkIfLogin()
+/*	public function checkIfLogin()
 	{
 		if(isset($_POST["submitLog"])){
 				if(isset($_POST["login"]) && isset($_POST["pass"]))

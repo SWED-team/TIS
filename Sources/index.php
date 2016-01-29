@@ -27,7 +27,7 @@
 
 
   $page->footer();
-  $_user->printLogPop();
+  $_user->loginForm();
 ?>
 
 <script type="text/javascript" src="js/scripts.js"></script>

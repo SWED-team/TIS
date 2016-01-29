@@ -71,7 +71,7 @@ class Module_v{
   public static function moduleEditorFooter($container){ ?>
         <hr>
         <div class="form_result"></div>
-        <button type="submit" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</button>
+        <a role="button" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</a>
         <button type="reset" class="btn btn-warning btn-block"><i class="fa fa-undo"></i> Reset</button>
         <a onclick="location.reload()" class="btn btn-primary btn-block"><i class="fa fa-refresh"></i></a>
 

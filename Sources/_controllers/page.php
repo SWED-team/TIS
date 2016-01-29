@@ -1,5 +1,9 @@
 <?php
 
+if(file_exists('user.php'))
+    require_once('user.php');
+
+
 if(!isset($_SESSION))
     session_start();
 
@@ -52,16 +56,18 @@ Class Page{
             require_once('../_models/Page_m.php');
             require_once('../_views/Page_v.php');
         }
-        if(file_exists('_controllers/user.php'))
-            require_once('_controllers/user.php');
-        if(file_exists('user.php'))
-            require_once('user.php');
+       
+        if(file_exists('_controllers/Category.php'))
+            require_once('_controllers/Category.php');
+        if(file_exists('Category.php'))
+            require_once('Category.php');
 
         $this->loggedUser = new User();
         $this->loggedUser->fillUserDatabySession();
 
         $this->editors=array();
         $this->editorsInfo=array();
+        $this->category = new Category();
         $this->pageData = array();
 
         $this->isOwner=true;
@@ -89,7 +95,7 @@ Class Page{
                 $this->editors = Page_m::getEditors($this->pageData["id"]);
                 $this->editorsInfo = Page_m::getEditorsInfo($this->pageData["id"]);
 
-                $this->category =  Page_m::getCategory($this->pageData["category_id"]);
+                $this->category->setById($this->pageData["category_id"]);
             }
             
         }
@@ -208,8 +214,8 @@ Class Page{
                // print_r($logedUser->hasEditRights($this->pageData["id"]));
                 //print_r($this->edited_by->userData);
                 $breadcrumbs = array(
-                    $this->category["title"]=>"?category=".$this->category["id"],
-                    $this->pageData["title"]=>"?page=".$this->pageData["id"]
+                    $this->category->categoryData["title"]=>"?category=".$this->category->categoryData["id"],
+                    $this->category->categoryData["title"]=>"?page=".$this->pageData["id"]
                     );
                 $this->pageInfo($breadcrumbs, $editable);
 
@@ -232,10 +238,10 @@ Class Page{
 
         else if( isset($_GET["category"]) && $_GET["category"] > 0 ){
             $editable = $logedUser->isAdmin();
-            $category = Page_m::getCategory($_GET["category"]);
+            $category = new Category($_GET["category"]);
             if($category != null){
                 $breadcrumbs = array(
-                    $category["title"]=>"?category=".$category["id"],
+                    $category->categoryData["title"]=>"?category=".$category->categoryData["id"],
                     );
 
                 $this->pageInfo($breadcrumbs);
@@ -262,9 +268,6 @@ Class Page{
         $pages = Page_m::getPagesWhere($col, $value, $orderBy);
         Page_v::pageListUser($pages);
 
-    }
-    public function categoryList(){
-        Page_v::categoryList(Page_m::getCategories());
     }
 
     public function setHomePage(){
@@ -299,7 +302,7 @@ Class Page{
     }
 
     public function preview($editable=false,$cols=1){
-        Page_v::preview($editable, $this->pageData, Page_m::getCategory($this->pageData["category_id"]), $this->file,$cols);
+        Page_v::preview($editable, $this->pageData, $this->category->categoryData, $this->file,$cols);
         return $this;
     }
 
@@ -492,54 +495,103 @@ Class Page{
 
 // ---------- Spracovanie ajax requestov admin a pouzivatel s pravami  ------------ START
 
-// TODO: dorobit overenie ci je prihlaseny && (ci je admin || ci ma pravo editovat page)
-if(true){
-    // ak posielame poziadavku na vypisanie editora pre dany modul
-    if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            echo $p->editor("edit");
-        }
-        else{
-            $p = new Page();
-            $p->editor("insert");
-        }
-    }
+// overenie ci sa vola ajax funkcia
+if (isset($_GET["show_editor"]) 
+    || isset($_GET["insert"]) 
+    || isset($_GET["edit"]) 
+    || isset($_GET["delete"])
+    || isset($_GET["set_navbar"]) 
+    || isset($_GET["set_home"]) 
+    || isset($_GET["set_status"]) ) {
+    
+    $loggedUser = new User();
+    $loggedUser->fillUserDatabySession();
 
-    // ak spracuvame formular ktory ma vlozit modul
-    if( isset($_GET["insert"]) && $_GET["insert"]){
-        $p = new Page();
-        if($p->getFormData()){
-            $p->insert();
-        }
-    }
-
-
-    // ak spracuvame formular ktory ma editovat modul
-    if( isset($_GET["edit"]) && $_GET["edit"] ){
-        if(isset($_GET["id"]) && $_GET["id"]>0){
-            $p = new Page($_GET["id"]);
-            if ($p->getFormData()){
-                $p->update();
-            }
-        }
-    }
-
-    // ak posielame poziadavku na vymazanie modulu s danum id
-    if ( isset($_GET["delete"]) && $_GET["delete"]){
-        if( isset($_POST["id"]) && $_POST["id"] > 0 ){
-            $p = new Page($_POST["id"]);
-            if($p->delete()){
-                echo '<strong>Page was deleted.</strong>';
+    if ($loggedUser->isLoggedIn()) {
+        // ak posielame poziadavku na vypisanie editora pre dany modul
+        if(isset($_GET["show_editor"]) && $_GET["show_editor"] ){
+            if(isset($_POST["id"]) && $_POST["id"]>0){
+                $p = new Page($_POST["id"]);
+                echo $p->editor("edit");
             }
             else{
-                echo '<strong>Delete Error:</strong> Delete was unsuccessfull.';
+                $p = new Page();
+                $p->editor("insert");
             }
         }
-        else{
-            echo '<strong>Delete Error:</strong> Unknown page.';
+
+        // ak spracuvame formular ktory ma vlozit modul
+        if( isset($_GET["insert"]) && $_GET["insert"]){
+            $p = new Page();
+            if($p->getFormData()){
+                $p->insert();
+            }
         }
+
+
+        // ak spracuvame formular ktory ma editovat modul
+        if( isset($_GET["edit"]) && $_GET["edit"] ){
+            if(isset($_GET["id"]) && $_GET["id"]>0){
+                $p = new Page($_GET["id"]);
+                if ($p->getFormData()){
+                    $p->update();
+                }
+            }
+        }
+
+        // ak posielame poziadavku na vymazanie modulu s danum id
+        if ( isset($_GET["delete"]) && $_GET["delete"]){
+            if( isset($_POST["id"]) && $_POST["id"] > 0 ){
+                $p = new Page($_POST["id"]);
+                if($p->delete()){
+                    echo '<strong>Page was deleted.</strong>';
+                }
+                else{
+                    echo '<strong>Delete Error:</strong> Delete was unsuccessfull.';
+                }
+            }
+            else{
+                echo '<strong>Delete Error:</strong> Unknown page.';
+            }
+        }    
+        if(isset($_GET["set_navbar"]) 
+            || isset($_GET["set_home"]) 
+            || isset($_GET["set_status"]) ){
+            
+            if ($loggedUser->isAdmin()) {
+                if ( isset($_POST["set_navbar"])){
+                    if(isset($_POST["id"]) && $_POST["id"]>0){
+                        $p = new Page($_POST["id"]);
+                        $val = ($_POST["set_navbar"] == 1)?1:0;
+                        $p->setNavbarPage($val);
+                    }
+                }
+
+                //nastavenie stranky aby sa zobrazovala ako home.. hodnota $_POST["set_home"] je id stranky
+                if ( isset($_POST["set_home"])){
+                    if(isset($_POST["id"]) && $_POST["id"]>0){
+                        $p = new Page($_POST["id"]);
+                        $p->setHomePage();
+                    }
+                }
+                //nastavenie stranky aby sa zobrazovala.. hodnota $_POST["set"] je id stranky
+                if ( isset($_POST["set_status"])){
+                    if(isset($_POST["id"]) && $_POST["id"]>0){
+                        $p = new Page($_POST["id"]);
+                        $val = ($_POST["set_status"] == 1)?1:0;
+                        $p->setPageStatus($val);
+                    }
+                }
+            }
+            else {
+             echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Permission denied:</strong> You dont have permissions to add/edit/del this page.</div>';
+            }  
+        }
+
     }
+    else {
+     echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Permission denied:</strong> You dont have permissions to add/edit/del this page.</div>';
+    }    
 
 }
 
@@ -548,32 +600,5 @@ if(true){
 
 // ---------- Spracovanie ajax requestov iba admin ------------ END
 
-if(true){ //overenie ci je admin 
-        //nastavenie stranky aby sa zobrazovala v navigacii .. hodnota $_POST["set_navbar"] je id stranky
-    if ( isset($_POST["set_navbar"])){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            $val = ($_POST["set_navbar"] == 1)?1:0;
-            $p->setNavbarPage($val);
-        }
-    }
-
-    //nastavenie stranky aby sa zobrazovala ako home.. hodnota $_POST["set_home"] je id stranky
-    if ( isset($_POST["set_home"])){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            $p->setHomePage();
-        }
-    }
-    //nastavenie stranky aby sa zobrazovala.. hodnota $_POST["set"] je id stranky
-    if ( isset($_POST["set_status"])){
-        if(isset($_POST["id"]) && $_POST["id"]>0){
-            $p = new Page($_POST["id"]);
-            $val = ($_POST["set_status"] == 1)?1:0;
-            $p->setPageStatus($val);
-        }
-    }
-    
-}
 
 ?>

@@ -108,6 +108,61 @@ function setStatusPage(value, id){
         }
     });
 }
+
+// volanie ajaxu na vypisanie editovacieho formulara
+function updateCategory(id) {
+    $.ajax({
+        url: "_controllers/Category.php?show_editor_category=true",
+        data: { "id": id },
+        type: "post",
+        success: function (result) {
+            showModal("modalBox", "lg", "Edit Category", result);
+        },
+        error:function (result){
+            showModal("modalBox", "sm", "Edit Category", "Unable to open editor.<br>"+result);
+        }
+    });
+}
+
+//volanie ajax funkcie na vymazanie modulu zo stranky
+function deleteCategory(id) {
+    if (confirm("Do you really want to remove this page?")) {
+        $.ajax({
+            url: "_controllers/Category.php?delete_category=true",
+            data: { "id": id },
+            type: "post",
+            success: function (result) {
+                $.fancybox({
+                    'modal': true,
+                    'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            },
+            error: function (result) {
+                $.fancybox({
+                    'modal': true,
+                    'content': result + '<a href="javascript:;" onclick="$.fancybox.close();">CLOSE</a>'
+                });
+            }
+        });
+    }
+}
+function addCategory(){
+    $.ajax({
+        url: "_controllers/Category.php?show_editor_category=true",
+        data: { },
+        type: "post",
+        success: function (result) {
+            showModal("modalBox", "lg", "Add Category", result);
+        },
+        error:function (result){
+            showModal("modalBox", "sm", "Add Category", "Unable to open editor.<br>"+result);
+        }
+    });
+}
+
 function printAlert(type, message){
     return '<div class="alert alert-warning alert-dismissible" role="alert">\
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\

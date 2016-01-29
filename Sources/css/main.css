@@ -157,8 +157,7 @@ header {
     margin-bottom: 40px;
 }
 
-.page-list .row,
-.user-list .row{
+.data-list .row,{
     margin-bottom: 5px;
 }
 .page-list-info{
@@ -375,7 +374,7 @@ position: absolute;
 
 .module-formated {
     overflow-y: scroll;
-    overflow-x: scroll;
+    overflow-x: none;
     background-color: rgba(255,255,255,0.8);
 }
 
@@ -688,4 +687,8 @@ input[name^="editor-id"]:checked + div {
 .cke_dialog, .cke_combopanel
 {
     z-index: 100055 !important;
+}
+.cke_dialog, .cke_dialog_body,.cke_dialog_ui_input_text
+{
+    z-index: 10055 !important;
 }

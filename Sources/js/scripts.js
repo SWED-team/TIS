@@ -37,7 +37,7 @@ function showModal(modalId, size, header, body) {
 
 ///script na preklikvania user/search v headeri
    
-  $("#userBarIcon" ).on("click",function() {
+  /*$("#userBarIcon" ).on("click",function() {
                 
            
 	  var toggleWidth = $("#userBarHide").width() == 500 ? "0px" : "500px";
@@ -57,7 +57,7 @@ function showModal(modalId, size, header, body) {
     $('#userBarHide').animate({ width: "0px",height: "0px" });
   });
 
-
+*/
 /////script pre overenie registracnych udajov usera a naslednej registracie
 	$("#regButton").on("click",function  () {
 
@@ -69,43 +69,12 @@ function showModal(modalId, size, header, body) {
 	});
 /////swtich user menu 
 	$("#btnEdit").on("click", function () {
-
-	    
 	    ajaxUniversal("SwithUserMenu1",1,null);
-
-
-
 	});
 
-	$("#btnListM").on("click", function () {
-
-	    
-	    ajaxUniversal("SwithUserMenu2",2,"created");
-
-
-
-	});
-
-	$("#btnAddPage").on("click", function () {
-
-
-	    ajaxUniversal("SwithUserMenu4",4,"");
-
-
-
-	});
-	
 
 	
 
-	$("#btnListU").on("click", function () {
-
-
-	    ajaxUniversal("SwithUserMenu3",3,"first_name");
-
-
-
-	});
 
 
 
@@ -121,10 +90,10 @@ function showModal(modalId, size, header, body) {
 		// body...
 	});
 
-	$("#loginButton").on("click",function  () {
-
+	$("#loginButton").on("click",function  (event) {
+		event.preventDefault();
 		$("#check_div").html("");
-			ajaxLogin();
+		ajaxLogin();
 	});
 	$("#logOffButton").on("click",function  () {
 		ajaxLogin();
@@ -222,7 +191,6 @@ function showModal(modalId, size, header, body) {
 	    	}
 	    },
 	    error: function(data){
-	  			alert(data);
 		  }
 
 		});

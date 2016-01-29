@@ -7,7 +7,7 @@ class User_v{
 	 * view pre zobrazenie pop-up okna pre login
 	 * @return [string] [html kod okna]
 	 */
-	public static function showLogPop()
+	public static function loginForm()
 	{
 	?>
 		<div id="LoginPop" class="modal fade  " role="dialog">
@@ -76,11 +76,7 @@ class User_v{
 
 	public static function showListUsers($list){ ?>
 		<div id="listP" class="">
-
-
-			<div id="user-list" class="col-lg-12 adminContent page-list">
-				
-
+			<div id="data-list" class="col-lg-12 adminContent data-list">
 			<?php
 			  $cnt=0;
 			foreach ($list as $key => $value) {
@@ -90,21 +86,15 @@ class User_v{
 				if($value["deactivated"]==0){$deactive=false;}
 				if($value["admin"]==1){$admin=true;}
 				?>
-
 				<div class="row bordered "><?php
          	echo "<div class='col-sm-4  page-list-info'><small class='text-muted'>#".$cnt ." </small> ". $value["first_name"]." ".$value["last_name"] ." (". $value["email"] .") </div>";					
-					if($deactive){
-           		echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-					}
-					else{
-           		echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini"  type="checkbox"></div>';
-					}
-					if($admin){
-           		echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-					}
-					else{
-           		echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-					}
+					if($deactive) 
+						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					else 
+						echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini"  type="checkbox"></div>';
+					if($admin) 
+						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					else echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
 					echo '<div  class="col-sm-2 col-xs-3 "><a href="?pages&amp;user='.$value["id"].'" class="btn  col-xs-12 btn-xs btn-default">Pages</a></div>';
 					echo '<div  class="col-sm-2 col-xs-3 "><a href="?profile&amp;user='.$value["id"].'" class="btn col-xs-12  btn-xs btn-default">Profile</a></div>';
 				?>
@@ -147,12 +137,15 @@ class User_v{
 	</script>
 	<?php
 	}
+
 	/**
 	 * view na zorazenie formulára na editovanie údajov používateľa
-	 * @param  [array] $userData [údaje]
-	 * @return [string] [html kod formuláru]
+	 * @param  array $userData pole údajov o používateľovi
+	 * @return string html kod formuláru
 	 */
-	public static function showEditForm($userData,$disabled)
+
+
+	public static function showEditForm($userData=array(),$disabled=false)
 	{
 		?>
 		<div  class="form-group">
@@ -177,10 +170,6 @@ class User_v{
 			  		<label for="usr">Bio:</label>
 			        <textarea disabled rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value=<?php echo '"'.$userData["bio"].'"'?>><?php echo $userData["bio"]?></textarea>
  				</div>
-
-
-
-
 						<?php
 				 } 
 				 else {?> 
@@ -284,7 +273,7 @@ class User_v{
 	 * view na zobrazenie zoznamu modulov pre daného používateľa
 	 * @return [string] [html kod zoznamu]
 	 */
-	public static function showListPages($list)
+/*	public static function showListPages($list)
 	{
 		?>
 		<div id="listP">
@@ -361,7 +350,7 @@ class User_v{
 	 * zobrazenie kompletnej sekcie pre správu používateľského konta aj so skriptami
 	 *@return [string] [html a js  kod sekcie]
 	 */
-	public static function showUserSection($userData,$profileID)
+	/*public static function showUserSection($userData,$profileID)
 	{
 		?>
 		
@@ -434,6 +423,6 @@ class User_v{
 
 		}
 		
-
-		}
+*/
+}
 
