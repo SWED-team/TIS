@@ -183,6 +183,16 @@ Class Page_m{
       array($category_id))->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
+  public static function getSearchPages($term, $status=" = 1"){
+    $result = Db::query(
+      " SELECT id
+        FROM `page`
+        WHERE ( title LIKE ? OR description LIKE ? )AND status $status
+        ORDER BY created
+      ",
+      array($term,$term))->fetchAll(PDO::FETCH_ASSOC);
+    return $result;
+  }
 
   public static function getModuleFiles($page_id){
     $result = Db::query("

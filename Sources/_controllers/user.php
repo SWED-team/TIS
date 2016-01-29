@@ -45,8 +45,7 @@ if(file_exists('_models/Db.php'))
 		{
 			return $this->profile();
 		}
-		
-		if(isset($_GET["pages"])){
+		else if(isset($_GET["pages"])){
 			return $this->pages();
 		}
 		else if(isset($_GET["pages_administration"])){
@@ -54,9 +53,6 @@ if(file_exists('_models/Db.php'))
 		}
 		else if(isset($_GET["users_administration"])){
 			return $this->usersAdministration();
-		}
-		else if(isset($_GET["q"])){
-			$this->search($_GET["q"]);
 		}
 		else if(isset($_GET["category_administration"])){
 			return $this->categoryAdministration();
@@ -85,7 +81,7 @@ if(file_exists('_models/Db.php'))
 			}
 			return false;
 		}
-		else if(isset($_GET["edit_profile"]))
+		else if(isset($_GET["edit_profile"])){
 			if($this->isAdmin()){
 				User_v::adminAdministrationTabs("profile",$this->getUserID());
 			}
@@ -93,7 +89,8 @@ if(file_exists('_models/Db.php'))
 				User_v::userAdministrationTabs("profile",$this->getUserID());
 			}
 			$this->editProfile();
-
+			return true;
+		}
 		return false;
 	}
 
@@ -127,6 +124,16 @@ if(file_exists('_models/Db.php'))
 		}
 		return false;
 	}
+
+  public function editProfile(){
+        if($this->isLoggedIn()){
+            User_v::showEditForm($this->userData);
+            return true;
+        }
+        return false;
+  }
+
+
 	public function pagesAdministration(){
 		if($this->isLoggedIn() && $this->isAdmin()){
 			User_v::adminAdministrationTabs("pages_administration",$this->getUserID());
@@ -152,29 +159,11 @@ if(file_exists('_models/Db.php'))
 			User_v::adminAdministrationTabs("category_administration",$this->getUserID());
 			$c = new Category();
 			$c->previewList();
-		}
-	}
-
-	public function search($term)
-	{
-			$listP =User_m::getPagesSearch($term);
-			$res='<div id="infoSectionUser2" style="width:80%;margin-left:10%;">
-			<span>Pages</span>
-			';
-			foreach ($listP as $key => $value) {
-				$p = new Page($value["id"]);
-				$p->preview(false,1);}
-			$res=$res.'
-			</div>';
-			return $res;
-	}
-	public function editProfile(){
-		if($this->isLoggedIn()){
-			User_v::showEditForm($this->userData);
 			return true;
 		}
 		return false;
 	}
+
 
 
 	

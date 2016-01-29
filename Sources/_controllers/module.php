@@ -149,7 +149,8 @@ abstract class Module{
             $this->containerData["page_id"] = $_GET['page_id'];                     // Priradi modulu page_id stranky na ktorej sa bude zobrazovat 
             $this->containerData["created_by"] = $this->loggedUser->getUserID();    // Nastavi modulu created_by id uzivatela ktorý ho vytvoril
             $this->containerData["edited_by"] = $this->loggedUser->getUserID();     // nastavi modulu edited_by id uzivatela ktory ho upravil
-
+            $this->containerData["edited"] = date("Y-m-d H:i:s", time());  
+            $this->containerData["created_by"] = date("Y-m-d H:i:s", time());  
         }
         // ----------- Pridanie noveho modulu na stranku --------------- END
         // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly

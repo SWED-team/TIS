@@ -103,7 +103,7 @@ class Page_v{
                 <div class="navbar-right">
                     <form class="navbar-form" role="search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="q">
+                        <input type="text" class="form-control" placeholder="Search" name="q" <?php if(isset($_GET["q"])) echo 'value="'.$_GET["q"].'"';?>>
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
@@ -292,9 +292,9 @@ class Page_v{
                 <div class="col-xs-2 text-center">
                     <?php 
                     if($page["status"]==0)
-                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Hidden" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Visible" data-off="Hidden"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Hidden" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Visible" data-off="Hidden"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
                 <div class="col-xs-2 text-center">

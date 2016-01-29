@@ -210,8 +210,9 @@ Class Page{
                 $this->modulesEditor();
             }
             else {
-                echo "Home page is unavailable";
+                return false;
             }
+            return true;
 
   
         }
@@ -242,8 +243,9 @@ Class Page{
                 }
             }
             else{
-                echo "Stranka nenajdena";
+                return false;
             }
+            return true;
         }
 
 
@@ -266,11 +268,40 @@ Class Page{
                 }
             }
             else{
-                echo "Kategoria neexistuje";
+                return false;
             }
+            return true;
         }
-    }
 
+        else if(isset($_GET["q"])){
+            if(strlen($_GET["q"]) > 0){
+                $editable = $logedUser->isAdmin();
+                $term = "%".$_GET["q"]."%";
+                $status = ($editable)?">= 0":"= 1";
+                $pages = Page_m::getSearchPages($term, $status);
+
+                $this->printAlert("success", "Search Result: ", sizeof($pages). " pages was found.");
+                foreach ($pages as $key => $p) {
+                    $pge = new Page($p["id"]);
+                    $pge->preview($editable,1);
+                }
+            }
+            else{
+                $this->printAlert("warning", "Search Result: ", "Searched term must contains atleast 1 character");
+            }
+            return true;
+        }
+        return false;
+    }
+   /*
+    public function editProfile(){
+        if($this->isLoggedIn()){
+            User_v::showEditForm($this->userData);
+            return true;
+        }
+        return false;
+    }
+*/
 
 
     public function pageListAdminWhere($col = 1, $value = 1, $orderBy = "id"){
@@ -363,6 +394,9 @@ Class Page{
                     $this->editors[] = array("user_id" => $_POST['editor-id'][$i]);            
                 }
             }
+            
+            $this->pageData["created"] = date("Y-m-d H:i:s", time());  
+            $this->pageData["edited"] =  date("Y-m-d H:i:s", time()); 
 
         }
         // ----------- Pridanie novej stranky --------------- END
@@ -380,8 +414,7 @@ Class Page{
                 $this->printAlert("danger", "Page Error:", "You cannot update this page (wrong page_id)");
                 return false;
             }
-            
-            $this->pageData["edited"] = date("Y-m-d H:i:s", time());       // Nastavenie casu kedy bol modul upravovany 
+            $this->pageData["edited"] =  date("Y-m-d H:i:s", time());          // Nastavenie casu kedy bol modul upravovany 
             $this->pageData["edited_by"] = $this->loggedUser->getUserID(); // Nastavi modulu edited_by id uzivatela ktory upravoval modul
             $this->pageData["id"] = $_GET['id'];                           // Nastavi modulu jeho id z url
             

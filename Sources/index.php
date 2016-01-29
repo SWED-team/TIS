@@ -14,14 +14,12 @@
   $_user->fillUserDatabySession();
 
   $page->header("TIS", $_user);
-  $page->pageContent($_user);
+  
+  //overenie obsahu stranky .. ak neprejde funkciami (nieje zadany ziaden vyhovujuci parameter) vypise 404
+  if( !($page->pageContent($_user) || $_user->_init_check()) ){
+    echo include '404.html';
+  }
 
-  //$page->pageListWhere("column", "value", "orderBy");
-  //$page->pageListAdminWhere(1,1,"title");
-  //$page->pageListUserWhere(1,1,"title");
-
-
-  $_user->_init_check();
 
 
 
