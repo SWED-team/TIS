@@ -4,14 +4,24 @@
  *
  * ModuleLink_v Trieda obsahuje view-y pre zobrazenie:
  *  -editora s možnosou predvyplnenia polí existujúcimi dátami
- *  -samotného modulu s možnosou zobrazenia administraèných funkcii.
+ *  -samotného modulu s možnosou zobrazenia administratorských funkcii.
  * Trieda taktiež obsahuje javascript pravidlá pre prácu s modulom
  *
  * @version 1.0
  * @author KRASNAN
+ * @package ModuleViews
  */
 class ModuleLink_v{
-    public static function editor($container, $content, $url, $file, $order_options, $pages){
+    /**
+     * View pre editor modulu
+     * @param  array  $container     Pole informácií o zakládných vlastnostiach modulu
+     * @param  array  $content       Pole informácií o obsahu modulu
+     * @param  string $url           Adresa na ktoru poslat ajax na spracovanie formuláru
+     * @param  array  $file          Pole informáci o obrázku modulu
+     * @param  array  $order_options Pole zoznamu pozici na page
+     * @param  array  $pages         Pole zoznamu interných stránok
+     */
+    public static function editor($container=array(), $content=array(), $url="", $file=array(), $order_options=array(), $pages=array()){
         echo "<h2>Module Link</h2>";
         Module_v::moduleEditorHeader($container, $order_options, $url);
         ?>
@@ -128,9 +138,14 @@ class ModuleLink_v{
 
     <?php
     }
-
-
-    public static function module($container, $content, $editable, $file){ ?>
+    /**
+     * View pre samotné zobrazenie modulu na stránke
+     * @param  array   $container Pole informácií o zakládných vlastnostiach modulu
+     * @param  array   $content   Pole informácií o obsahu modulu
+     * @param  boolean $editable  Ak true modul sa zobrazí v editovateľnom
+     * @param  array   $file      Pole informáci o obrázku modulu
+     */
+    public static function module($container=array(), $content=array(), $editable=false, $file=array()){ ?>
         <div class="module-container col-sm-<?php echo $container['cols'] * 3 ;?>">
             <?php if($editable){ Module_v::moduleAdministrationPanel('ModuleLink', $container, $content); } ?>
             <script type="text/javascript">
