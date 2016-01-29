@@ -22,21 +22,21 @@ class User_m{
 			 * @param  [type] $param [zmenené údaje]
 			 *
 			 */
-			public static function editUserToDb($param)
+			public static function editUserToDb($param, $id)
 			{
-				$result = Db::query("
-				     UPDATE user set email= ? ,first_name=? ,
-				     last_name=?,admin=?, reg_date=?,bio=?,password=?
-				     where id=? ",
-				      array($param['login'],$param['firstName'],
-				      	$param['lastName'],
-				      	0,'2014-01-01',
-
-				      	$param['bio'],
-						  hash( 'sha256', $param['pass'])
-				      ,
-				      $param['id']))->fetch();
-				    return $result;
+				$result = Db::query(
+					"UPDATE `user` 
+					SET `first_name`=?,
+				     `last_name`=?, 
+				     `bio`=?
+				  WHERE `id`=?",array(
+				      						$param['firstName'],
+				      						$param['lastName'],
+				      						$param['bio'],
+				      						$id
+				      					)
+				  );
+				return $result;
 
 			}
 
@@ -117,19 +117,18 @@ class User_m{
 			 */
 			public static function adduserToDb($param){
 
-				$result = Db::query("
-				      INSERT into
-				      user (email,first_name,last_name,admin,
-				      	reg_date,bio,password)
-				      values (?,?,?,?,?,?,?)",
-				      array($param['login'],$param['firstName'],
-				      	$param['lastName'],
-				      	0,'2014-01-01',
 
-				      	$param['bio'],
-				      	hash( 'sha256',$param['pass'])));
-
-
+				$values = array(
+						      	$param['login'],
+						      	$param['firstName'],
+						      	$param['lastName'],
+						      	$param['bio'],
+						      	hash( 'sha256',$param['pass'])
+				      		);
+				$result = Db::insert(
+					"INSERT INTO `user` (`email`, `first_name`, `last_name`, `admin`,`bio`, `password`)
+				   VALUES (?,?,?,0,?,?)",$values);
+				return $result;
 			}
 
 			public static function getAllUsers($order)

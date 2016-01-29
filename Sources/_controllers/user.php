@@ -49,13 +49,6 @@ if(file_exists('_models/Db.php'))
 		if(isset($_GET["pages"])){
 			return $this->pages();
 		}
-		
-		else if(isset($_GET["registration"])){
-			if(!$this->isLoggedIn()){
-				return $this->printUserSectionReg();
-			}
-			return false;
-		}
 		else if(isset($_GET["pages_administration"])){
 			return $this->pagesAdministration();
 		}
@@ -68,7 +61,6 @@ if(file_exists('_models/Db.php'))
 		else if(isset($_GET["category_administration"])){
 			return $this->categoryAdministration();
 		}
-
 		//return $show_page;*/
 	}
 
@@ -81,6 +73,7 @@ if(file_exists('_models/Db.php'))
 				else{
 					User_v::userAdministrationTabs("profile",$this->getUserID());
 				}
+
 				User_v::profile($this->userData);
 				return true;
 			}
@@ -92,6 +85,15 @@ if(file_exists('_models/Db.php'))
 			}
 			return false;
 		}
+		else if(isset($_GET["edit_profile"]))
+			if($this->isAdmin()){
+				User_v::adminAdministrationTabs("profile",$this->getUserID());
+			}
+			else{
+				User_v::userAdministrationTabs("profile",$this->getUserID());
+			}
+			$this->editProfile();
+
 		return false;
 	}
 
@@ -113,6 +115,10 @@ if(file_exists('_models/Db.php'))
 			$u=new User();
 			if($u->fillUserDataById($_GET["user"])!=0){
 					User_v::userAdministrationTabs("pages",$_GET["user"]);
+					if($this->isAdmin()){
+						$page = new Page();
+						$page->pageListAdminWhere('created_by', $u->getUserID(), "title");
+					}
 					$page = new Page();
 					$page->previewAllWhere("created_by",$u->getUserID(),"edited",1,$this->isAdmin());
 				return true;
@@ -162,6 +168,13 @@ if(file_exists('_models/Db.php'))
 			</div>';
 			return $res;
 	}
+	public function editProfile(){
+		if($this->isLoggedIn()){
+			User_v::showEditForm($this->userData);
+			return true;
+		}
+		return false;
+	}
 
 
 	
@@ -201,44 +214,6 @@ if(file_exists('_models/Db.php'))
 		User_v::loginForm();
 	}
 
-	/**
-	 * funckia kontroluje či prebehlo odhlásenie a následne
-	 * zruší SESSION premennú obsahujúcu ID užívateľa
-	 *
-	 */
-	/*public function checkIfLogoff(){
-
-
-
-	if(isset($_POST["submitLogoff"])){
-
-				unset($_SESSION["userId"]);
-				header("Refresh:0; url=");
-
-				}
-
-	}
-	/**
-	 * funckia kontroluje či prebehlo prihlásenie a následne
-	 * nastaví SESSION premennú obsahujúcu ID užívateľa
-	 *
-	 */
-/*	public function checkIfLogin()
-	{
-		if(isset($_POST["submitLog"])){
-				if(isset($_POST["login"]) && isset($_POST["pass"]))
-				{
-
-					$this->login($_POST["login"],$_POST["pass"]);
-
-				}
-		}
-	}
-
-///funckia ,zisti ,ci prebehla editacia profilu a nasledne vola funckia ktore zmenu vykona/
-///
-
-
 
 	/**
 	 * funkcia zabezpečí login na základe emailu a hesla a naplnenie údajov z databázy
@@ -249,14 +224,8 @@ if(file_exists('_models/Db.php'))
 	 public function login($login,$password)
 	 {
 
-
 	 	$this->userData=User_m::getUserDataByLogin($login,$password);
-	 //	echo User_m::getUserDataByLogin($login,$password);
 	 	$_SESSION["userId"]=$this->userData["id"];
-	 //	echo $this->userData["id"];
-
-
-	  //  return "Fsdfsdfsd"+$this->userData["email"];
 	  return $this->userData["id"];
 	 }
 
@@ -269,6 +238,7 @@ if(file_exists('_models/Db.php'))
 	 		$this->userData=User_m::getUserDataById($id);
 	 		return $this->getUserID();
 	 }
+
 	 public function fillUserDatabySession()
 	 {
 	 	if(isset($_SESSION["userId"])){
@@ -280,27 +250,13 @@ if(file_exists('_models/Db.php'))
 	 	}
 	 }
 
-
-
 	 /**
-	  * funckia zobrazí formulár na registráciu
-	  */
-
-	 public function printUserSectionReg()
-	 {
-	 	return User_v::showRegForm();
-	 }
-
-	 /**
-	  * funkcia zobrazí sekciu na správu používateľského konta používateľa
-	  * @return [type] [description]
-	  */
+	 * funkcia zobrazí sekciu na správu používateľského konta používateľa
+	 * @return [type] [description]
+	 */
 	 public function printUserSection()
 	 {
-
-	 	return User_v::showUserSection($this->userData,$_GET["profile"]);
-
-
+	 		return User_v::showUserSection($this->userData,$_GET["profile"]);
 	 }
 
 
@@ -311,19 +267,9 @@ if(file_exists('_models/Db.php'))
 		  *
 		  */
 	  	public function processRegistration($parameters){
-
-	 	User_m::checkValidReg($parameters);
-	 	User_m::addUserToDb($parameters);
-
-
+			 	User_m::checkValidReg($parameters);
+			 	User_m::addUserToDb($parameters);
 		 }
-/*
-		 public function printUpdateForm(){
-
-		 		User_v::showUpdateForm($userData);
-		 }*/
-
-
 
 		 /**
 		  * funkcia na zmazenie používateľa
@@ -386,43 +332,20 @@ if(file_exists('_models/Db.php'))
 		}
 		public static function checkValidEdit($param)
 		{
-
-			$errors = array();
-			if(!(filter_var($param["login"], FILTER_VALIDATE_EMAIL)))
-			{$errors["email"]="Email address is not valid";}
-
-
-
-
 			if(strlen($param["firstName"])<2)
 			{$errors["fname"]="First Name have to contains atleast 2 characters";}
 
 			if(strlen($param["lastName"])<2)
 			{$errors["lname"]="Last Name have to contains atleast 2 characters";}
 
-
-			if(strlen($param["pass"])<5)
-			{$errors["pass"]="Password have to contains atleast 5 characters";}
-
-
-			if($param["pass"]!=$param["pass2"])
-			{$errors["pass2"]="Passwords dont match";}
-
-
-
 			return $errors;
-
-
-
 		}
 
 
 		public function listPagesUser($id,$order)
 		{
 
-
 			$list = User_m::getPagesFromDb($id,$order);
-
 			return User_v::showListPages($list);
 
 		}

@@ -135,7 +135,8 @@ Class Page{
     */
     public function modules($editable){
         $count=0;
-        foreach (Page_m::getModules($this->pageData['id']) as $key => $module) {
+        $status = ($editable)?">= 0":"= 1";
+        foreach (Page_m::getModules($this->pageData['id'], $status) as $key => $module) {
             $new = clone  $this->newModules[$module['type']];
             $new->setById( $module['id']);
             array_push($this->modules, $new);
@@ -195,9 +196,10 @@ Class Page{
 
 
         if(sizeof($_GET)==0){
-            $editable = $logedUser->isAdmin();
+            
             
             if($this->setById(Page_m::getHomePage()["id"])!=null){
+                $editable = $logedUser->isAdmin() || $logedUser->hasEditRights($this->pageData["id"]);
                 if($editable) 
                     $this->addModuleButton();
 
@@ -219,23 +221,25 @@ Class Page{
         if( isset($_GET["page"])){
             if($_GET["page"] > 0 && $this->setById($_GET["page"])!= null){
                 $editable = $logedUser->isAdmin() || $logedUser->hasEditRights($this->pageData);
-               // print_r($logedUser->hasEditRights($this->pageData["id"]));
-                //print_r($this->edited_by->userData);
-                $breadcrumbs = array(
-                    $this->category->categoryData["title"]=>"?category=".$this->category->categoryData["id"],
-                    $this->category->categoryData["title"]=>"?page=".$this->pageData["id"]
-                    );
-                $this->pageInfo($breadcrumbs, $editable);
+                if($this->pageData["status"]!=0 || $editable){
+                   // print_r($logedUser->hasEditRights($this->pageData["id"]));
+                    //print_r($this->edited_by->userData);
+                    $breadcrumbs = array(
+                        $this->category->categoryData["title"]=>"?category=".$this->category->categoryData["id"],
+                        $this->pageData["title"]=>"?page=".$this->pageData["id"]
+                        );
+                    $this->pageInfo($breadcrumbs, $editable);
 
-                if($editable){
-                    $this->addModuleButton();
-                }
-                $count = $this->initModules()->modules($editable);
-                if($count > 0 && $editable){
-                    $this->addModuleButton();
-                }
+                    if($editable){
+                        $this->addModuleButton();
+                    }
+                    $count = $this->initModules()->modules($editable);
+                    if($count > 0 && $editable){
+                        $this->addModuleButton();
+                    }
 
-                $this->modulesEditor();
+                    $this->modulesEditor();
+                }
             }
             else{
                 echo "Stranka nenajdena";
@@ -247,14 +251,15 @@ Class Page{
         else if( isset($_GET["category"]) && $_GET["category"] > 0 ){
             $editable = $logedUser->isAdmin();
             $category = new Category($_GET["category"]);
-            if($category != null){
+            if($category != null){//status nastavit a upravit get category pagews
                 $breadcrumbs = array(
                     $category->categoryData["title"]=>"?category=".$category->categoryData["id"],
                     );
 
                 $this->pageInfo($breadcrumbs);
+                $status = ($editable)?">= 0":"= 1";
 
-                $pages = Page_m::getCategoryPages($_GET["category"]);
+                $pages = Page_m::getCategoryPages($_GET["category"], $status);
                 foreach ($pages as $key => $p) {
                     $pge = new Page($p["id"]);
                     $pge->preview($editable,1);
@@ -403,8 +408,8 @@ Class Page{
             $this->printAlert("danger", "Description Error:", "Description is incorrect.");
             $success = false;
         }
-        if(!(isset($_POST['category_id']))){
-            $this->printAlert("danger", "Category Error:", "Category is incorrect.");
+        if(!(isset($_POST['category_id']) && $_POST['category_id']>0)){
+            $this->printAlert("danger", "Category Error:", "Category must be selected.");
             $success = false;
         }
 
@@ -508,9 +513,9 @@ if (isset($_GET["show_editor"])
     || isset($_GET["insert"]) 
     || isset($_GET["edit"]) 
     || isset($_GET["delete"])
-    || isset($_GET["set_navbar"]) 
-    || isset($_GET["set_home"]) 
-    || isset($_GET["set_status"]) ) {
+    || isset($_POST["set_navbar"]) 
+    || isset($_POST["set_home"]) 
+    || isset($_POST["set_status"]) ) {
     
     $loggedUser = new User();
     $loggedUser->fillUserDatabySession();
@@ -562,9 +567,9 @@ if (isset($_GET["show_editor"])
                 echo '<strong>Delete Error:</strong> Unknown page.';
             }
         }    
-        if(isset($_GET["set_navbar"]) 
-            || isset($_GET["set_home"]) 
-            || isset($_GET["set_status"]) ){
+        if(isset($_POST["set_navbar"]) 
+            || isset($_POST["set_home"]) 
+            || isset($_POST["set_status"]) ){
             
             if ($loggedUser->isAdmin()) {
                 if ( isset($_POST["set_navbar"])){
@@ -595,18 +600,9 @@ if (isset($_GET["show_editor"])
              echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Permission denied:</strong> You dont have permissions to add/edit/del this page.</div>';
             }  
         }
-
-    }
-    else {
+    }else{
      echo '<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Permission denied:</strong> You dont have permissions to add/edit/del this page.</div>';
     }    
-
 }
-
-// ---------- Spracovanie ajax requestov admin a pouzivatel s pravami ------------ END
-
-
-// ---------- Spracovanie ajax requestov iba admin ------------ END
-
 
 ?>

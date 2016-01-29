@@ -150,11 +150,11 @@ Class Page_m{
   }
 
 
-  public static function getModules($page_id){ // vrati ID a TYPE pre vsetky moduly pre page so zadanym id
+  public static function getModules($page_id, $status){ // vrati ID a TYPE pre vsetky moduly pre page so zadanym id
     $result = Db::query("
       SELECT m.id, m.type
       FROM module m
-      WHERE m.page_id = ?
+      WHERE m.page_id = ? AND status $status
       ORDER BY m.order", 
       array($page_id))->fetchAll(PDO::FETCH_ASSOC);
     return $result;
@@ -173,11 +173,11 @@ Class Page_m{
     return $result;
   }
 
-  public static function getCategoryPages($category_id){
+  public static function getCategoryPages($category_id, $status=" = 1"){
     $result = Db::query(
       " SELECT id
         FROM `page`
-        WHERE category_id = ?
+        WHERE category_id = ? AND status $status
         ORDER BY created
       ",
       array($category_id))->fetchAll(PDO::FETCH_ASSOC);

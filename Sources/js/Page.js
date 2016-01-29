@@ -79,6 +79,7 @@ function setNavbarPage(value,id){
         data: {"id" : id, "set_navbar" : val},
         type: "post",
         success: function (result) {
+            alert(result);
             //showModal("modalBox", "sm", "Edit Page", result);
             $('#pagelist_result').html(printAlert('warning', '<strong>Warning!</strong>  Changes applies when page will be reloaded. <a onclick="javascript:location.reload()"> Click to reload</a>'));
         },

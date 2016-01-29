@@ -41,7 +41,7 @@ class User_v{
                           				<div class="form-group ">
 		                            		<!-- Username -->
 				                            <label class="control-label"  for="PoploginEmail">Username</label>
-				                            <input id="PoploginEmail" type="text" class="form-control input-sm" name="login" placeholder="Enter email">
+				                            <input id="PoploginEmail" type="email" class="form-control input-sm" name="login" placeholder="Enter email">
 			                          	</div>
     	                      			<div class="form-group">
 				                            <br>
@@ -62,37 +62,49 @@ class User_v{
 			    		<form role="form">
 			    			<fieldset class="form-group">
 			    				<div class="row">
-			    					<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="col-sm-6">
 			    						<div class="form-group">
-			                				<input id="loginFirstName" type="text" class="form-control input-sm" name="firstName" placeholder="Enter first name"/>
+			    							<label class="control-label"  for="loginFirstName">First Name</label>
+			                	<input id="loginFirstName" type="text" class="form-control input-sm" name="firstName" placeholder="Enter first name"/>
 			    						</div>
 					    			</div>
-					    			<div class="col-xs-6 col-sm-6 col-md-6">
+					    			<div class="col-sm-6">
 					    				<div class="form-group">
+					    					<label class="control-label"  for="loginLastName">Last Name</label>
 					    					<input id="loginLastName" type="text" class="form-control input-sm" name="LastName" placeholder="Enter surname "/>
 					    				</div>
 					    			</div>
 			    				</div>
-			    				<div class="form-group">
-			    					
-				    					<input id="loginEmail" type="text" class="form-control input-sm" name="login" placeholder="Email Address"/>
-				    				
+			    				<div class="row">
+			    					<div class="col-sm-12">
+			    						<div class="form-group">
+			    							<label class="control-label"  for="loginEmail">	Login Email</label>
+				    						<input id="loginEmail" type="email" class="form-control input-sm" name="login" placeholder="xxx@xxx.xx"/>
+				    					</div>
+				    				</div>
 				    			</div>
 			    				<div class="row">
-			    					<div class="col-xs-6 col-sm-6 col-md-6">
+			    					<div class="col-sm-6">
 			    						<div class="form-group">
+			    							<label class="control-label"  for="loginPass1">Password</label>
 				    						<input id="loginPass1" type="password" class="form-control input-sm" name="pass"  placeholder="Password"/>
 				    					</div>
 				    				</div>
-				    				<div class="col-xs-6 col-sm-6 col-md-6">
+				    				<div class="col-sm-6">
 			    						<div class="form-group">
+			    						<label class="control-label"  for="loginPass2">Confirm Password</label>
 			    							<input id="loginPass2" type="password" class="form-control input-sm" placeholder="Confirm Password" name="pass2"  />
 			    						</div>
 			    					</div>
 			    				</div>
-			    				<div class="form-group">
-			    					<textarea rows="4" cols="50" id="loginBio"  class="form-control input-sm" name="bio"  style="resize: none" placeholder="Enter short bio"></textarea>
-			    				</div>
+									<div class="row">
+			    					<div class="col-sm-12">
+					    				<div class="form-group">
+					    					<label class="control-label"  for="loginBio">About me</label>
+					    					<textarea rows="4" cols="50" id="loginBio"  class="form-control input-sm" name="bio"  style="resize: none" placeholder="Enter short bio"></textarea>
+					    				</div>
+					    			</div>
+					    		</div>
 			    				<div class="modal-footer" >
 		         						<div id="regButton" name="submitRegUser" class="btn btn-success" >Register</div>
 			    			</fieldset>
@@ -137,11 +149,61 @@ class User_v{
 				<i class="fa fa-calendar-o"></i><h6 class="text-muted"><?php echo $user['reg_date'];?></h6>
 				<i class="fa fa-comments"></i><p><?php echo $user['bio'];?></p>
 			</div>
-
+			<div class="col-sm-offset-3 col-sm-3 col-xs-12">
+				<a href="?profile&amp;edit_profile" class="col-xs-12 btn btn-default" >Edit Informations</a>
+			</div>
+			<div class="col-sm-3 col-xs-12">
+				<a href="?profile&amp;edit_profile" class="col-xs-12 btn btn-default" >Change Password</a>
+			</div>
 		</div>
 	<?php
 	}
 
+	/**
+	 * view na zorazenie formulára na editovanie údajov používateľa
+	 * @param  array $userData pole údajov o používateľovi
+	 * @return string html kod formuláru
+	 */
+	public static function showEditForm($userData=array())
+	{
+		?>
+		<div class="adminContent">
+			<h2>Profile editation <?php echo $userData["first_name"] .' '. $userData["last_name"]?>  </h2>
+			<p>
+				Insert valid informations about you.
+			</p>
+				<form role="form">
+				  <fieldset class="form-group">
+				    <div class="row">
+				    	<div class="col-sm-6">
+								<div class="form-group">
+									<label class="control-label"  for="editFirstName">First Name</label>
+									<input id="editFirstName" value=<?php echo '"'.$userData["first_name"].'"'?> type="text" class="form-control input-sm" name="firstName"  placeholder="Enter first name"/>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="control-label"  for="editLastName">Last Name</label>
+									<input id="editLastName" value=<?php echo '"'.$userData["last_name"].'"'?> type="text" class="form-control input-sm" name="LastName" placeholder="Enter surname "/>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="control-label"  for="editBio">About me</label>
+									<textarea id="editBio" rows="4" cols="50" class="form-control input-sm" name="editBio"  style="resize: none" placeholder="Enter short bio"><?php echo $userData['bio']; ?></textarea>
+								</div>
+							</div>
+						</div>
+						</fieldset>
+					<div id="editProfileResult"></div>
+					<a href="?profile&amp;user=<?php echo $userData['id']; ?>" class="btn btn-primary" >Back</a>
+					<a id="editProfileButtonSubmit" class="btn btn-success" >Save</a>
+				</form>	
+			</div>
+	<?php
+	}
 
 
 
@@ -165,9 +227,9 @@ class User_v{
 				<div class="row bordered "><?php
          	echo "<div class='col-sm-4  page-list-info'><small class='text-muted'>#".$cnt ." </small> ". $value["first_name"]." ".$value["last_name"] ." (". $value["email"] .") </div>";					
 					if($deactive) 
-						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Deactive" data-off="Active"  data-toggle="toggle" data-onstyle="danger" data-offstyle="success" data-size="mini" type="checkbox"></div>';
 					else 
-						echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Active" data-off="Deactive"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini"  type="checkbox"></div>';
+						echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Deactive" data-off="Active"  data-toggle="toggle" data-onstyle="danger" data-offstyle="success" data-size="mini"  type="checkbox"></div>';
 					if($admin) 
 						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
 					else echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
@@ -214,84 +276,6 @@ class User_v{
 	<?php
 	}
 
-	/**
-	 * view na zorazenie formulára na editovanie údajov používateľa
-	 * @param  array $userData pole údajov o používateľovi
-	 * @return string html kod formuláru
-	 */
-	public static function showEditForm($userData=array(),$disabled=false)
-	{
-		?>
-		<div  class="form-group">
-			<form method="post">
-				<?php if($disabled){ 
-
-						?>
-				<div class="form-group col-md-6">
-			  		<label for="login">Email:</label>
-			        <input id="loginEmail" disabled type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?>>
-			    </div>
-	         	<div class="form-group col-md-6">
-			  		<label for="usr">First Name:</label>
-			        <input id="loginFirstName" disabled type="text" class="form-control col-ms-1" name="firstName" value=<?php echo '"'.$userData["first_name"].'"'?>>
-			    </div>
-	         	<div class="form-group col-md-6">
-			  		<label for="usr"  >Last Name:</label>
-			        <input id="loginLastName" disabled type="text" class="form-control col-ms-1" name="LastName" value=<?php echo '"'.$userData["last_name"].'"'?>>
-			    </div>
-	        	
-	          	<div class="form-group col-md-6">
-			  		<label for="usr">Bio:</label>
-			        <textarea disabled rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value=<?php echo '"'.$userData["bio"].'"'?>><?php echo $userData["bio"]?></textarea>
- 				</div>
-						<?php
-				 } 
-				 else {?> 
-				<input id="idcko" type="text" class="form-control col-ms-1 hidden" name="loginID" value=<?php echo '"'.$userData["id"].'"'?>>
-	      	 	<div class="form-group col-md-6">
-			  		<label for="login">Email:</label>
-			        <input id="loginEmail" type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?> >
-			    </div>
-	         	<div class="form-group col-md-6">
-			  		<label for="usr">First Name:</label>
-			        <input id="loginFirstName" type="text" class="form-control col-ms-1" name="firstName" value=<?php echo '"'.$userData["first_name"].'"'?>>
-			    </div>
-	         	<div class="form-group col-md-6">
-			  		<label for="usr">Last Name:</label>
-			        <input id="loginLastName" type="text" class="form-control col-ms-1" name="LastName" value=<?php echo '"'.$userData["last_name"].'"'?>>
-			    </div>
-	        	<div class="form-group col-md-6">
-			  		<label for="usr">Password:</label>
-			        <input id="loginPass1" type="text" class="form-control col-ms-1" name="pass" value=<?php echo '"'.$userData["password"].'"'?>>
-			    </div>
-	        	<div class="form-group col-md-6">
-			  		<label for="usr">Password again:</label>
-			        <input id="loginPass2" type="text" class="form-control col-ms-1" name="pass2" value=<?php echo '"'.$userData["password"].'"'?>>
-			    </div>
-	          	<div class="form-group col-md-6">
-			  		<label for="usr">Bio:</label>
-			        <textarea rows="4" cols="50" id="loginBio"  class="form-control col-ms-1" name="bio" value=<?php echo '"'.$userData["bio"].'"'?>><?php echo $userData["bio"]?></textarea>
-			    </div>
-				<div class="modal-footer" style="margin-top:50px;">
-         		<div id="editButton" name="submitRegUser" class="btn btn-success" >Update</div> 
-
-			    <?php } ?>
-
-      			
-      		</form>
-      	</div>
-      	<div id="check_div"></div>
-
-      	<!-- Toto pride do js fillu-->
-		<script>
-			$("#editButton").on("click",function  () {
-				id=$("#idcko").val();
-				ajaxRegEdit(id);
-			});
-		</script>
-	
-	<?php
-	}
 
 	/**
 	 * view na zorazenie formulára na registráciu používateľa
@@ -299,7 +283,7 @@ class User_v{
 	 * @return [string] [html kod formuláru]
 	 */
 
-	public static function showRegForm()
+	/*public static function showRegForm()
 	{
 		?>
 

@@ -24,7 +24,11 @@ include_once('../_models/Db.php');
       case 'RegUser':
 
 				if(sizeof(User::checkValidReg($_POST['json']['arg']))<1)
-				{User_m::AddUserToDb($_POST['json']['arg']); echo "ok";}
+				{
+					if(User_m::AddUserToDb($_POST['json']['arg'])>0)
+						echo "ok";
+					else "error";
+				}
 				else
 				{echo json_encode(User::checkValidReg($_POST['json']['arg']));}
 				break;
@@ -32,9 +36,19 @@ include_once('../_models/Db.php');
       case 'EditUser':
 
 				if(sizeof(User::checkValidEdit($_POST['json']['arg']))<1)
-				{User_m::EditUserToDb($_POST['json']['arg']); echo "ok";}
+				{
+					$user=new User();
+			   	$user->fillUserDatabySession();
+
+					$res = User_m::EditUserToDb($_POST['json']['arg'], $user->getUserID()); 
+					if($res)
+						echo "ok";
+					else
+						echo "error";
+				}
 				else
-				{echo json_encode(User::checkValidEdit($_POST['json']['arg'])); }
+				{
+					echo json_encode(User::checkValidEdit($_POST['json']['arg'])); }
 				break;
 
 		   case 'SwithUserMenu1':

@@ -95,7 +95,7 @@ class Page_v{
                     <ul class="nav navbar-nav navbar-right">
                         <?php if($user->isLoggedIn()){ ?>
                             <a class="btn btn-primary navbar-btn"  href="?profile&amp;user=<?php echo $user->getUserID(); ?>">Administration</a>
-                            <a class="btn btn-danger navbar-btn" onclick="logOfUser()">Log Of</a>
+                            <a class="btn btn-danger navbar-btn" id="logofButton">Log Of</a>
                         <?php } else { ?>
                             <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#LoginPop" >Log in</button>                    
                         <?php }?>
@@ -314,9 +314,10 @@ class Page_v{
                     ?>
                 </div>
                 <div class="col-xs-3 pull-right">
-                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
-                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
-                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
+                    <a href="?profile&amp;user=<?php echo $page["created_by"];?>" class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-default" title="Open Creator Profile" ><i class=" fa  fa-user"></i></a>
+                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
+                    <a class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
+                    <a class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
                 </div>
             </div>
 
@@ -334,13 +335,10 @@ class Page_v{
                 <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
             </div>
             <div class="row">
-                <div class="col-xs-5">
+                <div class="col-xs-6">
                     <h4>Page Info</h4>
                 </div>
-                <div class="col-xs-2 text-center">
-                    <h4>Visible</h4>
-                </div>
-                <div class="col-xs-5 text-center">
+                <div class="col-xs-6 text-center">
                     <h4>Open / Edit / Delete</h4>
                 </div>                
             </div>
@@ -350,20 +348,12 @@ class Page_v{
                 $cnt++;
                 ?>
             <div class="row bordered">
-                <div class="col-xs-5 page-list-info">
+                <div class="col-xs-6 page-list-info">
                         <?php 
                         echo "<small class='text-muted'>#".$cnt ." </small> ". $page["title"];
                         ?>
                 </div>
-                <div class="col-xs-2 text-center">
-                     <?php 
-                    if($page["status"]==0)
-                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Visible" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-                    else 
-                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Visible" data-off="Visible"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-                    ?>
-                </div>
-                <div class="col-xs-5 pull-right">
+                <div class="col-xs-6 pull-right">
                     <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12  btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
                     <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
                     <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
@@ -473,7 +463,7 @@ class Page_v{
                 <label class="control-label col-sm-2" for="me-page_id">Select Category:</label>
                 <div class="col-sm-10">
                     <select id="pe-category" class="combobox form-control" name="category_id">
-                      <option></option>
+                      <option value="0"></option>
                       <?php
                         foreach ($category as $key => $c) {
                             echo '<option ' .((isset($content["category_id"]) && $c["id"] == $content["category_id"]) ? "selected" : "" ). ' value="'.$c["id"].'">'.$c["title"]. '</option>';
