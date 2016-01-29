@@ -2,7 +2,11 @@
 /**
  * Abstraktná trieda pre moduly,
  * ktorá definuje základnú povinnú funkčnosť pre všetky typy modulov.
- * @abstract
+ *
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleControllers
  */
 if(file_exists('../_views/Module_v.php'))
     require_once('../_views/Module_v.php');
@@ -217,7 +221,13 @@ abstract class Module{
    * @param  [type] $m_id [description]
    * @return [type]       [description]
    */
-  public function getOrderOptions($m_id){
+  
+  /**
+   * Funkcia vygeneruje zoznam moznosti pre select  
+   * @param  string $m_id [description]
+   * @return [type]       [description]
+   */
+  public function getOrderOptions($m_id=""){
         //nacitanie order moznosti
         $order_options="";
         $modules = Module_m::getPageModules($this->containerData['page_id']);

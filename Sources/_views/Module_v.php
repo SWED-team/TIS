@@ -1,16 +1,43 @@
 <?php
+
+/**
+ *  Module_v Trieda View-u pre kontroler Module.
+ *
+ *  Module_v Trieda obsahuje view-y pre zobrazenie:
+ *  editora s možnosou predvyplnenia polí existujúcimi dátami,
+ *  samotného modulu s možnosou zobrazenia administratorských funkcii.
+ *  Trieda taktiež obsahuje javascript pravidlá pre prácu s modulom
+ * 
+ * 
+ * 
+ * @version 1.0
+ * @author KRASNAN
+ * @package ModuleViews
+ */
+
+
 class Module_v{
   /**
-   * Funkcia vypisujúca view pre hlavičku formulára na pridávanie/editovanie modulov
+   *  *Funkcia vypisujúca view pre hlavičku formulára na pridávanie/editovanie modulov
    *
-   * View poskytuje možnosti na editovanie informácií obálky modulu ako 
+   *  View poskytuje možnosti na editovanie informácií obálky modulu ako 
+   *
+   * 
    *  * rows   - výška (počet riadkov modulu zobrazených na mriežke stránky) 
+   *
+   * 
    *  * cols   - šírka (počet stĺpcov modulu zobrazených na mriežke stránky) 
+   *
+   * 
    *  * status - publikovaný/nepublikovaný modul
    *  * order  - poradie modulu na stránke
-   * @param  array $container informácie o obálke modulu
+   *
+   * 
+   * @param  array  $container     Pole informácií o zakládných vlastnostiach modulu
+   * @param  array  $order_options [description]
+   * @param  string $url           [description]
    */
-  public static function moduleEditorHeader($container, $order_options, $url){ ?>
+  public static function moduleEditorHeader($container=array(), $order_options=array(), $url=''){ ?>
     <form class="<?php echo $container["type"];  ?>_form form-horizontal" role="form" enctype="multipart/form-data" method="post"
           action="<?php echo $url;?>">
         <h4 class="text-muted "> Module Container Data</h4>
@@ -68,7 +95,7 @@ class Module_v{
    * 
    * @param  array $container informácie o obálke modulu
    */
-  public static function moduleEditorFooter($container){ ?>
+  public static function moduleEditorFooter($container=array()){ ?>
         <hr>
         <div class="form_result"></div>
         <a role="button" onclick="selectAllCheckboxesFrom('.files-actual') ; return submitForm(this, '.<?php echo $container['type'];?>_form')" class="form_submit btn btn-success btn-block" data-loading-text=" Saving..." autocomplete="off"><i class="fa fa-check"></i> Save</a>
@@ -84,11 +111,11 @@ class Module_v{
    *
    * View obsahuje tlačidlo na otvorenie editora, tlačidlo na vymazanie modulu a súhrnné informácie o module
    * 
-   * @param  array $container informácie o obálke modulu
-   * @param  array $content   informácie o obsahu modulu
-   * @return [type]            [description]
+   * @param   array $container informácie o obálke modulu
+   * @param   array $content   informácie o obsahu modulu
+   * @param   string $class    trieda modulu do ktorej sa ma volat ajax funkcia na zobrazenie administratorskych informacii o module
    */
-  public static function moduleAdministrationPanel($class, $container, $content){ ?>
+  public static function moduleAdministrationPanel($class='', $container=array(), $content=array()){ ?>
     <div class="module-buttons">
         <div class="row">
             <div class="col-xs-6">
@@ -160,9 +187,6 @@ class Module_v{
     <?php
   }
 
-  public static function module(){
-    echo '';
-  }
 }
 
 ?>

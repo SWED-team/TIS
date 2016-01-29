@@ -1,6 +1,6 @@
 <?php
 /**
- * ModuleGallery_v Trieda View-u pre kontroler ModuleGalllery.
+ * ModuleGallery_v Trieda View-u pre kontroler ModuleGallery.
  *
  * ModuleGallery_v Trieda obsahuje view-y pre zobrazenie:
  *  editora s možnosou predvyplnenia polí existujúcimi dátami,

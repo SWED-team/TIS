@@ -1,6 +1,6 @@
 <?php
 /**
- * ModuleEmbeded_v Trieda View-u pre kontroler ModuleLink.
+ * ModuleEmbeded_v Trieda View-u pre kontroler ModuleEmbeded.
  *
  * ModuleEmbeded_v Trieda obsahuje view-y pre zobrazenie:
  * editora s možnosou predvyplnenia polí existujúcimi dátami,

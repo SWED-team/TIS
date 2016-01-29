@@ -1,6 +1,6 @@
 <?php
 /**
- * ModuleFormated_v Trieda View-u pre kontroler ModuleLink.
+ * ModuleFormated_v Trieda View-u pre kontroler ModuleFormated.
  *
  * ModuleFormated_v Trieda obsahuje view-y pre zobrazenie:
  * editora s možnosou predvyplnenia polí existujúcimi dátami,

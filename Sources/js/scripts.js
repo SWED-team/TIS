@@ -134,12 +134,12 @@ function showModal(modalId, size, header, body) {
 		{
 	    //alert("fsfdxxx");
 
-		$("#check_div").html("");
+		$("#check_div2").html("");
 			 $.each(errors ,function(key,value)
 			 {
 
 			
-			 	if(value){$("#check_div").
+			 	if(value){$("#check_div2").
 			 		append('<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Insertion Error:</strong> '+value+'</div>');}
 			 });
 		}
@@ -216,24 +216,14 @@ function showModal(modalId, size, header, body) {
 	       
 
 	       success: function(data){
-		 //  alert("toto su data"+data);
-		   if(data !==""){
-
-		     $("#check_divPop").html("");
-		     location.reload();
-				}
-		   else {
-		       $("#check_divPop").html("");
-				   $("#check_divPop").append('<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong></strong> Login dont match</div>');
-
-
+		 		//alert("toto su data"+data);
+				if(data !==""){
+				     $("#check_divPop").html("");
+				     location.reload();
+				}else {
+		       	$("#check_div").html("");
+				   $("#check_div").append('<div class="alert alert-danger" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong></strong> Login dont match</div>');
 			}
-
-				
-
-				
-		
-
 
 		  },
 	  		error: function(data){
@@ -277,14 +267,14 @@ function showModal(modalId, size, header, body) {
 
 	       success: function(data){
 		   if(data=="ok" || data ==""){
-		  // 	alert("je to ok");
-
-		   $("#check_div").append("<div id='sub_error' class='btn btn-success'><i ></i><span>Edit successfull</span> </div>");
-				}
-			else {
+		  		//alert("je to ok");
+		  		$("#check_div2").html("");
+		  		$('#regButton').hide();
+		   		$("#check_div2").append('<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Well done!</strong>Successfull registration !</div>');
+			}else {
 				data2 =jQuery.parseJSON(data);
-			//	alert("DATATYP:"+typeof data2 +data );
-					printRegErrors(data2);
+				//alert("DATATYP:"+typeof data2 +data );
+				printRegErrors(data2);
 				}
 		   // return data;
 		  },

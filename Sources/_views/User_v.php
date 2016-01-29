@@ -10,27 +10,94 @@ class User_v{
 	public static function loginForm()
 	{
 	?>
-		<div id="LoginPop" class="modal fade  " role="dialog">
-			<div class="modal-dialog modal-sm">
+		<div id="LoginPop" class="modal fade" role="dialog">
+			<div class="modal-dialog ">
 		    	<div class="modal-content">
 		      		<div class="modal-header">
 		        		<div type="button" class="close" data-dismiss="modal">&times;</div>
 		        		<h4 class="modal-title">Login/Registration</h4>
 		      		</div>
-		      		<form method="post">
-		      			<div class="modal-body">
-		       				<input id="PoploginEmail" type="text" class="form-control col-ms-1" name="login" placeholder="Enter email">
-		       				<br>
-		       				<input id="PoploginPass" type="password" class="form-control" name="pass" placeholder="Enter password">
-		      			</div>
-		      			<div class="modal-footer">
-		      				<a href="?registration"type="button" id="regButton" class="btn btn-primary" >Sign In</a>
-		       				<button type="submit" id="loginButton" class="btn btn-success" >Login</button>
-		      		</form>
-				</div>
-				<div id="check_divPop"></div>
+              	<div class="modal-body">
+                	<div class="well">
+                  		<ul class="nav nav-tabs"><li class="active"><a href="#login" data-toggle="tab">Login</a></li>
+                    		<li><a href="#create" data-toggle="tab">Create Account</a></li>
+                  		</ul>
+                  		<br>
+                  	<div id="myTabContent" class="tab-content">
+
+                    	<div class="tab-pane active in" id="login">
+                      		<form method="POST">
+                      			<div class="form-group ">
+                        			<fieldset>
+                          				<div class="form-group ">
+		                            		<!-- Username -->
+				                            <label class="control-label"  for="PoploginEmail">Username</label>
+				                            <input id="PoploginEmail" type="text" class="form-control input-sm" name="login" placeholder="Enter email">
+			                          	</div>
+    	                      			<div class="form-group">
+				                            <br>
+				                            <!-- Password-->
+			    	                        <label class="control-label" for="pass">Password</label>
+		            	                  	<input id="PoploginPass" type="password" class="form-control" name="pass" placeholder="Enter password">
+                        	  			</div>
+	                        	  	   		<!-- Button -->
+			                    	    <div class="modal-footer">
+					       					<button type="submit" id="loginButton" class="btn btn-success" >Login</button>
+	                          			</div>
+                        			</fieldset>
+                        		</div>
+                      		</form>
+                      		<div id="check_div"></div>
+                    	</div>
+                    <div class="tab-pane fade " id="create">
+			    		<form role="form">
+			    			<fieldset class="form-group">
+			    				<div class="row">
+			    					<div class="col-xs-6 col-sm-6 col-md-6">
+			    						<div class="form-group">
+			                				<input id="loginFirstName" type="text" class="form-control input-sm" name="firstName" placeholder="Enter first name"/>
+			    						</div>
+					    			</div>
+					    			<div class="col-xs-6 col-sm-6 col-md-6">
+					    				<div class="form-group">
+					    					<input id="loginLastName" type="text" class="form-control input-sm" name="LastName" placeholder="Enter surname "/>
+					    				</div>
+					    			</div>
+			    				</div>
+			    				<div class="form-group">
+			    					
+				    					<input id="loginEmail" type="text" class="form-control input-sm" name="login" placeholder="Email Address"/>
+				    				
+				    			</div>
+			    				<div class="row">
+			    					<div class="col-xs-6 col-sm-6 col-md-6">
+			    						<div class="form-group">
+				    						<input id="loginPass1" type="password" class="form-control input-sm" name="pass"  placeholder="Password"/>
+				    					</div>
+				    				</div>
+				    				<div class="col-xs-6 col-sm-6 col-md-6">
+			    						<div class="form-group">
+			    							<input id="loginPass2" type="password" class="form-control input-sm" placeholder="Confirm Password" name="pass2"  />
+			    						</div>
+			    					</div>
+			    				</div>
+			    				<div class="form-group">
+			    					<textarea rows="4" cols="50" id="loginBio"  class="form-control input-sm" name="bio"  style="resize: none" placeholder="Enter short bio"></textarea>
+			    				</div>
+			    				<div class="modal-footer" >
+		         						<div id="regButton" name="submitRegUser" class="btn btn-success" >Register</div>
+			    			</fieldset>
+
+			    		</form>
+
+			    		<div id="check_div2"></div>
+                	</div>
+              </div>
+            </div>
 			</div>
 		</div>
+	</div>
+</div>
 
 		<?php
 	}
@@ -143,8 +210,6 @@ class User_v{
 	 * @param  array $userData pole údajov o používateľovi
 	 * @return string html kod formuláru
 	 */
-
-
 	public static function showEditForm($userData=array(),$disabled=false)
 	{
 		?>
@@ -153,7 +218,7 @@ class User_v{
 				<?php if($disabled){ 
 
 						?>
-							<div class="form-group col-md-6">
+				<div class="form-group col-md-6">
 			  		<label for="login">Email:</label>
 			        <input id="loginEmail" disabled type="text" class="form-control col-ms-1" name="login" value=<?php echo '"'.$userData["email"].'"'?>>
 			    </div>
@@ -228,6 +293,7 @@ class User_v{
 	public static function showRegForm()
 	{
 		?>
+
 		<section class="container-fluid">
 			<div class="moduel-container col-sm-9">
 				<div id="infoSectionUser2">

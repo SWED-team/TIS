@@ -1,7 +1,7 @@
 <?php
 /**
- *  ModuleImage_v Trieda View-u pre kontroler obsahuje view-y pre zobrazenie:
- *  editora s možnosou predvyplnenia polí existujúcimi dátami,
+ *  ModuleImage_v Trieda View-u pre kontroler ModuleImage obsahuje view-y pre zobrazenie:
+ *  editora s možnosťou predvyplnenia polí existujúcimi dátami,
  *  samotného modulu s možnosou zobrazenia administratorských funkcii.
  * Trieda taktiež obsahuje javascript pravidlá pre prácu s modulom
  * 
