@@ -95,7 +95,7 @@ class Page_v{
                     <ul class="nav navbar-nav navbar-right">
                         <?php if($user->isLoggedIn()){ ?>
                             <a class="btn btn-primary navbar-btn"  href="?profile&amp;user=<?php echo $user->getUserID(); ?>">Administration</a>
-                            <a class="btn btn-danger navbar-btn" id="logofButton">Log Of</a>
+                            <a class="btn btn-danger navbar-btn" id="logofButton">Log Off</a>
                         <?php } else { ?>
                             <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#LoginPop" >Log in</button>                    
                         <?php }?>
