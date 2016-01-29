@@ -100,7 +100,7 @@ class Module_v{
                     <a onclick="deleteModule('<?php echo $class;?>', <?php echo $container["id"];?>)"><i class="fa fa-trash"></i></a>
                 </span>
             </div>
-        </div> <?php /*
+        </div>
         <div class="row">
             <div class="col-xs-4">
                 <strong>Child ID:</strong>
@@ -154,7 +154,7 @@ class Module_v{
                 <strong>Status:</strong>
             </div>
             <div class="col-xs-8"><?php echo $container["status"];?></div>
-        </div> */?>
+        </div>
     </div>
 
     <?php

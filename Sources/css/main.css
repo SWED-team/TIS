@@ -234,10 +234,10 @@ section .row {
     transition: .1s ease-in-out;
 }
 
-    /*.module-buttons:hover,
+    .module-buttons:hover,
     .module-buttons:focus {
         z-index: 999;
-    }*/
+    }
 
     .module-buttons:hover,
     .module-buttons:focus,
