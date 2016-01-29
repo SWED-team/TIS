@@ -402,7 +402,7 @@ Class Page{
         // ----------- Pridanie novej stranky --------------- END
 
         if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($this->pageData))){
-            $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this module.");
+            $this->printAlert("danger", "Permission Error: ", "You don\'t have prermission to insert or edit this module.");
             return false;
         }
 

@@ -73,7 +73,7 @@ abstract class Module{
    * @return string 
    * @abstract
    */
-  abstract static public function getModuleTypeName();
+  abstract public function getModuleTypeName();
   /**
    * Funkcia vráti view pre modul na stránke
    * @return string html kód pre modul
@@ -150,11 +150,13 @@ abstract class Module{
             $this->containerData["created_by"] = $this->loggedUser->getUserID();    // Nastavi modulu created_by id uzivatela ktorý ho vytvoril
             $this->containerData["edited_by"] = $this->loggedUser->getUserID();     // nastavi modulu edited_by id uzivatela ktory ho upravil
             $this->containerData["edited"] = date("Y-m-d H:i:s", time());  
-            $this->containerData["created_by"] = date("Y-m-d H:i:s", time());  
+            $this->containerData["created"] = date("Y-m-d H:i:s", time());  
         }
         // ----------- Pridanie noveho modulu na stranku --------------- END
         // Overenie ci ma uzivatel pravo editovat alebo vkladat nove moduly
-        if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($this->containerData))){
+        // 
+        $pageRights = array("id"=>$this->containerData["page_id"], "created_by" => $this->containerData["edited_by"]);
+        if(!($this->loggedUser->isAdmin() || $this->loggedUser->hasEditRights($pageRights))){
             $this->printAlert("danger", "Permission Error:", "You don\'t have prermission to insert or edit this module.");
             return false;
         }

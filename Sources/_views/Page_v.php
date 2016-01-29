@@ -463,7 +463,7 @@ class Page_v{
                 <label class="control-label col-sm-2" for="me-page_id">Select Category:</label>
                 <div class="col-sm-10">
                     <select id="pe-category" class="combobox form-control" name="category_id">
-                      <option value="0"></option>
+                      <option></option>
                       <?php
                         foreach ($category as $key => $c) {
                             echo '<option ' .((isset($content["category_id"]) && $c["id"] == $content["category_id"]) ? "selected" : "" ). ' value="'.$c["id"].'">'.$c["title"]. '</option>';

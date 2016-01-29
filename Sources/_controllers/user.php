@@ -148,7 +148,7 @@ if(file_exists('_models/Db.php'))
 		if($this->isLoggedIn() && $this->isAdmin()){
 			User_v::adminAdministrationTabs("users_administration",$this->getUserID());
 			$list = User_m::getAllUsers($order);
-			return User_v::showListUsers($list);
+			User_v::showListUsers($list);
 			return true;
 		}
 		return false;

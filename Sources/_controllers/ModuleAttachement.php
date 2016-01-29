@@ -267,7 +267,7 @@ class ModuleAttachement extends Module{
      * Funkcia vráti typ modulu s ikonou pre editor modulov
      * @return string ikona + typ modulu
      */
-    public static function getModuleTypeName(){
+    public function getModuleTypeName(){
         return '<i class="fa fa-file-o"></i> Attachement';
     }
 }

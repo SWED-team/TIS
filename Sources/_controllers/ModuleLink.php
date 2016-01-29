@@ -239,7 +239,7 @@ class ModuleLink extends Module{
         }
         return false;
     }
-    public static function getModuleTypeName(){
+    public function getModuleTypeName(){
         return '<i class="fa fa-link"></i>Link';
     }
     public function getPages(){
