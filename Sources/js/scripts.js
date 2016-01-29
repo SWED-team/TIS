@@ -163,13 +163,12 @@ function ajaxRegistration(){
 			  		$('#regButton').hide();
 			   		$("#check_div2").append('<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Well done!</strong>Successfull registration !</div>');
 					}else {
-						alert(data);
+
 						data2 =jQuery.parseJSON(data);
 						printRegErrors("#check_div2",data2);
 					}
 		  },
 	  		error: function(data){
-	  			alert(data);
 	  			alert("chyba AJAXU");
 		    return data;
 		  	}
@@ -192,11 +191,11 @@ function ajaxEditProfile(){
 	      },
 	       success: function(data){
 			   if(data=="ok" || data ==""){
-			   		alert(data);
+
 			  		$("#editProfileResult").html("");
 			   		$("#editProfileResult").append('<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Well done!</strong> Your profile informations was updated successfully</div>');
 					}else {
-						alert(data);
+
 						data2 =jQuery.parseJSON(data);
 						printRegErrors("#editProfileResult",data2);
 					}
