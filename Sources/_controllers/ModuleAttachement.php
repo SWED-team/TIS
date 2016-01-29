@@ -56,7 +56,7 @@ class ModuleAttachement extends Module{
         $this->setById($id);
     }
     /**
-     * Funkcia naèíta informácie z DB pre model so zadaným ID
+     * Funkcia načíta informácie z DB pre model so zadaným ID
      * @param integer $id ID modulu
      */
     public function setById($id=0){
@@ -77,7 +77,7 @@ class ModuleAttachement extends Module{
         ModuleAttachement_v::module($this->containerData, $this->contentData, $editable,$this->file);
     }
     /**
-     * Funkcia vypíše poh¾ad na editoru modulu
+     * Funkcia vypíše pohľad na editoru modulu
      * @param  string $operation operácia ktorá sa má vykona po odoslaní formulára (insert/edit)
      */
 

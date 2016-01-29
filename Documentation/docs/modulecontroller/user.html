@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 29 Jan 2016 18:12:18 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>User (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>ModuleController\User</h2>
+
+</header><p class="signature">public  class <strong>User</strong></p>
+
+<div class="comment"><p>User Kontroler</p><p>Trieda na pracu s viewom a modelom modulu : User</p></div>
+
+<table>
+<tr><th>Version</th>
+<td>1.0</td>
+</tr><tr><th>Author</th>
+<td>KRASNAN</td>
+</tr></table>
+<h3>Fields</h3>
+<table>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#userData">$userData</a></p></td>
+</tr>
+</table>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Konštruktor triedy USER , konštruktor iba načíta súbory podtried</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#categoryAdministration()">categoryAdministration</a>()</p><p class="description">Funkcia zobrazuje pohľad na administráciu kategórií</p></td>
+</tr>
+<tr>
+<td class="type">static  [type]</td>
+<td class="description"><p class="name"><a href="#checkValidEdit()">checkValidEdit</a>([type] param)</p><p class="description">Funkcia kontroluje vstupy z editačného formulára</p></td>
+</tr>
+<tr>
+<td class="type">static  [type]</td>
+<td class="description"><p class="name"><a href="#checkValidReg()">checkValidReg</a>([type] param)</p><p class="description">Funkcia kontroluje vstupy z registračného formulára</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>([type] id)</p><p class="description">funkcia na zmazenie používateľa</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#editProfile()">editProfile</a>()</p><p class="description">Funkcia zobrazuje pohľad na editovanie profilu používateľa</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#fillUserDataById()">fillUserDataById</a>([type] id)</p><p class="description">funckia naplní údaje o používateľévi z DB na základe ID</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#fillUserDatabySession()">fillUserDatabySession</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> integer</td>
+<td class="description"><p class="name"><a href="#getUserID()">getUserID</a>()</p><p class="description">Funkcia vracia id používateľa</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#hasEditRights()">hasEditRights</a>(mixed page)</p><p class="description">Funkcia vracia či má používateľ práva na editáciu stránky zadanej parametrom</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#isAdmin()">isAdmin</a>()</p><p class="description">Funkcia vracia hodnotu objektu ktorá určuje či je používateľ administrátor</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#isLoggedIn()">isLoggedIn</a>()</p><p class="description">Funkcia vracia či je objekt nastavený na prihláseného používateľa</p></td>
+</tr>
+<tr>
+<td class="type"> [type]</td>
+<td class="description"><p class="name"><a href="#login()">login</a>([type] login, [type] password)</p><p class="description">Funkcia zabezpečí login na základe emailu a hesla a naplnenie údajov z databázy</p></td>
+</tr>
+<tr>
+<td class="type"> [type]</td>
+<td class="description"><p class="name"><a href="#loginForm()">loginForm</a>()</p><p class="description">Funkcia zobrazuje pohľad na prihlasovací formulár</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#pages()">pages</a>()</p><p class="description">Funkcia spracúva parameter user a pages a podľa týchto parametrov zobrazuje jednotlivé pohľady</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#pagesAdministration()">pagesAdministration</a>()</p><p class="description">Funkcia zobrazuje pohľad na administráciu stránok administrátora</p></td>
+</tr>
+<tr>
+<td class="type"> [type]</td>
+<td class="description"><p class="name"><a href="#printUserSection()">printUserSection</a>()</p><p class="description">funkcia zobrazí sekciu na správu používateľského konta používateľa</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#processRegistration()">processRegistration</a>(mixed parameters)</p><p class="description">funcia na spracovanie registrácie po kontrole validity</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#profile()">profile</a>()</p><p class="description">Funkcia spracúva parameter user a profile a podľa ttýchto parametrov zobrazuje jednotlivé pohľady</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#showApproveList()">showApproveList</a>()</p><p class="description">funkcia zobrazí zoznam žiadostí o schválenie</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#showUsersList()">showUsersList</a>()</p><p class="description">funckia zobrazí zoznam všetkých používateľov</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#usersAdministration()">usersAdministration</a>(str order)</p><p class="description">Funkcia zobrazuje pohľad na administráciu stránok používateľa</p></td>
+</tr>
+</table>
+
+<h3>Details</h3>
+<code class="signature" id="userData">public  mixed <strong>$userData</strong> = array()</code>
+<div class="details">
+</div>
+
+<code class="signature" id="__construct">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Konštruktor triedy USER , konštruktor iba načíta súbory podtried</p></div>
+
+<code class="signature" id="categoryAdministration">public  boolean <strong>categoryAdministration</strong>()</code>
+<div class="details">
+<p>Funkcia zobrazuje pohľad na administráciu kategórií</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa zobrazil nejaký pohľad</td>
+</tr></table>
+</div>
+
+<code class="signature" id="checkValidEdit">public static  [type] <strong>checkValidEdit</strong>([type] param)</code>
+<div class="details">
+<p>Funkcia kontroluje vstupy z editačného formulára</p><table>
+<tr><th>Parameters</th>
+<td>param - [description]</td>
+</tr><tr><th>Returns</th>
+<td>[description]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="checkValidReg">public static  [type] <strong>checkValidReg</strong>([type] param)</code>
+<div class="details">
+<p>Funkcia kontroluje vstupy z registračného formulára</p><table>
+<tr><th>Parameters</th>
+<td>param - [description]</td>
+</tr><tr><th>Returns</th>
+<td>[description]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="delete">public static  void <strong>delete</strong>([type] id)</code>
+<div class="details">
+<p>funkcia na zmazenie používateľa</p><table>
+<tr><th>Parameters</th>
+<td>id - [ID používateľa]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="editProfile">public  boolean <strong>editProfile</strong>()</code>
+<div class="details">
+<p>Funkcia zobrazuje pohľad na editovanie profilu používateľa</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa zobrazil nejaký pohľad</td>
+</tr></table>
+</div>
+
+<code class="signature" id="fillUserDataById">public  void <strong>fillUserDataById</strong>([type] id)</code>
+<div class="details">
+<p>funckia naplní údaje o používateľévi z DB na základe ID</p><table>
+<tr><th>Parameters</th>
+<td>id - [ID používateľa]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="fillUserDatabySession">public  void <strong>fillUserDatabySession</strong>()</code>
+<div class="details">
+</div>
+
+<code class="signature" id="getUserID">public  integer <strong>getUserID</strong>()</code>
+<div class="details">
+<p>Funkcia vracia id používateľa</p><table>
+<tr><th>Returns</th>
+<td>id používateľa</td>
+</tr></table>
+</div>
+
+<code class="signature" id="hasEditRights">public  boolean <strong>hasEditRights</strong>(mixed page)</code>
+<div class="details">
+<p>Funkcia vracia či má používateľ práva na editáciu stránky zadanej parametrom</p><table>
+<tr><th>Returns</th>
+<td>true ak je používateľ schopný editovať stránku</td>
+</tr></table>
+</div>
+
+<code class="signature" id="isAdmin">public  boolean <strong>isAdmin</strong>()</code>
+<div class="details">
+<p>Funkcia vracia hodnotu objektu ktorá určuje či je používateľ administrátor</p><table>
+<tr><th>Returns</th>
+<td>[description]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="isLoggedIn">public  boolean <strong>isLoggedIn</strong>()</code>
+<div class="details">
+<p>Funkcia vracia či je objekt nastavený na prihláseného používateľa</p><table>
+<tr><th>Returns</th>
+<td>true ak je používateľ prihlásený</td>
+</tr></table>
+</div>
+
+<code class="signature" id="login">public  [type] <strong>login</strong>([type] login, [type] password)</code>
+<div class="details">
+<p>Funkcia zabezpečí login na základe emailu a hesla a naplnenie údajov z databázy</p><table>
+<tr><th>Parameters</th>
+<td>login - [description]</td>
+<td>password - [description]</td>
+</tr><tr><th>Returns</th>
+<td>[description]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="loginForm">public  [type] <strong>loginForm</strong>()</code>
+<div class="details">
+<p>Funkcia zobrazuje pohľad na prihlasovací formulár</p><table>
+<tr><th>Returns</th>
+<td>[description]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="pages">public  boolean <strong>pages</strong>()</code>
+<div class="details">
+<p>Funkcia spracúva parameter user a pages a podľa týchto parametrov zobrazuje jednotlivé pohľady</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa zobrazil nejaký pohľad</td>
+</tr></table>
+</div>
+
+<code class="signature" id="pagesAdministration">public  boolean <strong>pagesAdministration</strong>()</code>
+<div class="details">
+<p>Funkcia zobrazuje pohľad na administráciu stránok administrátora</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa zobrazil nejaký pohľad</td>
+</tr></table>
+</div>
+
+<code class="signature" id="printUserSection">public  [type] <strong>printUserSection</strong>()</code>
+<div class="details">
+<p>funkcia zobrazí sekciu na správu používateľského konta používateľa</p><table>
+<tr><th>Returns</th>
+<td>[description]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="processRegistration">public  void <strong>processRegistration</strong>(mixed parameters)</code>
+<div class="details">
+<p>funcia na spracovanie registrácie po kontrole validity</p></div>
+
+<code class="signature" id="profile">public  boolean <strong>profile</strong>()</code>
+<div class="details">
+<p>Funkcia spracúva parameter user a profile a podľa ttýchto parametrov zobrazuje jednotlivé pohľady</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa zobrazil nejaký pohľad</td>
+</tr></table>
+</div>
+
+<code class="signature" id="showApproveList">public  void <strong>showApproveList</strong>()</code>
+<div class="details">
+<p>funkcia zobrazí zoznam žiadostí o schválenie</p></div>
+
+<code class="signature" id="showUsersList">public  void <strong>showUsersList</strong>()</code>
+<div class="details">
+<p>funckia zobrazí zoznam všetkých používateľov</p></div>
+
+<code class="signature" id="usersAdministration">public  boolean <strong>usersAdministration</strong>(str order)</code>
+<div class="details">
+<p>Funkcia zobrazuje pohľad na administráciu stránok používateľa</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa zobrazil nejaký pohľad</td>
+</tr></table>
+</div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -37,7 +37,10 @@ if(file_exists('_models/Db.php'))
 	 * Funkcia zabezpečuje zobrazenie POP-UP okna pre prihlásenie
 	 */
 
-
+	/**
+	 * Funkcia overuje parametre z adresy prehliadača a podľa týchto parametrov zobrazuje jednotlivé pohľady
+	 * @return [type] [description]
+	 */
 	public function _init_check()
 	{
 		//ak je v adrese profile zobrazi sa profil pouzivatela
@@ -59,7 +62,10 @@ if(file_exists('_models/Db.php'))
 		}
 		//return $show_page;*/
 	}
-
+	/**
+	 * Funkcia spracúva parameter user a profile a podľa ttýchto parametrov zobrazuje jednotlivé pohľady 
+	 * @return boolean príznak či sa zobrazil nejaký pohľad
+	 */
 	public function profile(){
 		if(isset($_GET["user"])){
 			if($this->isLoggedIn() && $_GET["user"]==$this->getUserID()){
@@ -93,7 +99,10 @@ if(file_exists('_models/Db.php'))
 		}
 		return false;
 	}
-
+	/**
+	 * Funkcia spracúva parameter user a pages a podľa týchto parametrov zobrazuje jednotlivé pohľady 
+	 * @return boolean príznak či sa zobrazil nejaký pohľad
+	 */
 	public function pages(){
 		if(isset($_GET["user"])){
 			if($this->isLoggedIn() && $_GET["user"]==$this->getUserID()){
@@ -124,7 +133,10 @@ if(file_exists('_models/Db.php'))
 		}
 		return false;
 	}
-
+	/**
+	 * Funkcia zobrazuje pohľad na editovanie profilu používateľa
+	 * @return boolean príznak či sa zobrazil nejaký pohľad
+	 */
   public function editProfile(){
         if($this->isLoggedIn()){
             User_v::showEditForm($this->userData);
@@ -133,7 +145,10 @@ if(file_exists('_models/Db.php'))
         return false;
   }
 
-
+	/**
+	 * Funkcia zobrazuje pohľad na administráciu stránok administrátora
+	 * @return boolean príznak či sa zobrazil nejaký pohľad
+	 */
 	public function pagesAdministration(){
 		if($this->isLoggedIn() && $this->isAdmin()){
 			User_v::adminAdministrationTabs("pages_administration",$this->getUserID());
@@ -143,6 +158,10 @@ if(file_exists('_models/Db.php'))
 		}
 		return false;
 	}
+		/**
+	 * Funkcia zobrazuje pohľad na administráciu stránok používateľa
+	 * @return boolean príznak či sa zobrazil nejaký pohľad
+	 */
 	public function usersAdministration($order="id")
 	{
 		if($this->isLoggedIn() && $this->isAdmin()){
@@ -153,7 +172,10 @@ if(file_exists('_models/Db.php'))
 		}
 		return false;
 	}
-
+	/**
+	 * Funkcia zobrazuje pohľad na administráciu kategórií
+	 * @return boolean príznak či sa zobrazil nejaký pohľad
+	 */
 	public function categoryAdministration(){
 		if($this->isLoggedIn() && $this->isAdmin()){
 			User_v::adminAdministrationTabs("category_administration",$this->getUserID());
@@ -167,27 +189,39 @@ if(file_exists('_models/Db.php'))
 
 
 	
-
+	/**
+	 * Funkcia vracia či je objekt nastavený na prihláseného používateľa
+	 * @return boolean true ak je používateľ prihlásený
+	 */
 	public function isLoggedIn()
 	{
 		if(isset($this->userData["id"]) && $this->userData["id"]>0)
 			return true;
 		return false;
 	}
-
+	/**
+	 * Funkcia vracia id používateľa
+	 * @return integer id používateľa
+	 */
 	public function getUserID(){
 		if(isset($this->userData["id"]) && $this->userData["id"]>0)
 			return  $this->userData["id"];
 		return 0;
 	}
-
+	/**
+	 * Funkcia vracia hodnotu objektu ktorá určuje či je používateľ administrátor
+	 * @return boolean [description]
+	 */
 	public function isAdmin()
 	{
 		if(isset($this->userData["admin"]) && $this->userData["admin"]==1)
 			return true;
 		return false;
 	}
-
+	/**
+	 * Funkcia vracia či má používateľ práva na editáciu stránky zadanej parametrom
+	 * @return boolean true ak je používateľ schopný editovať stránku
+	 */
 	public function hasEditRights($page)
 	{
 		if($this->isLoggedIn()){
@@ -197,7 +231,10 @@ if(file_exists('_models/Db.php'))
 		return false;
 	}
 
-
+	/**
+	 * Funkcia zobrazuje pohľad na prihlasovací formulár
+	 * @return [type] [description]
+	 */
 	public function loginForm()
 	{
 		User_v::loginForm();
@@ -205,10 +242,10 @@ if(file_exists('_models/Db.php'))
 
 
 	/**
-	 * funkcia zabezpečí login na základe emailu a hesla a naplnenie údajov z databázy
-	 * @param  [type] $login    [email používateľa]
-	 * @param  [type] $password [heslo]
-	 * @return [type]           [údaje používateľa získane z DB]
+	 * Funkcia zabezpečí login na základe emailu a hesla a naplnenie údajov z databázy
+	 * @param  [type] $login    [description]
+	 * @param  [type] $password [description]
+	 * @return [type]           [description]
 	 */
 	 public function login($login,$password)
 	 {
@@ -289,7 +326,11 @@ if(file_exists('_models/Db.php'))
 		}
 
 
-
+		/**
+		 * Funkcia kontroluje vstupy z registračného formulára
+		 * @param  [type] $param [description]
+		 * @return [type]        [description]
+		 */
 		public static function checkValidReg($param)
 		{
 			$errors = array();
@@ -319,6 +360,12 @@ if(file_exists('_models/Db.php'))
 
 
 		}
+
+		/**
+		 * Funkcia kontroluje vstupy z editačného formulára
+		 * @param  [type] $param [description]
+		 * @return [type]        [description]
+		 */
 		public static function checkValidEdit($param)
 		{
 			if(strlen($param["firstName"])<2)
@@ -330,7 +377,7 @@ if(file_exists('_models/Db.php'))
 			return $errors;
 		}
 
-
+		/*
 		public function listPagesUser($id,$order)
 		{
 
@@ -340,12 +387,12 @@ if(file_exists('_models/Db.php'))
 		}
 
 
-
+		
 		public function addPageForm($id)
 		{
 			echo User_v::showAddPage();
 		}
 
-
+*/
 
 }

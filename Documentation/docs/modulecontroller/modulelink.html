@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 29 Jan 2016 18:12:18 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>ModuleLink (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>ModuleController\ModuleLink</h2>
+
+</header><p class="signature">public  class <strong>ModuleLink</strong> extends <a href="../modulecontroller/module.html">Module</a>
+
+</p>
+
+<div class="comment"><p>ModuleLink Kontroler</p><p>Trieda na pracu s viewom a modelom modulu : ModuleLink</p></div>
+
+<table>
+<tr><th>Version</th>
+<td>1.0</td>
+</tr><tr><th>Author</th>
+<td>KRASNAN</td>
+</tr></table>
+<h3>Fields inherited from ModuleController\Module</h3>
+<table>
+<tr><td><a href="../modulecontroller/module.html#childsData">childsData</a>, <a href="../modulecontroller/module.html#containerData">containerData</a>, <a href="../modulecontroller/module.html#contentData">contentData</a>, <a href="../modulecontroller/module.html#created_by">created_by</a>, <a href="../modulecontroller/module.html#edited_by">edited_by</a>, <a href="../modulecontroller/module.html#file">file</a>, <a href="../modulecontroller/module.html#loggedUser">loggedUser</a>, <a href="../modulecontroller/module.html#module_type">module_type</a></td></tr></table>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(integer id, mixed editable)</p><p class="description">Konštruktor triedy kontrolera modulu ModuleLink</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>()</p><p class="description">Funkcia vymaže modul z DB</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#editor()">editor</a>(string operation)</p><p class="description">Funkcia vráti poh¾ad na editoru modulu</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#getFormData()">getFormData</a>()</p><p class="description">Funkcia uloží validné premenné odoslané z formulára a uloží ich do vnútornej štruktúry objektu</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getModuleTypeName()">getModuleTypeName</a>()</p><p class="description">Funkcia vráti názov typu modulu</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getPages()">getPages</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#insert()">insert</a>()</p><p class="description">funkcia vloží modul do DB</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#module()">module</a>(mixed editable)</p><p class="description">Funkcia vráti pohľad na modul</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setById()">setById</a>(integer id)</p><p class="description">Funkcia naèíta informácie z DB pre model so zadaným ID</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#update()">update</a>()</p><p class="description">Funkcia aktualizuje údaje o module v DB</p></td>
+</tr>
+</table>
+
+<h3>Methods inherited from ModuleController\Module</h3>
+<table>
+<tr><td><a href="../modulecontroller/module.html#__construct()">__construct</a>, <a href="../modulecontroller/module.html#delete()">delete</a>, <a href="../modulecontroller/module.html#editor()">editor</a>, <a href="../modulecontroller/module.html#getFormData()">getFormData</a>, <a href="../modulecontroller/module.html#getModuleTypeName()">getModuleTypeName</a>, <a href="../modulecontroller/module.html#getNewOrderValue()">getNewOrderValue</a>, <a href="../modulecontroller/module.html#getOrderOptions()">getOrderOptions</a>, <a href="../modulecontroller/module.html#insert()">insert</a>, <a href="../modulecontroller/module.html#printAlert()">printAlert</a>, <a href="../modulecontroller/module.html#setById()">setById</a>, <a href="../modulecontroller/module.html#update()">update</a>, <a href="../modulecontroller/module.html#verify()">verify</a></td></tr></table>
+
+<h3>Details</h3>
+<code class="signature" id="__construct">public  string <strong>__construct</strong>(integer id, mixed editable)</code>
+<div class="details">
+<p>Konštruktor triedy kontrolera modulu ModuleLink</p><table>
+<tr><th>Parameters</th>
+<td>id - ID modulu(ak je ID = 0 tak sa vytvorí prázdny objekt)</td>
+</tr><tr><th>Returns</th>
+<td>html kód pre modul</td>
+</tr></table>
+</div>
+
+<code class="signature" id="delete">public  boolean <strong>delete</strong>()</code>
+<div class="details">
+<p>Funkcia vymaže modul z DB</p><table>
+<tr><th>Returns</th>
+<td>true ak vymaže false ak nastane chyba</td>
+</tr></table>
+</div>
+
+<code class="signature" id="editor">public  string <strong>editor</strong>(string operation)</code>
+<div class="details">
+<p>Funkcia vráti poh¾ad na editoru modulu</p><table>
+<tr><th>Parameters</th>
+<td>operation - operácia ktorá sa má vykona po odoslaní formulára (insert/edit)</td>
+</tr><tr><th>Returns</th>
+<td>html kód editora modulu</td>
+</tr></table>
+</div>
+
+<code class="signature" id="getFormData">public  boolean <strong>getFormData</strong>()</code>
+<div class="details">
+<p>Funkcia uloží validné premenné odoslané z formulára a uloží ich do vnútornej štruktúry objektu</p><table>
+<tr><th>Returns</th>
+<td>true ak sú dáta posielané z formulára validné / inak false</td>
+</tr></table>
+</div>
+
+<code class="signature" id="getModuleTypeName">public  string <strong>getModuleTypeName</strong>()</code>
+<div class="details">
+<p>Funkcia vráti názov typu modulu</p></div>
+
+<code class="signature" id="getPages">public  void <strong>getPages</strong>()</code>
+<div class="details">
+</div>
+
+<code class="signature" id="insert">public  boolean <strong>insert</strong>()</code>
+<div class="details">
+<p>funkcia vloží modul do DB</p><table>
+<tr><th>Returns</th>
+<td>true ak vloží úspešne false ak nastane chyba</td>
+</tr></table>
+</div>
+
+<code class="signature" id="module">public  string <strong>module</strong>(mixed editable)</code>
+<div class="details">
+<p>Funkcia vráti pohľad na modul</p><table>
+<tr><th>Returns</th>
+<td>html kód poh¾adu na modul</td>
+</tr></table>
+</div>
+
+<code class="signature" id="setById">public  void <strong>setById</strong>(integer id)</code>
+<div class="details">
+<p>Funkcia naèíta informácie z DB pre model so zadaným ID</p><table>
+<tr><th>Parameters</th>
+<td>id - ID modulu</td>
+</tr></table>
+</div>
+
+<code class="signature" id="update">public  boolean <strong>update</strong>()</code>
+<div class="details">
+<p>Funkcia aktualizuje údaje o module v DB</p><table>
+<tr><th>Returns</th>
+<td>true ak edituje úspešne inak false</td>
+</tr></table>
+</div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

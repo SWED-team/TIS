@@ -21,7 +21,10 @@ Class Category{
     public $categoryData;
 
     private $logedUser;
-
+    /**
+     * Konštruktor metódy Category
+     * @param integer $id [description]
+     */
     public function __construct($id=0){
         if(file_exists('_models/Category_m.php')&&file_exists('_views/Category_v.php')) {
             require_once('_models/Category_m.php');

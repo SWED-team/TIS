@@ -53,7 +53,13 @@ Class Page{
      */
     public $file;
     
-
+/**
+ * Konštruktor triedy Page ktorý vytvorí objekt tejto triedy. 
+ * 
+ * Metóda dostáva ako parameter id ktoré určuje o ktorú stránku sa jedná.
+ * Tento parameter je prednastavený na 0 a nieje povinný
+ * @param integer $id id stránky
+ */
     public function __construct($id=0){
 
         if(file_exists('_models/Page_m.php')&&file_exists('_views/Page_v.php')) {
@@ -85,6 +91,15 @@ Class Page{
 
 
     }
+
+    /**
+     * Metóda nastaví objekt podľa informácií získaných z databázy
+     *
+     * Parameter metódy je id stránky ktorá sa má nastaviť. Predvolená hodnota parametra je 0.
+     * Funkcia vracia informácie o stránke
+     *
+     * @param integer $id Id stránky ktorá sa má získať z databázy.
+     */
     public function setById($id=0){
         if($id != 0){     
             $this->pageData = Page_m::getPageData($id);
@@ -109,6 +124,14 @@ Class Page{
         }
         return $this->pageData;
     }
+    /**
+     * Metóda nastavujúca všetky moduly ktoré je možné zobraziť na stránke.
+     * 
+     * Každý nový modul sa musí implementovať v tejto metóde.
+     * Pri inicializácii modulov sa načítajú potrebné súbory na prácu s modulmi a vytvoria sa ich nové objekty.
+     * 
+     * @return Page Self objekt
+     */
     public function initModules(){
         require_once('_controllers/ModuleImage.php');
         require_once('_controllers/ModuleVideo.php');
@@ -130,10 +153,13 @@ Class Page{
         return $this;
     }
 
-    /*
-        Funkcia vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke
-    */
-    public function modules($editable){
+    /**
+     * Metóda vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke.
+     * 
+     * @param  boolean $editable príznak či majú byť moduly editovateľné
+     * @return Integer            počet načítaných modulov
+     */
+    public function modules($editable=false){
         $count=0;
         $status = ($editable)?">= 0":"= 1";
         foreach (Page_m::getModules($this->pageData['id'], $status) as $key => $module) {
@@ -147,27 +173,33 @@ Class Page{
         }
         return $count;
     }
-    /*
-    * Funkcia zobrazí tlačidlo na pridávanie modulov
+
+   /**
+    * Metóda zobrazí tlačidlo na pridávanie modulov
     */
     public function addModuleButton(){
         echo Page_v::addModuleButton();
     }
-    /*
-        Funkcia vypíše formuláre na úpravu modulov
+
+   /**
+    * Metóda vypíše formuláre na úpravu modulov
     */
     public function modulesEditor(){
-        return Page_v::moduleEditor($this->newModules, $this->pageData["id"]);
+        Page_v::moduleEditor($this->newModules, $this->pageData["id"]);
     }
-    /*
-    Funkcia zobrazí view pre header stránky
+
+   /**
+    * Funkcia zobrazí view pre header stránky
+    * @param  string $title Titulka stránky
+    * @param  array  $user  Informácie o používateľovi
     */
-    public function header($title, $user){
+    public function header($title="", $user=array()){
         Page_v::pageHead($title);
         Page_v::pageHeader(Page_m::getCategories(), Page_m::getHomePage(), Page_m::getNavbarPages(), $user);
     }
-    /*
-    funkcia zobrazí view pre footer stránky
+
+   /**
+    * Metóda zobrazí view pre footer stránky
     */
     public function footer(){
         return Page_v::footer();
@@ -189,8 +221,8 @@ Class Page{
             Page_v::pageInfo($subsections, $page, $editable);
         }
     }
-    /*
-        Funkcia zobrazí obsah s modulmy
+    /**
+    * Metóda zobrazí obsah stránky na základe parametrov nachádzajúcich sa v adrese prehliadača
     */
     public function pageContent($logedUser=null){
 
@@ -293,42 +325,71 @@ Class Page{
         }
         return false;
     }
-   /*
-    public function editProfile(){
-        if($this->isLoggedIn()){
-            User_v::showEditForm($this->userData);
-            return true;
-        }
-        return false;
-    }
-*/
 
-
+    /**
+     * Metóda zobrazí pohľad pre zoznam stránok pre administrátora
+     *
+     * Metóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu
+     * 
+     * @param  integer $col     obmedzenie stlĺpca
+     * @param  integer $value   hodnota stĺpca
+     * @param  string  $orderBy stĺpec podľa ktorého majú byž údaje zoradené
+     */
     public function pageListAdminWhere($col = 1, $value = 1, $orderBy = "id"){
         $pages = Page_m::getPagesWhere($col, $value, $orderBy);
         Page_v::pageListAdmin($pages);
     }
+
+    /**
+     * Metóda zobrazí pohľad pre zoznam stránok pre používateľa
+     *
+     * Metóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu
+     * 
+     * @param  integer $col     obmedzenie stlĺpca
+     * @param  integer $value   hodnota stĺpca
+     * @param  string  $orderBy stĺpec podľa ktorého majú byž údaje zoradené
+     */
     public function pageListUserWhere($col = 1, $value = 1, $orderBy = "id"){
         $pages = Page_m::getPagesWhere($col, $value, $orderBy);
         Page_v::pageListUser($pages);
 
     }
-
+    /**
+     * Metóda nastavuje stránku ako homepage
+     */
     public function setHomePage(){
         Page_m::setHomePage($this->pageData["id"]);
 
     }
 
-
-    public function setNavbarPage( $value){
+    /**
+     * Metóda nastavuje stránku aby bola zobrazená v navigačnej lište
+     * @param integer $value id stránky
+     */
+    public function setNavbarPage( $value = 0 ){
         Page_m::setNavbarPage($this->pageData["id"], $value);
     }
 
-
-    public function setPageStatus($value){
+    /**
+     * Metóda nastavuje stránku ako homepage
+     * @param integer $value id stránky
+     */
+    public function setPageStatus($value = 0){
         Page_m::setStatusPage($this->pageData["id"], $value);
     }
 
+
+   /**
+     * Metóda zobrazí pohľad pre náhľady stránok
+     *
+     * Metóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu
+     * 
+     * @param  integer $col     obmedzenie stlĺpca
+     * @param  integer $value   hodnota stĺpca
+     * @param  string  $orderBy stĺpec podľa ktorého majú byž údaje zoradené
+     * @param  integer $cols    šírka náhľadu
+     * @param  boolean $editable príznak či má byť náhľad editovateľný
+     */
     public function previewAllWhere($column=1,$value=1,$order_by="id",$cols=1,$editable=false){
         $pages = Page_m::getPagesJoinedWhere($column,$value, $order_by);
         foreach ($pages as $key => $page) {
@@ -344,14 +405,24 @@ Class Page{
             Page_v::preview($editable, $page, $category, $file, $cols);
         }
     }
-
+    /**
+     * Metóda zobrazí pohľad pre náhľad stránky
+     * @param  boolean $editable príznak určujúci či je v náhľade možnosť editácie stránky
+     * @param  integer $cols     šírka náhľadu na stránke
+     */
     public function preview($editable=false,$cols=1){
         Page_v::preview($editable, $this->pageData, $this->category->categoryData, $this->file,$cols);
         return $this;
     }
 
-
-    public function editor($operation){
+    /**
+     * Funkcia zobrazí pohľad pre editor stránky
+     *
+     * Nastavuje sa tu adresa na ktorej sa majú spracovať informácie z editora
+     * 
+     * @param  string $operation operácia ktorá sa má vykonať po odoslaní formulára v editore
+     */
+    public function editor($operation=""){
         $url = '_controllers/Page.php?'.$operation.'=true';
         if(isset($this->pageData["id"]) && $this->pageData["id"]!=0) {
             $url = $url.'&id='.$this->pageData["id"];
@@ -373,7 +444,10 @@ Class Page{
     }
 
 
-
+    /**
+     * Metóda overuje dáta odosielané z formulára a vypisuje chybové hlášky pri nesprávnych vstupných dátach
+     * @return boolean hodnota či sú vstupné parametre v poriadku
+     */
     public function getFormData(){
         $success = true;
 
@@ -478,7 +552,11 @@ Class Page{
     }
 
 
-
+    /**
+     * Metóda vloží hodnoty objektu stránky do databázy
+     * 
+     * @return boolean príznak či sa funkcia vykonala úspešne
+     */
     public function insert(){
         $this->pageData['id'] = Page_m::insertInto("page", $this->pageData);
         if ($this->pageData['id'] > 0){
@@ -504,7 +582,11 @@ Class Page{
     }
 
 
-
+    /**
+     * Metóda upraví hodnoty objektu stránky v databáze
+     * 
+     * @return boolean príznak či sa funkcia vykonala úspešne
+     */
     public function update(){
         if(isset($this->pageData['id']) && $this->pageData['id'] > 0 ){
             Page_m::update("page", $this->pageData, "id",$this->pageData['id']);

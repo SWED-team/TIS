@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 29 Jan 2016 10:29:23 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>User_m (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>Swed TEAM\User_m</h2>
+
+</header><p class="signature">public  class <strong>User_m</strong></p>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#addPageToDb()">addPageToDb</a>(mixed id, mixed title)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#adduserToDb()">adduserToDb</a>([type] param)</p><p class="description">funckia pridá nový záznam používateľa do DB</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#changeAdminToDb()">changeAdminToDb</a>(mixed value, mixed id)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#changeDeactiveToDb()">changeDeactiveToDb</a>(mixed value, mixed id)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#changeTitleToDb()">changeTitleToDb</a>(mixed value, mixed id)</p></td>
+</tr>
+<tr>
+<td class="type">static  [boolean]</td>
+<td class="description"><p class="name"><a href="#checkValidReg()">checkValidReg</a>([type] param)</p><p class="description">funckia kontroluje či sa v databáze nachádza používateľ so
+zadaným emailom a heslom</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#editUserToDb()">editUserToDb</a>([type] param)</p><p class="description">funkcia vykoná editáciu používateľa v DB</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#getAllUsers()">getAllUsers</a>(mixed order)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#getPagesFromDb()">getPagesFromDb</a>(mixed id, mixed order)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#getPagesSearch()">getPagesSearch</a>(mixed term)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#getUserDataById()">getUserDataById</a>(mixed id)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#getUserDataByLogin()">getUserDataByLogin</a>(mixed mail, mixed pass)</p></td>
+</tr>
+<tr>
+<td class="type">static  [list]</td>
+<td class="description"><p class="name"><a href="#getUsers()">getUsers</a>()</p><p class="description">funckia vráti všetkých používateľov v DB</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#hasRights()">hasRights</a>(mixed pageID, mixed userID)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#isInDb()">isInDb</a>(mixed what, mixed value)</p></td>
+</tr>
+</table>
+
+<h3>Details</h3>
+<code class="signature" id="__construct">public  void <strong>__construct</strong>()</code>
+<div class="details">
+</div>
+
+<code class="signature" id="addPageToDb">public static  void <strong>addPageToDb</strong>(mixed id, mixed title)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="adduserToDb">public static  void <strong>adduserToDb</strong>([type] param)</code>
+<div class="details">
+<p>funckia pridá nový záznam používateľa do DB</p><table>
+<tr><th>Parameters</th>
+<td>param - [údaje]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="changeAdminToDb">public static  void <strong>changeAdminToDb</strong>(mixed value, mixed id)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="changeDeactiveToDb">public static  void <strong>changeDeactiveToDb</strong>(mixed value, mixed id)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="changeTitleToDb">public static  void <strong>changeTitleToDb</strong>(mixed value, mixed id)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="checkValidReg">public static  [boolean] <strong>checkValidReg</strong>([type] param)</code>
+<div class="details">
+<p>funckia kontroluje či sa v databáze nachádza používateľ so
+zadaným emailom a heslom</p><table>
+<tr><th>Parameters</th>
+<td>param - [email a heslo]</td>
+</tr><tr><th>Returns</th>
+<td>[vrati true/false,podľa toho či nájde taký záznam]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="editUserToDb">public static  void <strong>editUserToDb</strong>([type] param)</code>
+<div class="details">
+<p>funkcia vykoná editáciu používateľa v DB</p><table>
+<tr><th>Parameters</th>
+<td>param - [zmenené údaje]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="getAllUsers">public static  void <strong>getAllUsers</strong>(mixed order)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="getPagesFromDb">public static  void <strong>getPagesFromDb</strong>(mixed id, mixed order)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="getPagesSearch">public static  void <strong>getPagesSearch</strong>(mixed term)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="getUserDataById">public static  void <strong>getUserDataById</strong>(mixed id)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="getUserDataByLogin">public static  void <strong>getUserDataByLogin</strong>(mixed mail, mixed pass)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="getUsers">public static  [list] <strong>getUsers</strong>()</code>
+<div class="details">
+<p>funckia vráti všetkých používateľov v DB</p><table>
+<tr><th>Returns</th>
+<td>[zoznam používateľov]</td>
+</tr></table>
+</div>
+
+<code class="signature" id="hasRights">public static  void <strong>hasRights</strong>(mixed pageID, mixed userID)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="isInDb">public static  void <strong>isInDb</strong>(mixed what, mixed value)</code>
+<div class="details">
+</div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

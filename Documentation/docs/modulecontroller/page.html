@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2.0.5 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 29 Jan 2016 18:12:18 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../namespaces.html">
+
+<title>Page (SWEDTeamTitle)</title>
+
+</head>
+<body id="definition">
+
+<header><h1>PHPDoctor: The PHP Documentation Creator</h1><span>Class</span>
+
+<h2>ModuleController\Page</h2>
+
+</header><p class="signature">public  class <strong>Page</strong></p>
+
+<div class="comment"><p>Page Kontroler</p><p>Trieda na pracu s viewom a modelom modulu : Page</p></div>
+
+<table>
+<tr><th>Version</th>
+<td>1.0</td>
+</tr><tr><th>Author</th>
+<td>KRASNAN</td>
+</tr></table>
+<h3>Fields</h3>
+<table>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#file">$file</a></p><p class="description">pole informácií o reprezentativnom obrazku</p></td>
+</tr>
+</table>
+
+<h3>Methods</h3>
+<table>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(integer id)</p><p class="description">Konštruktor triedy Page ktorý vytvorí objekt tejto triedy. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#addModuleButton()">addModuleButton</a>()</p><p class="description">Metóda zobrazí tlačidlo na pridávanie modulov</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#editor()">editor</a>(string operation)</p><p class="description">Funkcia zobrazí pohľad pre editor stránkyNastavuje sa tu adresa na ktorej sa majú spracovať informácie z editora</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#footer()">footer</a>()</p><p class="description">Metóda zobrazí view pre footer stránky</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#getFormData()">getFormData</a>()</p><p class="description">Metóda overuje dáta odosielané z formulára a vypisuje chybové hlášky pri nesprávnych vstupných dátach</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#header()">header</a>(string title, array user)</p><p class="description">Funkcia zobrazí view pre header stránky</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../modulecontroller/page.html">Page</a></td>
+<td class="description"><p class="name"><a href="#initModules()">initModules</a>()</p><p class="description">Metóda nastavujúca všetky moduly ktoré je možné zobraziť na stránke.
+</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#insert()">insert</a>()</p><p class="description">Metóda vloží hodnoty objektu stránky do databázy</p></td>
+</tr>
+<tr>
+<td class="type"> Integer</td>
+<td class="description"><p class="name"><a href="#modules()">modules</a>(boolean editable)</p><p class="description">Metóda vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#modulesEditor()">modulesEditor</a>()</p><p class="description">Metóda vypíše formuláre na úpravu modulov</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#pageContent()">pageContent</a>(mixed logedUser)</p><p class="description">Metóda zobrazí obsah stránky na základe parametrov nachádzajúcich sa v adrese prehliadača</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#pageInfo()">pageInfo</a>(mixed subsections)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#pageListAdminWhere()">pageListAdminWhere</a>(integer col, integer value, string orderBy)</p><p class="description">Metóda zobrazí pohľad pre zoznam stránok pre administrátoraMetóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#pageListUserWhere()">pageListUserWhere</a>(integer col, integer value, string orderBy)</p><p class="description">Metóda zobrazí pohľad pre zoznam stránok pre používateľaMetóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#preview()">preview</a>(boolean editable, integer cols)</p><p class="description">Metóda zobrazí pohľad pre náhľad stránky</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#previewAllWhere()">previewAllWhere</a>(integer col, integer value, string orderBy, integer cols, boolean editable, int column, str order_by)</p><p class="description">Metóda zobrazí pohľad pre náhľady stránokMetóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#printAlert()">printAlert</a>(str type, mixed title, mixed message)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setById()">setById</a>(integer id)</p><p class="description">Metóda nastaví objekt podľa informácií získaných z databázyParameter metódy je id stránky ktorá sa má nastaviť. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setHomePage()">setHomePage</a>()</p><p class="description">Metóda nastavuje stránku ako homepage</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setNavbarPage()">setNavbarPage</a>(integer value)</p><p class="description">Metóda nastavuje stránku aby bola zobrazená v navigačnej lište</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setPageStatus()">setPageStatus</a>(integer value)</p><p class="description">Metóda nastavuje stránku ako homepage</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#update()">update</a>()</p><p class="description">Metóda upraví hodnoty objektu stránky v databáze</p></td>
+</tr>
+</table>
+
+<h3>Details</h3>
+<code class="signature" id="file">public  array <strong>$file</strong></code>
+<div class="details">
+<p>pole informácií o reprezentativnom obrazku</p></div>
+
+<code class="signature" id="__construct">public  void <strong>__construct</strong>(integer id)</code>
+<div class="details">
+<p>Konštruktor triedy Page ktorý vytvorí objekt tejto triedy.</p><p>Metóda dostáva ako parameter id ktoré určuje o ktorú stránku sa jedná.
+Tento parameter je prednastavený na 0 a nieje povinný</p><table>
+<tr><th>Parameters</th>
+<td>id - id stránky</td>
+</tr></table>
+</div>
+
+<code class="signature" id="addModuleButton">public  void <strong>addModuleButton</strong>()</code>
+<div class="details">
+<p>Metóda zobrazí tlačidlo na pridávanie modulov</p></div>
+
+<code class="signature" id="delete">public  void <strong>delete</strong>()</code>
+<div class="details">
+</div>
+
+<code class="signature" id="editor">public  void <strong>editor</strong>(string operation)</code>
+<div class="details">
+<p>Funkcia zobrazí pohľad pre editor stránky</p><p>Nastavuje sa tu adresa na ktorej sa majú spracovať informácie z editora</p><table>
+<tr><th>Parameters</th>
+<td>operation - operácia ktorá sa má vykonať po odoslaní formulára v editore</td>
+</tr></table>
+</div>
+
+<code class="signature" id="footer">public  void <strong>footer</strong>()</code>
+<div class="details">
+<p>Metóda zobrazí view pre footer stránky</p></div>
+
+<code class="signature" id="getFormData">public  boolean <strong>getFormData</strong>()</code>
+<div class="details">
+<p>Metóda overuje dáta odosielané z formulára a vypisuje chybové hlášky pri nesprávnych vstupných dátach</p><table>
+<tr><th>Returns</th>
+<td>hodnota či sú vstupné parametre v poriadku</td>
+</tr></table>
+</div>
+
+<code class="signature" id="header">public  void <strong>header</strong>(string title, array user)</code>
+<div class="details">
+<p>Funkcia zobrazí view pre header stránky</p><table>
+<tr><th>Parameters</th>
+<td>title - Titulka stránky</td>
+<td>user - Informácie o používateľovi</td>
+</tr></table>
+</div>
+
+<code class="signature" id="initModules">public  <a href="../modulecontroller/page.html">Page</a> <strong>initModules</strong>()</code>
+<div class="details">
+<p>Metóda nastavujúca všetky moduly ktoré je možné zobraziť na stránke.</p><p>Každý nový modul sa musí implementovať v tejto metóde.
+Pri inicializácii modulov sa načítajú potrebné súbory na prácu s modulmi a vytvoria sa ich nové objekty.</p><table>
+<tr><th>Returns</th>
+<td>Self objekt</td>
+</tr></table>
+</div>
+
+<code class="signature" id="insert">public  boolean <strong>insert</strong>()</code>
+<div class="details">
+<p>Metóda vloží hodnoty objektu stránky do databázy</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa funkcia vykonala úspešne</td>
+</tr></table>
+</div>
+
+<code class="signature" id="modules">public  Integer <strong>modules</strong>(boolean editable)</code>
+<div class="details">
+<p>Metóda vytiahne všetky informácie o moduloch z databázy a zobrazí ich na stránke.</p><table>
+<tr><th>Parameters</th>
+<td>editable - príznak či majú byť moduly editovateľné</td>
+</tr><tr><th>Returns</th>
+<td>počet načítaných modulov</td>
+</tr></table>
+</div>
+
+<code class="signature" id="modulesEditor">public  void <strong>modulesEditor</strong>()</code>
+<div class="details">
+<p>Metóda vypíše formuláre na úpravu modulov</p></div>
+
+<code class="signature" id="pageContent">public  void <strong>pageContent</strong>(mixed logedUser)</code>
+<div class="details">
+<p>Metóda zobrazí obsah stránky na základe parametrov nachádzajúcich sa v adrese prehliadača</p></div>
+
+<code class="signature" id="pageInfo">public  void <strong>pageInfo</strong>(mixed subsections)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="pageListAdminWhere">public  void <strong>pageListAdminWhere</strong>(integer col, integer value, string orderBy)</code>
+<div class="details">
+<p>Metóda zobrazí pohľad pre zoznam stránok pre administrátora</p><p>Metóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu</p><table>
+<tr><th>Parameters</th>
+<td>col - obmedzenie stlĺpca</td>
+<td>value - hodnota stĺpca</td>
+<td>orderBy - stĺpec podľa ktorého majú byž údaje zoradené</td>
+</tr></table>
+</div>
+
+<code class="signature" id="pageListUserWhere">public  void <strong>pageListUserWhere</strong>(integer col, integer value, string orderBy)</code>
+<div class="details">
+<p>Metóda zobrazí pohľad pre zoznam stránok pre používateľa</p><p>Metóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu</p><table>
+<tr><th>Parameters</th>
+<td>col - obmedzenie stlĺpca</td>
+<td>value - hodnota stĺpca</td>
+<td>orderBy - stĺpec podľa ktorého majú byž údaje zoradené</td>
+</tr></table>
+</div>
+
+<code class="signature" id="preview">public  void <strong>preview</strong>(boolean editable, integer cols)</code>
+<div class="details">
+<p>Metóda zobrazí pohľad pre náhľad stránky</p><table>
+<tr><th>Parameters</th>
+<td>editable - príznak určujúci či je v náhľade možnosť editácie stránky</td>
+<td>cols - šírka náhľadu na stránke</td>
+</tr></table>
+</div>
+
+<code class="signature" id="previewAllWhere">public  void <strong>previewAllWhere</strong>(integer col, integer value, string orderBy, integer cols, boolean editable, int column, str order_by)</code>
+<div class="details">
+<p>Metóda zobrazí pohľad pre náhľady stránok</p><p>Metóda sa nastavuje vstupnými parametrami na základe ktorých sa vypíše obsah pohľadu</p><table>
+<tr><th>Parameters</th>
+<td>col - obmedzenie stlĺpca</td>
+<td>value - hodnota stĺpca</td>
+<td>orderBy - stĺpec podľa ktorého majú byž údaje zoradené</td>
+<td>cols - šírka náhľadu</td>
+<td>editable - príznak či má byť náhľad editovateľný</td>
+</tr></table>
+</div>
+
+<code class="signature" id="printAlert">public  void <strong>printAlert</strong>(str type, mixed title, mixed message)</code>
+<div class="details">
+</div>
+
+<code class="signature" id="setById">public  void <strong>setById</strong>(integer id)</code>
+<div class="details">
+<p>Metóda nastaví objekt podľa informácií získaných z databázy</p><p>Parameter metódy je id stránky ktorá sa má nastaviť. Predvolená hodnota parametra je 0.
+Funkcia vracia informácie o stránke</p><table>
+<tr><th>Parameters</th>
+<td>id - Id stránky ktorá sa má získať z databázy.</td>
+</tr></table>
+</div>
+
+<code class="signature" id="setHomePage">public  void <strong>setHomePage</strong>()</code>
+<div class="details">
+<p>Metóda nastavuje stránku ako homepage</p></div>
+
+<code class="signature" id="setNavbarPage">public  void <strong>setNavbarPage</strong>(integer value)</code>
+<div class="details">
+<p>Metóda nastavuje stránku aby bola zobrazená v navigačnej lište</p><table>
+<tr><th>Parameters</th>
+<td>value - id stránky</td>
+</tr></table>
+</div>
+
+<code class="signature" id="setPageStatus">public  void <strong>setPageStatus</strong>(integer value)</code>
+<div class="details">
+<p>Metóda nastavuje stránku ako homepage</p><table>
+<tr><th>Parameters</th>
+<td>value - id stránky</td>
+</tr></table>
+</div>
+
+<code class="signature" id="update">public  boolean <strong>update</strong>()</code>
+<div class="details">
+<p>Metóda upraví hodnoty objektu stránky v databáze</p><table>
+<tr><th>Returns</th>
+<td>príznak či sa funkcia vykonala úspešne</td>
+</tr></table>
+</div>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>
