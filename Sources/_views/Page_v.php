@@ -405,7 +405,7 @@ class Page_v{
                     </span>
                 </div>
             </div>
-
+<?php /*
             <div class="row">
                 <div class="col-xs-4">
                     <strong>Created:</strong>
@@ -435,7 +435,7 @@ class Page_v{
                     <strong>Status:</strong>
                 </div>
                 <div class="col-xs-8"><?php echo $pageData["status"];?></div>
-            </div>
+            </div>*/ ?>
         </div>
         <?php
     }
