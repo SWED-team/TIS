@@ -51,7 +51,7 @@ class Page_v{
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
     <?php
     }
-    public static function pageHeader( $category, $home, $navbarPages, $user){
+    public static function pageHeader( $category, $home, $navbarPages, $user, $actCategory=null){
     ?>
     <header>
         <div id="header-image">
@@ -77,7 +77,7 @@ class Page_v{
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                         <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo (($actCategory!=null)? $actCategory["title"] : "Category" );?> <span class="caret"></span></a>
                           <ul class="dropdown-menu">
                           <?php
                             foreach ($category as $key => $c) {
@@ -106,7 +106,7 @@ class Page_v{
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="q" <?php if(isset($_GET["q"])) echo 'value="'.$_GET["q"].'"';?>>
                         <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
                     </form>
@@ -144,8 +144,8 @@ class Page_v{
           </div>
         </section>
         </div>
-        <div class="push"></div>
-        <footer class="container-fluid">
+
+        <footer class="container-fluid shadow">
           <div class="row">
             <div class="col-md-12 text-center">
               <p>Copyright (c) 2015 SWED Team</p>
@@ -220,15 +220,10 @@ class Page_v{
         </script>
         <?php
     } 
-    public static function pageInfo($subsection=array(), $page=null, $editable=false){?>
+    public static function breadcrumbs($subsection=array(), $page=null, $editable=false){?>
         <div class="page-info">
-            <ol class="breadcrumb">
-                <li><a href="./">Home</a></li>
-                <?php
-                foreach ($subsection as $title => $href) {
-                   echo '<li><a href="'.$href.'">'. $title.'</a></li>';
-                }
-                if($editable && $page != null){ ?>
+        <?php
+            if($editable && $page != null){ ?>
                     <span class="pull-right">
                         <a onclick="addPage()"><i class="fa fa-plus-square"></i></a>
                         <a onclick="updatePage( <?php echo $page["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
@@ -236,23 +231,43 @@ class Page_v{
                         
                     </span>
                 <?php } ?>
+            <ol class="breadcrumb">
+                <li><a href="./"><i class="fa fa-home"></i></a></li>
+                <?php
+                foreach ($subsection as $title => $href) {
+                   echo '<li class="breadcrumb-item"><a href="'.$href.'">'. $title.'</a></li>';
+                }
+                ?>
 
             </ol>
-            <?php 
-            if($page!=null){ 
-                ?>
-                <div class="col-sm-12 relative">
-                    <div class="page-info-image" style="background-image: url('<?php echo  $page["image"]; ?>')"></div>
-                    <div class="page-info-container row">
-                        <div class="page-descritpion col-sm-12 text-center"><h4><?php echo $page["description"]?></h4></div>
-                        <div class="col-sm-6 text-muted">Last modification: <?php echo $page["edited"]?></div>
-                        <div class="col-sm-6 pull-right text-muted text-right">Author: <?php echo $page["author"]?></div>
-                    </div>
-                </div>
-                <?php
-            } ?>
         </div>
         <?php
+    }
+    public static function pageInfo($page,$editable=false){ ?>
+        <div class="page-info shadow">
+            <?php
+            if($editable && $page != null){ ?>
+                    <span class="col-xs-12 text-right">
+                        <a onclick="addPage()"><i class="fa fa-plus-square"></i></a>
+                        <a onclick="updatePage( <?php echo $page["id"];?>)"><i class="fa fa-pencil-square-o"></i></a>
+                        <a onclick="deletePage( <?php echo $page["id"];?>)"><i class="fa fa-trash"></i></a>
+                        
+                    </span>
+                <?php 
+            } 
+            echo "<h4>".$page["title"] . "</h4><p>".$page["description"]."</p>";
+            ?>
+
+        </div>
+        <?php
+    }
+
+    public static function pageFooter($page){ ?>
+        <div class="col-xs-12">
+        <hr>
+            <div class="row text-muted">Author: <a href="?profile&user=<?php echo $page["author_id"]?>"><?php echo $page["author"]?></a></div>
+            <div class="row text-muted">Last modification: <?php echo $page["edited"]?> by <a href="?profile&user=<?php echo $page["editor_id"]?>"><?php echo $page["editor"]?></a></div>
+        </div>  <?php
     }
 
     public static function pageListAdmin($pageData){?>
@@ -376,18 +391,20 @@ class Page_v{
 
             <div class="module page-preview row-1" >  
                <div class="page-preview-image" style="background-image: url('<?php echo  $file["thumb-medium"]; ?>')"> </div>
-               <div class="page-title ">
+               <div class="page-title">
                      <a role="button" class="help" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($page['title']) ; ?>" data-content="<?php echo $page['description'] ;?>"><?php echo $page['title'] ; ?></a>
                </div>
-               <div class="page-preview-text">
+               
+                <a href="<?php echo '?page='.$page['id']?>" class="page-preview-href">
+                    <div class="page-preview-text">
                    <?php echo $page['description'] ; ?>
-               </div>
-                <div class="page-preview-category">
+                   <br><br><small class="text-muted">...continue to page</small>
+                    </div>
+               </a>
+                <!--<div class="page-preview-category">
                    <a href"<?php echo '?category='.$category['id']?>"><?php echo $category["title"]?></a>
                </div>
-               <a href="<?php echo '?page='.$page['id']?>" class="btn-primary page-preview-href">
-                   Open
-               </a>
+               -->
             </div>
         </div>
     <?php

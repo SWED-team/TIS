@@ -158,14 +158,16 @@ class ModuleLink_v{
                <div class="module-title ">
                      <a role="button" class="help" data-container="body" data-trigger="hover" data-toggle="popover" data-placement="bottom" title="<?php echo strtoupper($content['title']) ; ?>" data-content="<?php echo $content['description'] ;?>"><?php echo $content['title'] ; ?></a>
                </div>
-               <div class="module-link-text">
-                   <?php echo $content['description'] ; ?>
-               </div>
+<!--
                 <div class="module-link-category">
                    category
-               </div>
-               <a href="<?php echo ($content['page_id']!='')? './?page='.$content['page_id']:$content['link'].'" target="_blank' ; ?>" class="btn-primary module-link-href">
-                   Open
+               </div>-->
+               <a href="<?php echo ($content['page_id']!='')? './?page='.$content['page_id']:$content['link'].'" target="_blank' ; ?>" class="module-link-href">
+                  <div class="module-link-text">
+                   <?php echo $content['description'] ; ?>
+                    <br><br><small class="text-muted">...continue reading</small>
+
+                  </div>
                </a>
             </div>
         </div>

@@ -62,6 +62,10 @@ $("#logofButton").on("click",function  () {
 $("#editProfileButtonSubmit").on("click",function  () {
 		ajaxEditProfile();
 });
+//kliknutie na editovanie profilu
+$("#editPasswordButtonSubmit").on("click",function  () {
+		ajaxEditPassword();
+});
 
 
 ///funckia vypise vsetky errory pri reg/editacii usera
@@ -206,4 +210,36 @@ function ajaxEditProfile(){
 		  	}
 		});
 }
+
+function ajaxEditPassword(){
+		 var sendInfo = {
+		 	'function':'EditPassword',
+		 	"arg":{
+		          "password":$("#editPassword").val(), 
+		       		"password2":$("#editPassword2").val(),
+		       	}
+	  };
+	  jQuery.ajax({
+	        type: "POST",
+	        url: '_controllers/ajax_handler.php',
+	        data: {'json':sendInfo
+	      },
+	       success: function(data){
+			   if(data=="ok" || data ==""){
+
+			  		$("#editPasswordResult").html("");
+			   		$("#editPasswordResult").append('<div class="alert alert-success" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Well done!</strong> Your password was updated successfully</div>');
+					}else {
+
+						data2 =jQuery.parseJSON(data);
+						printRegErrors("#editPasswordResult",data2);
+					}
+		  },
+	  		error: function(data){
+	  			alert("chyba AJAXU");
+		    	return data;
+		  	}
+		});
+}
+
 

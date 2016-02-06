@@ -194,8 +194,17 @@ Class Page{
     * @param  array  $user  Informácie o používateľovi
     */
     public function header($title="", $user=array()){
+        $actCategory = null;
+        if(isset($_GET["category"])){
+            $actCategory = new Category($_GET["category"]);
+            $actCategory = $actCategory->categoryData;
+        }
+        if(isset($_GET["page"])){
+            if($this->setById($_GET["page"])!=null)
+                $actCategory = $this->category->categoryData;
+        }
         Page_v::pageHead($title);
-        Page_v::pageHeader(Page_m::getCategories(), Page_m::getHomePage(), Page_m::getNavbarPages(), $user);
+        Page_v::pageHeader(Page_m::getCategories(), Page_m::getHomePage(), Page_m::getNavbarPages(), $user, $actCategory);
     }
 
    /**
@@ -204,22 +213,38 @@ Class Page{
     public function footer(){
         return Page_v::footer();
     }
-    public function pageInfo($subsections=array(), $editable=false){
+    public function breadcrumbs($subsections=array(), $editable=false){
         $page=null;
         if(sizeof($this->pageData)>0){
             $page=array(
                     "id"=>$this->pageData["id"], 
                     "title"       =>$this->pageData["title"], 
                     "description" =>$this->pageData["description"], 
-                    "image"       =>$this->file["thumb-medium"],
-                    "author"      =>$this->created_by->userData["first_name"]." ".$this->created_by->userData["last_name"],
-                    "editor"      =>$this->edited_by->userData["first_name"]." ".$this->edited_by->userData["last_name"],
-                    "edited"      =>$this->pageData["edited"]
                 );
         }
         if(sizeof($subsections)>0){
-            Page_v::pageInfo($subsections, $page, $editable);
+            Page_v::breadcrumbs($subsections, $page, $editable);
         }
+    }
+    public function pageInfo($editable=false){
+        Page_v::pageInfo($this->pageData,$editable);
+    }
+
+    public function pageFooter(){
+        $page=null;
+        if(sizeof($this->pageData)>0){
+            $page=array(
+                    "image"       =>$this->file["thumb-medium"],
+                    "author_id"   =>$this->created_by->userData["id"],
+                    "editor_id"   =>$this->created_by->userData["id"],
+                    "author"      =>$this->created_by->userData["first_name"]." ".$this->created_by->userData["last_name"],
+                    "editor"      =>$this->edited_by->userData["first_name"]." ".$this->edited_by->userData["last_name"],
+                    "edited"      =>$this->pageData["edited"],
+                    "created"     =>$this->pageData["created"]
+                    );
+        }
+        Page_v::pageFooter($page);
+
     }
     /**
     * Metóda zobrazí obsah stránky na základe parametrov nachádzajúcich sa v adrese prehliadača
@@ -257,12 +282,12 @@ Class Page{
                 if($this->pageData["status"]!=0 || $editable){
                    // print_r($logedUser->hasEditRights($this->pageData["id"]));
                     //print_r($this->edited_by->userData);
-                    $breadcrumbs = array(
+                   /* $breadcrumbs = array(
                         $this->category->categoryData["title"]=>"?category=".$this->category->categoryData["id"],
                         $this->pageData["title"]=>"?page=".$this->pageData["id"]
                         );
-                    $this->pageInfo($breadcrumbs, $editable);
-
+                    $this->breadcrumbs($breadcrumbs, $editable);*/
+                    $this->pageInfo($editable);
                     if($editable){
                         $this->addModuleButton();
                     }
@@ -270,9 +295,10 @@ Class Page{
                     if($count > 0 && $editable){
                         $this->addModuleButton();
                     }
-
+                    $this->pageFooter();
                     $this->modulesEditor();
                 }
+
             }
             else{
                 return false;
@@ -286,17 +312,17 @@ Class Page{
             $editable = $logedUser->isAdmin();
             $category = new Category($_GET["category"]);
             if($category != null){//status nastavit a upravit get category pagews
-                $breadcrumbs = array(
+                /*$breadcrumbs = array(
                     $category->categoryData["title"]=>"?category=".$category->categoryData["id"],
                     );
 
-                $this->pageInfo($breadcrumbs);
+                $this->breadcrumbs($breadcrumbs);*/
                 $status = ($editable)?">= 0":"= 1";
 
                 $pages = Page_m::getCategoryPages($_GET["category"], $status);
                 foreach ($pages as $key => $p) {
                     $pge = new Page($p["id"]);
-                    $pge->preview($editable,1);
+                    $pge->preview($editable,2);
                 }
             }
             else{
@@ -315,7 +341,7 @@ Class Page{
                 $this->printAlert("success", "Search Result: ", sizeof($pages). " pages was found.");
                 foreach ($pages as $key => $p) {
                     $pge = new Page($p["id"]);
-                    $pge->preview($editable,1);
+                    $pge->preview($editable,2);
                 }
             }
             else{

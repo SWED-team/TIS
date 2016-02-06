@@ -69,8 +69,8 @@ class Module_v{
             <label class="control-label col-sm-2" for="status">Status:</label>
             <div class="col-sm-4">
                 <select id="status" class="form-control" name="status">
-                    <option value="0" <?php echo ((isset($container["status"]) && $container["status"]==0)?"selected":"");  ?>>Hidden</option>
                     <option value="1" <?php echo ((isset($container["status"]) && $container["status"]==1)?"selected":"");  ?>>Published</option>
+                    <option value="0" <?php echo ((isset($container["status"]) && $container["status"]==0)?"selected":"");  ?>>Hidden</option>
                 </select>
             </div>
             <label class="control-label col-sm-2" for="me-order">Order:</label>

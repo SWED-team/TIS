@@ -50,6 +50,24 @@ include_once('../_models/Db.php');
 				{
 					echo json_encode(User::checkValidEdit($_POST['json']['arg'])); }
 				break;
+ 			
+ 			case 'EditPassword':
+
+				if(sizeof(User::checkValidPassword($_POST['json']['arg']))<1)
+				{
+					$user=new User();
+			   	$user->fillUserDatabySession();
+
+					$res = User_m::editUserPassword($_POST['json']['arg']['password'], $user->getUserID()); 
+					if($res)
+						echo "ok";
+					else
+						echo "error";
+				}
+				else
+				{
+					echo json_encode(User::checkValidPassword($_POST['json']['arg'])); }
+				break;
 
 		   case 'SwithUserMenu1':
 

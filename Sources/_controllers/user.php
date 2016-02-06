@@ -97,6 +97,16 @@ if(file_exists('_models/Db.php'))
 			$this->editProfile();
 			return true;
 		}
+		else if(isset($_GET["edit_password"])){
+			if($this->isAdmin()){
+				User_v::adminAdministrationTabs("profile",$this->getUserID());
+			}
+			else{
+				User_v::userAdministrationTabs("profile",$this->getUserID());
+			}
+			$this->editPassword();
+			return true;
+		}
 		return false;
 	}
 	/**
@@ -140,6 +150,13 @@ if(file_exists('_models/Db.php'))
   public function editProfile(){
         if($this->isLoggedIn()){
             User_v::showEditForm($this->userData);
+            return true;
+        }
+        return false;
+  }
+  public function editPassword(){
+  	    if($this->isLoggedIn()){
+            User_v::editPasswordForm($this->userData);
             return true;
         }
         return false;
@@ -375,6 +392,18 @@ if(file_exists('_models/Db.php'))
 			{$errors["lname"]="Last Name have to contains atleast 2 characters";}
 
 			return $errors;
+		}
+		public static function checkValidPassword($param){
+			$errors = array();
+			//print_r($param);
+			if(strlen($param["password"])<5)
+			{$errors["password"]="Password have to contains atleast 5 characters";}
+
+
+			if($param["password"]!=$param["password2"])
+			{$errors["password2"]="Passwords dont match";}
+
+			return ($errors);
 		}
 
 		/*

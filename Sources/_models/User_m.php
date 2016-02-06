@@ -40,6 +40,18 @@ class User_m{
 
 			}
 
+			public static function editUserPassword($password, $id){
+				$result = Db::query(
+					"UPDATE `user` 
+					SET `password`=?
+					WHERE `id`=?",array(
+				      						hash( 'sha256',$password),
+				      						$id
+				      					)
+				  );
+				return $result;
+			}
+
 			public static function getUserDataByLogin($mail,$pass)
 			{
 

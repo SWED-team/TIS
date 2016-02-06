@@ -153,7 +153,7 @@ class User_v{
 				<a href="?profile&amp;edit_profile" class="col-xs-12 btn btn-default" >Edit Informations</a>
 			</div>
 			<div class="col-sm-3 col-xs-12">
-				<a href="?profile&amp;edit_profile" class="col-xs-12 btn btn-default" >Change Password</a>
+				<a href="?profile&amp;edit_password" class="col-xs-12 btn btn-default" >Change Password</a>
 			</div>
 		</div>
 	<?php
@@ -203,6 +203,35 @@ class User_v{
 				</form>	
 			</div>
 	<?php
+	}
+
+	public static function editPasswordForm($userData){ ?>
+		<div class="adminContent">
+			<h2>Password editation <?php echo $userData["first_name"] .' '. $userData["last_name"]?>  </h2>
+				<form role="form">
+				  <fieldset class="form-group">
+				    <div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="control-label"  for="editPassword">Type your new password</label>
+									<input id="editPassword" type="password" class="form-control input-sm" name="password"  placeholder="Enter first name" required/>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label class="control-label"  for="editPassword2">Retype your new password</label>
+									<input id="editPassword2" type="password" class="form-control input-sm" name="password2"  placeholder="Enter first name" required/>
+								</div>
+							</div>
+						</div>
+						</fieldset>
+					<div id="editPasswordResult"></div>
+					<a href="?profile&amp;user=<?php echo $userData['id']; ?>" class="btn btn-primary" >Back</a>
+					<a id="editPasswordButtonSubmit" class="btn btn-success" >Save</a>
+				</form>	
+			</div>
+	<?php
+
 	}
 
 
