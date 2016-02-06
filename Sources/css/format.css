@@ -1,9 +1,9 @@
-b,strong{font-weight:700}
+/*b,strong{font-weight:700}
 ol,ul{list-style:none;}
 button,input,input[type=color],input[type=text],input[type=time],input[type=url],input[type=week],input[type=button],input[type=reset],input[type=submit],input[type=date],input[type=datetime],input[type=datetime-local],input[type=email],input[type=month],input[type=number],input[type=password],input[type=search],input[type=tel],pre,select,textarea{font:inherit}
 @font-face{font-family:aileron;font-style:normal;font-weight:200;src:url(../fonts/aileron-ultra-light.eot?#iefix) format("embedded-opentype"),url(../fonts/aileron-ultra-light.woff) format("woff"),url(../fonts/aileron-ultra-light.ttf) format("truetype")}
 *{font-family: 'Open Sans', sans-serif;}
-h1,h2,h3,h4,h5,h6{/*font-weight:600;*/line-height:1.4em;margin:25px 0 15px}
+h1,h2,h3,h4,h5,h6{/*font-weight:600;line-height:1.4em;margin:25px 0 15px}
 h1{font-size:34px}
 h2{font-size:30px}
 h3{font-size:26px}
@@ -11,15 +11,15 @@ h4{font-size:22px}
 h5{font-size:18px}
 h6{font-size:14px}
 p{margin:25px 0}
-a{cursor: pointer;}
+a{cursor: pointer;}*/
 ol,ul{margin-left:15px;list-style-position:outside;margin-bottom:20px}
 ol li,ul li{margin-left:10px}
 ul{list-style-type:disc;}
 ol{list-style-type:decimal}
-table{width:100%;border-spacing:0;border-collapse:separate;border:0}
+/*table{width:100%;border-spacing:0;border-collapse:separate;border:0}
 table tr:nth-child(even){background:rgba(0,0,0,0.05);}
 table caption,table td,table th{padding:15px 7px;border:0;font:inherit}
 table th{font-weight:400;color:#6E6E6E;border-bottom:2px solid #B9B9B9!important;background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDQgMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPlJlY3RhbmdsZSAxODdAMng8L3RpdGxlPjxwYXRoIGQ9Ik0wIDBoNHYyMEgweiIgZmlsbD0iI0I5QjlCOSIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+);background-position:100% 100%;background-size:2px 10px;background-repeat:no-repeat}
 table th:last-child{background:0 0}
 table thead td{font-weight:400;color:#6E6E6E;border-bottom:2px solid #B9B9B9!important;background-image:url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDQgMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPlJlY3RhbmdsZSAxODdAMng8L3RpdGxlPjxwYXRoIGQ9Ik0wIDBoNHYyMEgweiIgZmlsbD0iI0I5QjlCOSIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+);background-position:100% 100%;background-size:2px 10px;background-repeat:no-repeat}
-table thead td:last-child{background:0 0}
+table thead td:last-child{background:0 0}*/

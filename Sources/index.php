@@ -17,7 +17,7 @@
   
   //overenie obsahu stranky .. ak neprejde funkciami (nieje zadany ziaden vyhovujuci parameter) vypise 404
   if( !($page->pageContent($_user) || $_user->_init_check()) ){
-    echo include '404.html';
+    include '404.html';
   }
 
 

@@ -34,7 +34,6 @@ class ModuleFormated_v{
         <?php Module_v::moduleEditorFooter($container); ?>
 
         <script>
-
             CKEDITOR.replace( 'editor1' ,
             {
                 toolbar: 'MyToolbar',

@@ -163,7 +163,7 @@ class ModuleLink_v{
                    category
                </div>-->
                <a href="<?php echo ($content['page_id']!='')? './?page='.$content['page_id']:$content['link'].'" target="_blank' ; ?>" class="module-link-href">
-                  <div class="module-link-text">
+                  <div class="module-link-text shadow">
                    <?php echo $content['description'] ; ?>
                     <br><br><small class="text-muted">...continue reading</small>
 

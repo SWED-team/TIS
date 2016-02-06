@@ -311,7 +311,8 @@ Class Page{
         else if( isset($_GET["category"]) && $_GET["category"] > 0 ){
             $editable = $logedUser->isAdmin();
             $category = new Category($_GET["category"]);
-            if($category != null){//status nastavit a upravit get category pagews
+            //print_r($category->categoryData);
+            if($category->categoryData != null){//status nastavit a upravit get category pagews
                 /*$breadcrumbs = array(
                     $category->categoryData["title"]=>"?category=".$category->categoryData["id"],
                     );

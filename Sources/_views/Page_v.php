@@ -27,6 +27,7 @@ class Page_v{
     <link rel="stylesheet" href="./js/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" />
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    
     <link rel="stylesheet" href="css/format.css">
     <link rel="stylesheet" href="css/user.css">
     <link href="css/bootstrap-combobox.css" rel="stylesheet">
@@ -396,7 +397,7 @@ class Page_v{
                </div>
                
                 <a href="<?php echo '?page='.$page['id']?>" class="page-preview-href">
-                    <div class="page-preview-text">
+                    <div class="page-preview-text shadow">
                    <?php echo $page['description'] ; ?>
                    <br><br><small class="text-muted">...continue to page</small>
                     </div>
