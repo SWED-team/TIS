@@ -185,15 +185,52 @@ Class Page_m{
   }
   public static function getSearchPages($term, $status=" = 1"){
     $result = Db::query(
-      " SELECT id
-        FROM `page`
-        WHERE ( title LIKE ? OR description LIKE ? )AND status $status
-        ORDER BY created
+      " SELECT DISTINCT p.id
+        FROM `page` p
+
+        INNER JOIN `module` m
+        ON m.page_id = p.id
+
+        INNER JOIN `module_formated` mf
+        ON mf.module_id = m.id
+
+        WHERE 
+          ( 
+            p.title LIKE ? 
+            OR p.description LIKE ? 
+            OR 
+            ( 
+              
+                mf.content LIKE ? 
+                OR mf.content LIKE ?
+                
+            ) AND m.status $status
+          )
+          AND p.status $status
+        ORDER BY p.created
       ",
-      array($term,$term))->fetchAll(PDO::FETCH_ASSOC);
+      array($term,$term,$term,$term))->fetchAll(PDO::FETCH_ASSOC);
     return $result;
   }
 
+
+  /*SELECT id
+        FROM `page`
+        WHERE ( title LIKE ? OR description LIKE ? )AND status $status
+        ORDER BY created*/
+
+
+/*SELECT p.id
+        FROM `page` p
+        INNER JOIN `module_formated` mf 
+        ON p.id = mf.page_id
+        WHERE ( 
+            p.title LIKE ? 
+            OR p.description LIKE ? 
+            OR ( mf.content LIKE ? AND mf.status = $status )
+          )
+          AND p.status $status
+        ORDER BY p.created*/
   public static function getModuleFiles($page_id){
     $result = Db::query("
       SELECT *

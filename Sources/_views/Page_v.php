@@ -106,7 +106,7 @@ class Page_v{
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="q" <?php if(isset($_GET["q"])) echo 'value="'.$_GET["q"].'"';?>>
                         <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            <button class="btn btn-default" type="submit">&nbsp;<i class="fa fa-search"></i>&nbsp;</button>
                         </div>
                     </div>
                     </form>
