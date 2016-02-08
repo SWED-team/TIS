@@ -37,8 +37,8 @@ class ModuleFormated_v{
             CKEDITOR.replace( 'editor1' ,
             {
                 toolbar: 'MyToolbar',
-                filebrowserBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&relative_url=1',
-                filebrowserImageBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&relative_url=1&akey=189dqwSdq1q32SdFeec6S4486aASdcxQ432s1S3121S1445DED8713ADWEX84321159ASsaasd'
+                filebrowserBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&relative_url=0',
+                filebrowserImageBrowseUrl : './filemanager/dialog.php?type=1&editor=ckeditor&relative_url=1'
             });
 
         </script>
