@@ -141,7 +141,7 @@ class User_v{
 		</ul>
 		<?php 
 	}
-	public static function profile( $user, $pages_count=0, $last_edited_pages=array(), $editable=false){ ?>
+	public static function profile( $user, $editable=false, $pages_count=0){ ?>
 		<div class="user-profile row adminContent">
 			<div class="text-center">
 				<i class="fa fa-users"></i><h2><?php echo $user['first_name']." ".$user["last_name"];?></h2>
@@ -149,12 +149,14 @@ class User_v{
 				<i class="fa fa-calendar-o"></i><h6 class="text-muted"><?php echo $user['reg_date'];?></h6>
 				<i class="fa fa-comments"></i><p><?php echo $user['bio'];?></p>
 			</div>
+			<?php if($editable){ ?>
 			<div class="col-sm-offset-3 col-sm-3 col-xs-12">
 				<a href="?profile&amp;edit_profile" class="col-xs-12 btn btn-default" >Edit Informations</a>
 			</div>
 			<div class="col-sm-3 col-xs-12">
 				<a href="?profile&amp;edit_password" class="col-xs-12 btn btn-default" >Change Password</a>
-			</div>
+			</div> 
+			<?php } ?>
 		</div>
 	<?php
 	}
@@ -214,13 +216,13 @@ class User_v{
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label"  for="editPassword">Type your new password</label>
-									<input id="editPassword" type="password" class="form-control input-sm" name="password"  placeholder="Enter first name" required/>
+									<input id="editPassword" type="password" class="form-control input-sm" name="password"  placeholder="Enter new password..." required/>
 								</div>
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
 									<label class="control-label"  for="editPassword2">Retype your new password</label>
-									<input id="editPassword2" type="password" class="form-control input-sm" name="password2"  placeholder="Enter first name" required/>
+									<input id="editPassword2" type="password" class="form-control input-sm" name="password2"  placeholder="Enter new password again..." required/>
 								</div>
 							</div>
 						</div>
@@ -256,14 +258,16 @@ class User_v{
 				<div class="row bordered "><?php
          	echo "<div class='col-sm-4  page-list-info'><small class='text-muted'>#".$cnt ." </small> ". $value["first_name"]." ".$value["last_name"] ." (". $value["email"] .") </div>";					
 					if($deactive) 
-						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Deactive" data-off="Active"  data-toggle="toggle" data-onstyle="danger" data-offstyle="success" data-size="mini" type="checkbox"></div>';
+						echo '<div class="col-sm-2 col-sm-3 text-center"><input checked onchange="user_deactive(this,'.$value["id"].');" data-on="Deactive" data-off="Active"  data-toggle="toggle" data-onstyle="danger" data-offstyle="success" data-size="mini" type="checkbox"></div>';
 					else 
-						echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Deactive" data-off="Active"  data-toggle="toggle" data-onstyle="danger" data-offstyle="success" data-size="mini"  type="checkbox"></div>';
+						echo '<div class="col-sm-2 col-sm-3 text-center"><input  onchange="user_deactive(this,'.$value["id"].');" data-on="Deactive" data-off="Active"  data-toggle="toggle" data-onstyle="danger" data-offstyle="success" data-size="mini"  type="checkbox"></div>';
 					if($admin) 
-						echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-					else echo '<div class="col-sm-2 col-xs-3 "><input  onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
-					echo '<div  class="col-sm-2 col-xs-3 "><a href="?pages&amp;user='.$value["id"].'" class="btn  col-xs-12 btn-xs btn-default">Pages</a></div>';
-					echo '<div  class="col-sm-2 col-xs-3 "><a href="?profile&amp;user='.$value["id"].'" class="btn col-xs-12  btn-xs btn-default">Profile</a></div>';
+						echo '<div class="col-sm-2 col-sm-3 text-center"><input checked onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					else 
+						echo '<div class="col-sm-2 col-sm-3 text-center"><input  onchange="user_admin(this,'.$value["id"].');" data-on="Admin" data-off="User"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+					
+					echo '<div  class="col-sm-2 col-sm-3 "><a href="?pages&amp;user='.$value["id"].'" class="btn  col-xs-12 btn-xs btn-default"><i class="fa fa-th-list"></i> Pages</a></div>';
+					echo '<div  class="col-sm-2 col-sm-3 "><a href="?profile&amp;user='.$value["id"].'" class="btn col-xs-12  btn-xs btn-default"><i class="fa fa-user"></i> Profile</a></div>';
 				?>
 				</div>
 				<?php

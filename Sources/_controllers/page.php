@@ -236,7 +236,7 @@ Class Page{
             $page=array(
                     "image"       =>$this->file["thumb-medium"],
                     "author_id"   =>$this->created_by->userData["id"],
-                    "editor_id"   =>$this->created_by->userData["id"],
+                    "editor_id"   =>$this->edited_by->userData["id"],
                     "author"      =>$this->created_by->userData["first_name"]." ".$this->created_by->userData["last_name"],
                     "editor"      =>$this->edited_by->userData["first_name"]." ".$this->edited_by->userData["last_name"],
                     "edited"      =>$this->pageData["edited"],

@@ -69,6 +69,8 @@ if(file_exists('_models/Db.php'))
 	public function profile(){
 		if(isset($_GET["user"])){
 			if($this->isLoggedIn() && $_GET["user"]==$this->getUserID()){
+
+
 				if($this->isAdmin()){
 					User_v::adminAdministrationTabs("profile",$this->getUserID());
 				}
@@ -76,15 +78,16 @@ if(file_exists('_models/Db.php'))
 					User_v::userAdministrationTabs("profile",$this->getUserID());
 				}
 
-				User_v::profile($this->userData);
+				User_v::profile($this->userData,true);
 				return true;
 			}
 			$u=new User();
 			if($u->fillUserDataById($_GET["user"])!=0){
 				User_v::userAdministrationTabs("profile",$_GET["user"]);
-				User_v::profile($u->userData);
+				User_v::profile($u->userData,false);
 				return true;
 			}
+
 			return false;
 		}
 		else if(isset($_GET["edit_profile"])){
@@ -136,7 +139,7 @@ if(file_exists('_models/Db.php'))
 						$page->pageListAdminWhere('created_by', $u->getUserID(), "title");
 					}
 					$page = new Page();
-					$page->previewAllWhere("created_by",$u->getUserID(),"edited",1,$this->isAdmin());
+					$page->previewAllWhere("created_by",$u->getUserID(),"edited",2,$this->isAdmin());
 				return true;
 			}
 			return false;

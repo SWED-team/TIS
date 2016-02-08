@@ -279,19 +279,19 @@ class Page_v{
                 <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
             </div>
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <h4>Page Info</h4>
                 </div>
-                <div class="col-xs-2 text-center">
+                <div class="col-sm-2 text-center">
                     <h4>Visible</h4>
                 </div>
-                <div class="col-xs-2 text-center">
+                <div class="col-sm-2 text-center">
                     <h4>Home</h4>
                 </div>
-                <div class="col-xs-2 text-center">
+                <div class="col-sm-2 text-center">
                     <h4>Navbar</h4>
                 </div>
-                <div class="col-xs-3 text-center">
+                <div class="col-sm-3 text-center">
                     <h4>Open / Edit / Delete</h4>
                 </div>                
             </div>
@@ -301,40 +301,40 @@ class Page_v{
                 $cnt++;
                 ?>
             <div class="row bordered">
-                <div class="col-xs-3 page-list-info">
+                <div class="col-sm-3 page-list-info">
                         <?php 
                         echo "<small class='text-muted'>#".$cnt ." </small> ". $page["title"];
                         ?>
                 </div>
-                <div class="col-xs-2 text-center">
+                <div class="col-sm-2 text-center">
                     <?php 
                     if($page["status"]==0)
-                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Visible" data-off="Hidden"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2  "><input  onchange="setStatusPage(this,'.$page["id"].')" data-on="Visible" data-off="Hidden"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Visible" data-off="Hidden"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2 "><input checked onchange="setStatusPage(this, '.$page["id"].')" data-on="Visible" data-off="Hidden"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
-                <div class="col-xs-2 text-center">
+                <div class="col-sm-2 text-center">
                     <?php 
                     if($page["is_home"]==0)
-                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setHomePage(this,'.$page["id"].')" data-on="Home On" data-off="Home Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2 "><input  onchange="setHomePage(this,'.$page["id"].')" data-on="Home On" data-off="Home Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<div class="col-sm-2 col-xs-3 disabled"><input class="homeDisabled"  checked data-on="Home On" data-off="Home Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2  disabled"><input class="homeDisabled"  checked data-on="Home On" data-off="Home Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
-                <div class="col-xs-2 text-center">
+                <div class="col-sm-2 text-center">
                     <?php 
                     if($page["in_navbar"]==0)
-                        echo '<div class="col-sm-2 col-xs-3 "><input  onchange="setNavbarPage(this,'.$page["id"].')" data-on="Nav On" data-off="Nav Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2  "><input  onchange="setNavbarPage(this,'.$page["id"].')" data-on="Nav On" data-off="Nav Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     else 
-                        echo '<div class="col-sm-2 col-xs-3 "><input checked onchange="setNavbarPage(this,'.$page["id"].')" data-on="Nav On" data-off="Nav Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
+                        echo '<div class="col-sm-2  "><input checked onchange="setNavbarPage(this,'.$page["id"].')" data-on="Nav On" data-off="Nav Off"  data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-size="mini" type="checkbox"></div>';
                     ?>
                 </div>
-                <div class="col-xs-3 pull-right">
-                    <a href="?profile&amp;user=<?php echo $page["created_by"];?>" class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-default" title="Open Creator Profile" ><i class=" fa  fa-user"></i></a>
-                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
-                    <a class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
-                    <a class="col-sm-offset-1 col-sm-2 col-xs-12 btn-xs btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
+                <div class="col-sm-3 text-center">
+                    <a href="?profile&amp;user=<?php echo $page["created_by"];?>" class="col-sm-offset-1 col-sm-2 btn-xs btn btn-default" title="Open Creator Profile" ><i class=" fa  fa-user"></i></a>
+                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-2 btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
+                    <a class="col-sm-offset-1 col-sm-2 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
+                    <a class="col-sm-offset-1 col-sm-2 btn-xs btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
                 </div>
             </div>
 
@@ -352,10 +352,10 @@ class Page_v{
                 <a class=" col-xs-12 btn btn-primary" title="Create new page" onclick="addPage()"><i class=" fa fa-plus"></i> Create new page</a>
             </div>
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-sm-6">
                     <h4>Page Info</h4>
                 </div>
-                <div class="col-xs-6 text-center">
+                <div class="col-sm-6 text-center">
                     <h4>Open / Edit / Delete</h4>
                 </div>                
             </div>
@@ -365,15 +365,15 @@ class Page_v{
                 $cnt++;
                 ?>
             <div class="row bordered">
-                <div class="col-xs-6 page-list-info">
+                <div class="col-sm-6 page-list-info">
                         <?php 
                         echo "<small class='text-muted'>#".$cnt ." </small> ". $page["title"];
                         ?>
                 </div>
-                <div class="col-xs-6 pull-right">
-                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 col-xs-12  btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
-                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
-                    <a class="col-sm-offset-1 col-sm-3 col-xs-12 btn-xs  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
+                <div class="col-sm-6 text-center">
+                    <a href="?page=<?php echo $page["id"];?>" class="col-sm-offset-1 col-sm-3 btn-xs btn btn-primary" title="Open this page." ><i class=" fa  fa-arrow-circle-right"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 btn-xs btn btn-warning" title="Edit this page." onclick="updatePage( <?php echo $page["id"];?>)"><i class=" fa fa-pencil-square-o"></i></a>
+                    <a class="col-sm-offset-1 col-sm-3 btn-xs  btn btn-danger" title="Delete this page." onclick="deletePage( <?php echo $page["id"];?>)"><i class=" fa fa-trash"></i></a>
                 </div>                
             </div>
 
