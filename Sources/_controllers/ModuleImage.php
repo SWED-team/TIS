@@ -59,7 +59,8 @@ class ModuleImage extends Module{
         if($id != 0){               // nastavenie vlastnosti modulu z databazy ak je to existujuci modul
             $this->containerData = Module_m::getModuleContainer($id);
             $this->contentData   = Module_m::getModuleContent($id,  $this->module_type);
-            $this->file          = Module_m::getModuleFiles($id)[0];
+            $f                   = Module_m::getModuleFiles($id);
+            $this->file          = $f[0];
             $this->created_by->fillUserDataById($this->containerData['created_by']);
             $this->edited_by->fillUserDataById($this->containerData['edited_by']);
         }

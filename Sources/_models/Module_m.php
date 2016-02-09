@@ -129,7 +129,8 @@ class Module_m{
         FROM `module` 
         WHERE `$whereCol`=?"
       , array($whereVal));
-    return $result->fetch()[0];
+    $tmp = $result->fetch();
+    return $tmp[0];
   }
   /**
    * Funkcia vráti "order" hodnotu riadku zadaného v parametri pre zadanú page
@@ -149,7 +150,8 @@ class Module_m{
           OFFSET ?
           "
         ,array($page_id, $position-1));
-      return $result->fetch()[0];
+        $tmp = $result->fetch();
+        return $tmp[0];
     }
     else return null;
   }

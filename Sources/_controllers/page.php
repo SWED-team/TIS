@@ -254,8 +254,8 @@ Class Page{
 
         if(sizeof($_GET)==0){
             
-            
-            if($this->setById(Page_m::getHomePage()["id"])!=null){
+            $p = Page_m::getHomePage();
+            if($this->setById($p["id"])!=null){
                 $editable = $logedUser->isAdmin() || $logedUser->hasEditRights($this->pageData["id"]);
                 if($editable) 
                     $this->addModuleButton();

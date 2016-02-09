@@ -78,18 +78,21 @@ class Page_v{
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                         <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo (($actCategory!=null)? $actCategory["title"] : "Category" );?> <span class="caret"></span></a>
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                              <?php echo (($actCategory!=null)? $actCategory["title"] : "Category" );?> 
+                              <span class="caret"></span>
+                          </a>
                           <ul class="dropdown-menu">
                           <?php
                             foreach ($category as $key => $c) {
-                                echo '<li><a href="?category='.$c["id"].'">'.$c["title"].'</a></li>';
+                                echo '<li><a href="?category='.$c["id"].'" title="'.$c["description"].'">'.$c["title"].'</a></li>';
                             }
                           ?>
                           </ul>
                         </li>
                         <?php
                             foreach ($navbarPages as $key => $n) {
-                                echo '<li><a href="?page='.$n["id"].'">'.$n["title"].'</a></li>';
+                                echo '<li><a href="?page='.$n["id"].'" title="'.$n["description"].'">'.$n["title"].'</a></li>';
                             }
                         ?>
                     </ul>
