@@ -59,7 +59,7 @@ abstract class Module{
 
   /**
    * Konštruktor abstraktnej triedy Module
-   * @param [type] $id [description]
+   * @param integer $id id modulu
    * @abstract
    */
   abstract function __construct($id);
@@ -90,7 +90,7 @@ abstract class Module{
 
 /**
  * Funkcia nacita data z post premennych ktore sa odoslu po submitnuti fomulara
- * @return [type] [description]
+ * @return boolean vrati true ak je formular validny
  */
   abstract public function getFormData();
   
