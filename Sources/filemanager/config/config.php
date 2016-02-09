@@ -30,7 +30,7 @@ date_default_timezone_set('Europe/Rome');
 |
 */
 
-define('USE_ACCESS_KEYS', true); // TRUE or FALSE
+define('USE_ACCESS_KEYS', false); // TRUE or FALSE
 
 /*
 |--------------------------------------------------------------------------
