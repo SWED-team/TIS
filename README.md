@@ -15,7 +15,7 @@ Cieľom je vytvoriť komplexnú web-aplikáciu, ktorá bude obsahovať prezenta�
 Web-aplikácia umožní vyhľadávať, kategorizovať a filtrovať tieto projekty.
 
 ### Záverečná správa
-  - záverečnú správu nájdete tu [Zaverecna Sprava](https://github.com/SWED-team/TIS/blob/master/Documentation/Zavere%C4%8Dn%C3%A1%20spr%C3%A1va.pdf)
+  - vo formáte pdf: [Záverečná správa.pdf](https://github.com/SWED-team/TIS/blob/master/Documentation/Zavere%C4%8Dn%C3%A1%20spr%C3%A1va.pdf)
 
 ### Nasadené dielo
   - nájdete [tu](http://kempelen.ii.fmph.uniba.sk/rg/)
